@@ -13,7 +13,7 @@ clusterGroup:
     - redhat-ods-operator:
         operatorGroup: true
         targetNamespaces: 
-    - gaudi-llm
+    - amd-instinct-llm
 
   subscriptions:    
     nfd:
@@ -59,7 +59,7 @@ clusterGroup:
     - openshift-kmm
     - habana-ai-operator
     - redhat-ods-operator
-    - gaudi-llm
+    - amd-instinct-llm
   # Explicitly mention the cluster-state based overrides we plan to use for this pattern.
   # We can use self-referential variables because the chart calls the tpl function with these variables defined
   sharedValueFiles:
@@ -122,15 +122,15 @@ clusterGroup:
       namespace: redhat-ods-operator
       project: redhat-ods-operator
       path: charts/all/rhods-operator
-    rhods-gaudi-addons:
-      name: rhods-gaudi-addons
+    rhods-amd-instinct-addons:
+      name: rhods-amd-instinct-addons
       namespace: redhat-ods-operator
       project: redhat-ods-operator
-      path: charts/all/rhods-operator-gaudi-addons
+      path: charts/all/rhods-operator-amd-instinct-addons
     tei-xeon-service:
       name: tei-xeon-service
-      namespace: gaudi-llm
-      project: gaudi-llm
+      namespace: amd-instinct-llm
+      project: amd-instinct-llm
       path: charts/all/tei-xeon-service
       ignoreDifferences:
       - group: apps
@@ -143,8 +143,8 @@ clusterGroup:
         - '.spec.paused'
     tei-embedding-service:
       name: tei-embedding-service
-      namespace: gaudi-llm
-      project: gaudi-llm
+      namespace: amd-instinct-llm
+      project: amd-instinct-llm
       path: charts/all/tei-embedding-service
       ignoreDifferences:
       - group: apps
@@ -157,8 +157,8 @@ clusterGroup:
         - '.spec.paused'
     retriever:
       name: retriever
-      namespace: gaudi-llm
-      project: gaudi-llm
+      namespace: amd-instinct-llm
+      project: amd-instinct-llm
       path: charts/all/retriever
       ignoreDifferences:
       - group: apps
@@ -171,8 +171,8 @@ clusterGroup:
         - '.spec.paused'
     reranking:
       name: reranking
-      namespace: gaudi-llm
-      project: gaudi-llm
+      namespace: amd-instinct-llm
+      project: amd-instinct-llm
       path: charts/all/reranking
       ignoreDifferences:
       - group: apps
@@ -185,14 +185,14 @@ clusterGroup:
         - '.spec.paused'
     redis-vector-db:
       name: redis-vector-db
-      namespace: gaudi-llm
-      project: gaudi-llm
+      namespace: amd-instinct-llm
+      project: amd-instinct-llm
       path: charts/all/redis-vector-db
-    llm-server-for-gaudi:
-      name: llm-server-for-gaudi
-      namespace: gaudi-llm
-      project: gaudi-llm
-      path: charts/all/llm-server-for-gaudi
+    llm-server-for-amd-instinct:
+      name: llm-server-for-amd-instinct
+      namespace: amd-instinct-llm
+      project: amd-instinct-llm
+      path: charts/all/llm-server-for-amd-instinct
       ignoreDifferences:
       - group: apps
         kind: Deployment
@@ -202,11 +202,11 @@ clusterGroup:
         kind: BuildConfig
         jqPathExpressions:
         - '.spec.paused'
-    gaudillm-init:
-      name: gaudillm-init
-      namespace: gaudi-llm
-      project: gaudi-llm
-      path: charts/all/gaudillm-init
+    amd-instinct-llm-init:
+      name: amd-instinct-llm-init
+      namespace: amd-instinct-llm
+      project: amd-instinct-llm
+      path: charts/all/amd-instinct-llm-init
       ignoreDifferences:
       - group: machineconfiguration.openshift.io
         kind: KubeletConfig
@@ -216,8 +216,8 @@ clusterGroup:
           - /metadata/annotations/kubectl.kubernetes.io~1last-applied-configuration
     embedding:
       name: embedding
-      namespace: gaudi-llm
-      project: gaudi-llm
+      namespace: amd-instinct-llm
+      project: amd-instinct-llm
       path: charts/all/embedding
       ignoreDifferences:
       - group: apps
@@ -230,8 +230,8 @@ clusterGroup:
         - '.spec.paused'
     dataprep:
       name: dataprep
-      namespace: gaudi-llm
-      project: gaudi-llm
+      namespace: amd-instinct-llm
+      project: amd-instinct-llm
       path: charts/all/dataprep
       ignoreDifferences:
       - group: apps
@@ -242,10 +242,10 @@ clusterGroup:
         kind: BuildConfig
         jqPathExpressions:
         - '.spec.paused'
-    chatqna-ui-server:
+    chatqna-/ui-server:
       name: chatqna-ui-server
-      namespace: gaudi-llm
-      project: gaudi-llm
+      namespace: amd-instinct-llm
+      project: amd-instinct-llm
       path: charts/all/chatqna-ui-server
       ignoreDifferences:
       - group: apps
@@ -257,11 +257,11 @@ clusterGroup:
         kind: BuildConfig
         jqPathExpressions:
         - '.spec.paused'
-    chatqna-gaudi-backend:
-      name: chatqna-gaudi-backend
-      namespace: gaudi-llm
-      project: gaudi-llm
-      path: charts/all/chatqna-gaudi-backend
+    chatqna-amd-instinct-backend:
+      name: chatqna-amd-instinct-backend
+      namespace: amd-instinct-llm
+      project: amd-instinct-llm
+      path: charts/all/chatqna-amd-instinct-backend
       ignoreDifferences:
       - group: apps
         kind: Deployment

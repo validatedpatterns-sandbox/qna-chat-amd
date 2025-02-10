@@ -1,15 +1,17 @@
 global: 
-  pattern: gaudillm
+  pattern: amd_instinct_llm
 
   clusterDomain: igk.internal
 
   gaudillm:
-    namespace: gaudi-llm
+    namespace: amd-instinct-llm
     build_envs: [] # http_proxy/https_prxy can be set here
     runtime_envs: []
     
-    chatqna_gaudi_backend: 
-      git_ref: 2b51374 
+    chatqna_amd_instinct_backend:
+      git_ref: 2b51374
+      # TODO(SG): Use the AMD instinct image
+      # TODO(SG): Do we really need this as the reference seems to be pointed towards chatqna?
       image: image-registry.openshift-image-registry.svc:5000/gaudi-llm/chatqna:latest
       megaservice_envs:
         - name: EMBEDDING_SERVICE_HOST_IP
