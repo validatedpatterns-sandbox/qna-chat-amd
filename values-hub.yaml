@@ -7,7 +7,7 @@ clusterGroup:
     - golang-external-secrets
     - openshift-nfd
     # TODO(SG): Create the AMD operator namespace (if needed)
-    - amd-gpu-operator-olm
+    - amd-gpu-operator
     - openshift-kmm:
         operatorGroup: true
         targetNamespaces: 
@@ -30,8 +30,8 @@ clusterGroup:
       source: redhat-operators
 
     amd-ai:
-      name: amd-gpu-operator-olm
-      namespace: amd-gpu-operator-olm
+      name: amd-gpu-operator
+      namespace: amd-gpu-operator
       # TODO(SG): This is the ONLY channel available for this oeprator
       channel: alpha
       source: certified-operators
@@ -59,7 +59,7 @@ clusterGroup:
     - hub
     - openshift-nfd
     - openshift-kmm
-    - amd-gpu-operator-olm
+    - amd-gpu-operator
     - redhat-ods-operator
     - amd-llm
   # Explicitly mention the cluster-state based overrides we plan to use for this pattern.
@@ -116,10 +116,10 @@ clusterGroup:
       path: charts/all/openshift-data-foundations
     # TODO(SG): What's the AMD equivalent
     # Will enable amd-ai charts once we've figured out what to add in the charts
-#    amd-gpu-operator-olm:
+#    amd-gpu-operator:
 #      name: amd-ai
-#      namespace: amd-gpu-operator-olm
-#      project: amd-gpu-operator-olm
+#      namespace: amd-gpu-operator
+#      project: amd-gpu-operator
 #      path: charts/all/amd-ai
 #    habana-ai:
 #      name: habana-ai
@@ -269,6 +269,13 @@ clusterGroup:
         kind: BuildConfig
         jqPathExpressions:
         - '.spec.paused'
+    # TODO(SG): Commenting out as this is failing in ArgoCD
+    # Error from the pod:
+    # Traceback (most recent call last):
+    #  File "/home/user/chatqna.py", line 7, in <module>
+    #    from comps import ChatQnAGateway, MicroService, ServiceOrchestrator, ServiceType
+    #ImportError: cannot import name 'ChatQnAGateway' from 'comps' (/home/user/GenAIComps/comps/__init__.py)
+
     chatqna-amd-backend:
       name: chatqna-amd-backend
       namespace: amd-llm
