@@ -8,6 +8,6 @@ global:
 
     reranking:  
       # TODO(SG): Provide image for AMD (if needed)
-      image: image-registry.openshift-image-registry.svc:5000/gaudi-llm/reranking-tei:latest
+      image: quay.io/sgahlot/opea/reranking:latest
       # TODO(SG): Provide git reference for AMD (if needed)
       git_ref: 8ebe2bf # make sure to validate buildconfig & other change scope before updating
