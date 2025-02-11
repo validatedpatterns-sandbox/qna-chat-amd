@@ -7,13 +7,13 @@ metadata:
     argocd.argoproj.io/compare-options: IgnoreExtraneous
     argocd.argoproj.io/sync-wave: "5"
   labels:
-    io.kompose.service: chatqna-gaudi-ui-server
-  name: chatqna-gaudi-ui-server
-  namespace: {{ .Values.global.gaudillm.namespace }}
+    io.kompose.service: chatqna-amd-ui-server
+  name: chatqna-amd-ui-server
+  namespace: {{ .Values.global.amdllm.namespace }}
 spec:
   ports:
     - name: "5173"
       port: 5173
       targetPort: 5173
   selector:
-    io.kompose.service: chatqna-gaudi-ui-server
+    io.kompose.service: chatqna-amd-ui-server

@@ -7,7 +7,7 @@ metadata:
   labels:
     io.kompose.service: redis-vector-db
   name: redis-vector-db
-  namespace: {{ .Values.global.gaudillm.namespace }}
+  namespace: {{ .Values.global.amdllm.namespace }}
 spec:
   replicas: 1
   selector:
@@ -23,7 +23,7 @@ spec:
         io.kompose.service: redis-vector-db
     spec:
       containers:
-        - image: {{ .Values.global.gaudillm.redis_vector_db.image }}
+        - image: {{ .Values.global.amdllm.redis_vector_db.image }}
           name: redis-vector-db
           ports:
             - containerPort: 6379

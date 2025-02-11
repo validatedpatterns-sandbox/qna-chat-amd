@@ -4,10 +4,10 @@ metadata:
   labels:
     io.kompose.service: redis-vector-db-claim0
   name: redis-vector-db-claim0
-  namespace: {{ .Values.global.gaudillm.namespace }}
+  namespace: {{ .Values.global.amdllm.namespace }}
 spec:
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: {{ .Values.global.gaudillm.redis_vector_db.pvc.size }}
+      storage: {{ .Values.global.amdllm.redis_vector_db.pvc.size }}

@@ -1,5 +1,5 @@
 ---
-# Source: chatqna-gaudi-backend/templates/chatqna-gaudi-backend-server-cm.yaml
+# Source: chatqna-amd-backend/templates/chatqna-amd-backend-server-cm.yaml
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -102,7 +102,7 @@ data:
       mega_flow:
         - embedding >> retrieval >> reranking >> llm
 ---
-# Source: chatqna-gaudi-backend/templates/chatqna-gaudi-backend-server-service.yaml
+# Source: chatqna-amd-backend/templates/chatqna-amd-backend-server-service.yaml
 apiVersion: v1
 kind: Service
 metadata:
@@ -123,7 +123,7 @@ spec:
   selector:
     io.kompose.service: chatqna-gaudi-backend-server
 ---
-# Source: chatqna-gaudi-backend/templates/chatqna-gaudi-backend-server-deployment.yaml
+# Source: chatqna-amd-backend/templates/chatqna-amd-backend-server-deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -132,7 +132,7 @@ metadata:
     kompose.version: 1.33.0 (3ce457399)
     argocd.argoproj.io/compare-options: IgnoreExtraneous
     argocd.argoproj.io/sync-wave: "5"
-    image.openshift.io/triggers: '[{"from":{"kind":"ImageStreamTag","name":"chatqna:latest"},"fieldPath":"spec.template.spec.containers[?(@.name==\"chatqna-gaudi-backend-server\")].image"}]'
+    image.openshift.io/triggers: '[{"from":{"kind":"ImageStreamTag","name":"chatqna:latest"},"fieldPath":"spec.template.spec.containers[?(@.name==\"chatqna-amd-backend-server\")].image"}]'
   labels:
     io.kompose.service: chatqna-gaudi-backend-server
   name: chatqna-gaudi-backend-server
@@ -172,7 +172,7 @@ spec:
             - name: LLM_SERVICE_PORT
               value: "9000"           
           image: chatqna:latest
-          name: chatqna-gaudi-backend-server
+          name: chatqna-amd-backend-server
           ports:
             - containerPort: 8888
               protocol: TCP
@@ -187,7 +187,7 @@ spec:
             name: megaservice-config
             defaultMode: 0755
 ---
-# Source: chatqna-gaudi-backend/templates/chatqna-gaudi-backend-server-buildconfig.yaml
+# Source: chatqna-amd-backend/templates/chatqna-amd-backend-server-buildconfig.yaml
 kind: BuildConfig
 apiVersion: build.openshift.io/v1
 metadata:
@@ -219,7 +219,7 @@ spec:
   triggers:
   - type: ConfigChange
 ---
-# Source: chatqna-gaudi-backend/templates/chatqna-gaudi-backend-server-imagestream.yaml
+# Source: chatqna-amd-backend/templates/chatqna-amd-backend-server-imagestream.yaml
 apiVersion: image.openshift.io/v1
 kind: ImageStream
 metadata:
@@ -229,7 +229,7 @@ spec:
   lookupPolicy:
     local: true
 ---
-# Source: chatqna-gaudi-backend/templates/chatqna-gaudi-backend-server-route.yaml
+# Source: chatqna-amd-backend/templates/chatqna-amd-backend-server-route.yaml
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
@@ -241,6 +241,6 @@ spec:
     targetPort: 8888
   to:
     kind: Service
-    name: chatqna-gaudi-backend-server
+    name: chatqna-amd-backend-server
     weight: 100
   wildcardPolicy: None

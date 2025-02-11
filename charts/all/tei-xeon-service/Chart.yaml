@@ -1,6 +1,8 @@
 
 apiVersion: v2
+# TODO(SG): Fix the xeon for AMD equivalent
 name: tei-xeon-service
+# TODO(SG): Fix the xeon for AMD equivalent
 description: Chart deploying tei-xeon-service component for OPEA demo Validated Pattern
 type: application
 version: 0.1.0

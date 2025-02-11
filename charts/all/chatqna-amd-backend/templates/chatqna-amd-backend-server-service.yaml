@@ -7,13 +7,13 @@ metadata:
     argocd.argoproj.io/compare-options: IgnoreExtraneous
     argocd.argoproj.io/sync-wave: "5"
   labels:
-    io.kompose.service: chatqna-gaudi-backend-server
-  name: chatqna-gaudi-backend-server
-  namespace: {{ .Values.global.gaudillm.namespace }}
+    io.kompose.service: chatqna-amd-backend-server
+  name: chatqna-amd-backend-server
+  namespace: {{ .Values.global.amdllm.namespace }}
 spec:
   ports:
     - name: "8888"
       port: 8888
       targetPort: 8888
   selector:
-    io.kompose.service: chatqna-gaudi-backend-server
+    io.kompose.service: chatqna-amd-backend-server

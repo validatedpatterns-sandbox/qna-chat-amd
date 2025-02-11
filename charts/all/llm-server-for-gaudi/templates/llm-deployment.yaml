@@ -6,11 +6,11 @@ metadata:
     kompose.version: 1.33.0 (3ce457399)
     argocd.argoproj.io/compare-options: IgnoreExtraneous
     argocd.argoproj.io/sync-wave: "5"
-    image.openshift.io/triggers: '[{"from":{"kind":"ImageStreamTag","name":"llm-tgi:latest"},"fieldPath":"spec.template.spec.containers[?(@.name==\"llm-tgi-gaudi-server\")].image"}]'
+    image.openshift.io/triggers: '[{"from":{"kind":"ImageStreamTag","name":"llm-tgi:latest"},"fieldPath":"spec.template.spec.containers[?(@.name==\"llm-tgi-amd-server\")].image"}]'
   labels:
     io.kompose.service: llm
   name: llm
-  namespace: {{ .Values.global.gaudillm.namespace }}
+  namespace: {{ .Values.global.amdllm.namespace }}
 spec:
   replicas: 1
   selector:
@@ -46,15 +46,15 @@ spec:
             - name: SSL_CERT_FILE
               value: /tmp/bundle.crt
             - name: TGI_LLM_ENDPOINT
-              value: https://{{ .Values.global.gaudillm.servingRuntime.name }}-{{ .Values.global.gaudillm.servingRuntime.namespace }}.apps.{{ .Values.global.clusterDomain }}
-            {{- if .Values.global.gaudillm.runtime_envs }}
-            {{- range .Values.global.gaudillm.runtime_envs }}
+              value: https://{{ .Values.global.amdllm.servingRuntime.name }}-{{ .Values.global.amdllm.servingRuntime.namespace }}.apps.{{ .Values.global.clusterDomain }}
+            {{- if .Values.global.amdllm.runtime_envs }}
+            {{- range .Values.global.amdllm.runtime_envs }}
             - name: {{ .name }}
               value: {{ .value }}
             {{- end }}
             {{- end }}
-          image: {{ .Values.global.gaudillm.llm_server_for_gaudi.image }}
-          name: llm-tgi-gaudi-server
+          image: {{ .Values.global.amdllm.llm_server_for_amd.image }}
+          name: llm-tgi-amd-server
           ports:
             - containerPort: 9000
               protocol: TCP

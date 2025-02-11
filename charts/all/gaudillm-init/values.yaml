@@ -1,15 +1,15 @@
 global:
-  pattern: gaudillm
+  pattern: amdllm
 
   clusterDomain: lab.com
 
-  gaudillm:
-    namespace: gaudi-llm
+  amdllm:
+    namespace: amd-llm
   
 job:
   image: image-registry.openshift-image-registry.svc:5000/openshift/cli:latest
   
-serviceAccountName: gaudi-pattern-sa
+serviceAccountName: amd-pattern-sa
 
 secretStore:
   name: vault-backend
@@ -20,7 +20,7 @@ hftokensecret:
 
 rbac:
   roles:
-    - name: gaudi-pattern-rhoai-role
+    - name: amd-pattern-rhoai-role
       createRole: true
       apiGroups:
         - '""'
@@ -52,7 +52,7 @@ rbac:
         - "update"
         - "use"
         - "watch"
-    - name: gaudi-pattern-rhoai-role-mcp-label
+    - name: amd-pattern-rhoai-role-mcp-label
       createRole: true
       apiGroups:
         - '"machineconfiguration.openshift.io"'
@@ -67,29 +67,29 @@ rbac:
         - "patch"
         - "watch"
   roleBindings:
-    - name: gaudi-pattern-rhoai-rolebind
+    - name: amd-pattern-rhoai-rolebind
       createBinding: true
       scope:
         cluster: true
         namespace: ""
       subjects:
         kind: ServiceAccount
-        name: gaudi-pattern-sa
-        namespace: gaudi-llm 
+        name: amd-pattern-sa
+        namespace: amd-llm
         apiGroup: ""
       roleRef:
         kind: ClusterRole
-        name: gaudi-pattern-rhoai-role  
-    - name: gaudi-pattern-rhoai-role-mcp-label
+        name: amd-pattern-rhoai-role
+    - name: amd-pattern-rhoai-role-mcp-label
       createBinding: true
       scope:
         cluster: true
         namespace: ""
       subjects:
         kind: ServiceAccount
-        name: gaudi-pattern-sa
-        namespace: gaudi-llm 
+        name: amd-pattern-sa
+        namespace: amd-llm
         apiGroup: ""
       roleRef:
         kind: ClusterRole
-        name: gaudi-pattern-rhoai-role-mcp-label
+        name: amd-pattern-rhoai-role-mcp-label

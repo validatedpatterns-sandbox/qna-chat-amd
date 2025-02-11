@@ -1,13 +1,15 @@
 global: 
-  pattern: gaudillm
+  pattern: amdllm
 
   clusterDomain: lab.com
 
-  gaudillm:
-    namespace: gaudi-llm
+  amdllm:
+    namespace: amd-llm
     build_envs: [] # http_proxy/https_prxy can be set here
     runtime_envs: []
     
-    chatqna_ui_server:  
-      git_ref: 2b51374 
+    chatqna_ui_server:
+      # TODO(SG): Provide the correct git reference for AMD (if needed)
+      git_ref: 2b51374
+      # TODO(SG): Provide the correct image for AMD (if needed)
       image: image-registry.openshift-image-registry.svc:5000/gaudi-llm/chatqna-ui:latest

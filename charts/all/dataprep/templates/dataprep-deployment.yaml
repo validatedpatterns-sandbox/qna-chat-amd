@@ -10,7 +10,7 @@ metadata:
   labels:
     io.kompose.service: dataprep-redis
   name: dataprep
-  namespace: {{ .Values.global.gaudillm.namespace }}
+  namespace: {{ .Values.global.amdllm.namespace }}
 spec:
   replicas: 1
   selector:
@@ -32,16 +32,16 @@ spec:
             - name: PYTHONPATH
               value: /home/user/.local/lib/python3.11/site-packages:/home/user
             - name: REDIS_URL
-              value: redis://redis-vector-db.gaudi-llm.svc.cluster.local:6379
+              value: redis://redis-vector-db.amd-llm.svc.cluster.local:6379
             - name: INDEX_NAME
               value: rag-redis
-            {{- if .Values.global.gaudillm.runtime_envs }}
-            {{- range .Values.global.gaudillm.runtime_envs }}
+            {{- if .Values.global.amdllm.runtime_envs }}
+            {{- range .Values.global.amdllm.runtime_envs }}
             - name: {{ .name }}
               value: {{ .value }}
             {{- end }}
             {{- end }}
-          image: {{ .Values.global.gaudillm.dataprep.image }}
+          image: {{ .Values.global.amdllm.dataprep.image }}
           name: dataprep-redis-server
           ports:
             - containerPort: 6007

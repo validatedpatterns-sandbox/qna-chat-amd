@@ -9,7 +9,7 @@ metadata:
   labels:
     io.kompose.service: llm
   name: llm
-  namespace: {{ .Values.global.gaudillm.namespace }}
+  namespace: {{ .Values.global.amdllm.namespace }}
 spec:
   ports:
     - name: "9000"

@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: ensure-builds
-  namespace: {{ .Values.global.gaudillm.namespace }}
+  namespace: {{ .Values.global.amdllm.namespace }}
   annotations:
     argocd.argoproj.io/sync-wave: "-1"
 data:
@@ -11,7 +11,7 @@ data:
 
     set -o pipefail
 
-    NS="{{ .Values.global.gaudillm.namespace }}"
+    NS="{{ .Values.global.amdllm.namespace }}"
 
     echo "Ensuring no buildconfigs are in failed status after all MCs have been applied"
 

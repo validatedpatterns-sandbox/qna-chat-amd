@@ -1,13 +1,13 @@
 ---
 global:
-  pattern: opea-chatqna-on-amd-instinct
+  pattern: opea-chatqna-on-amd
   options:
     useCSV: false
     syncPolicy: Automatic
     installPlanApproval: Automatic
 
-  amd_instinct_llm:
-    namespace: amd-instinct-llm
+  amd_llm:
+    namespace: amd-llm
     build_envs: [] 
     runtime_envs: []
 
@@ -27,10 +27,10 @@ global:
 
 
     servingRuntime:
-      namespace: amd-instinct-llm
+      namespace: amd-llm
       name: tgi-70b-gaudi   # TODO(SG): Use AMD specific ServingRuntime
 
-    chatqna_amd_instinct_backend:
+    chatqna_amd_backend:
       image: chatqna:latest
     chatqna_ui_server:  
       image: chatqna-ui:latest
@@ -38,8 +38,8 @@ global:
       image: dataprep-redis:latest
     embedding:  
       image: embedding-tei:latest
-    amd_instinct_llm_init: {}
-    llm_server_for_amd_instinct:
+    amd_llm_init: {}
+    llm_server_for_amd:
       image: llm-tgi:latest
     redis_vector_db:  
       image: redis/redis-stack:7.2.0-v9

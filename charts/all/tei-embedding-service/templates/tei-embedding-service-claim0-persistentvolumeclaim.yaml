@@ -4,10 +4,10 @@ metadata:
   labels:
     io.kompose.service: tei-embedding-service-claim0
   name: tei-embedding-service-claim0
-  namespace: {{ .Values.global.gaudillm.namespace }}
+  namespace: {{ .Values.global.amdllm.namespace }}
 spec:
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: {{ .Values.global.gaudillm.tei_embedding.pvc.size }}
+      storage: {{ .Values.global.amdllm.tei_embedding.pvc.size }}

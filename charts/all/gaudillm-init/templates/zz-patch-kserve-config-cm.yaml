@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: patch-kserve-progress-deadline
-  namespace: {{ .Values.global.gaudillm.namespace }}
+  namespace: {{ .Values.global.amdllm.namespace }}
 data:
   patch-kserve-progress-deadline.sh: |
     #!/bin/bash

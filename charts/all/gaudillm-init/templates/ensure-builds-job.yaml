@@ -5,7 +5,7 @@ metadata:
     argocd.argoproj.io/hook: Sync
     argocd.argoproj.io/sync-wave: "11"
   name: ensure-builds-job
-  namespace: {{ .Values.global.gaudillm.namespace }}
+  namespace: {{ .Values.global.amdllm.namespace }}
 spec:
   template:
     spec:
@@ -17,7 +17,7 @@ spec:
         - |
           oc wait --for condition=Complete -n habana-ai-operator job confirm-habana-is-enabled --timeout=-1s
           oc wait --for condition=Complete -n habana-ai-operator job job-wait-for-mcp-update --timeout=-1s
-          oc wait --for condition=Complete -n {{ .Values.global.gaudillm.namespace }} job init-kubeletconfig-apply-job --timeout=-1s
+          oc wait --for condition=Complete -n {{ .Values.global.amdllm.namespace }} job init-kubeletconfig-apply-job --timeout=-1s
           '/tmp/ensure-builds.sh'
         name: ensure-builds
         volumeMounts:

@@ -2,15 +2,14 @@
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
-  name: embedding-megaservice-route
+  name: megaservice-main-route
   namespace: {{ .Values.global.amdllm.namespace }}
 spec:
   host: megaservice-{{ .Values.global.amdllm.namespace }}.apps.{{ .Values.global.clusterDomain }}
-  path: /v1/embeddings
   port:
-    targetPort: 6000
+    targetPort: 8888
   to:
     kind: Service
-    name: embedding
+    name: chatqna-amd-backend-server
     weight: 100
   wildcardPolicy: None

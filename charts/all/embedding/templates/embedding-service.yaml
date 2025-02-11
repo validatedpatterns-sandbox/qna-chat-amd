@@ -9,7 +9,7 @@ metadata:
   labels:
     io.kompose.service: embedding
   name: embedding
-  namespace: {{ .Values.global.gaudillm.namespace }}
+  namespace: {{ .Values.global.amdllm.namespace }}
 spec:
   ports:
     - name: "6000"

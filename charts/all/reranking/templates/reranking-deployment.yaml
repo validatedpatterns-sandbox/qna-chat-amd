@@ -5,11 +5,11 @@ metadata:
     kompose.cmd: kompose convert -f docker_compose.yaml
     kompose.version: 1.33.0 (3ce457399)
     argocd.argoproj.io/sync-wave: "5"
-    image.openshift.io/triggers: '[{"from":{"kind":"ImageStreamTag","name":"reranking-tei:latest"},"fieldPath":"spec.template.spec.containers[?(@.name==\"reranking-tei-gaudi-server\")].image"}]'
+    image.openshift.io/triggers: '[{"from":{"kind":"ImageStreamTag","name":"reranking-tei:latest"},"fieldPath":"spec.template.spec.containers[?(@.name==\"reranking-tei-amd-server\")].image"}]'
   labels:
     io.kompose.service: reranking
   name: reranking
-  namespace: {{ .Values.global.gaudillm.namespace }}
+  namespace: {{ .Values.global.amdllm.namespace }}
 spec:
   replicas: 1
   selector:
@@ -36,15 +36,16 @@ spec:
                   key: huggingface
                   name: hf-token-secret
             - name: TEI_RERANKING_ENDPOINT
-              value: http://tei-xeon-service.gaudi-llm.svc.cluster.local:8808
-            {{- if .Values.global.gaudillm.runtime_envs }}
-            {{- range .Values.global.gaudillm.runtime_envs }}
+              # TODO(SG): Fix the xeon for AMD equivalent
+              value: http://tei-xeon-service.amd-llm.svc.cluster.local:8808
+            {{- if .Values.global.amdllm.runtime_envs }}
+            {{- range .Values.global.amdllm.runtime_envs }}
             - name: {{ .name }}
               value: {{ .value }}
             {{- end }}
             {{- end }}
-          image: {{ .Values.global.gaudillm.reranking.image }}
-          name: reranking-tei-gaudi-server
+          image: {{ .Values.global.amdllm.reranking.image }}
+          name: reranking-tei-amd-server
           ports:
             - containerPort: 8000
               protocol: TCP

@@ -5,13 +5,16 @@ metadata:
     kompose.cmd: kompose convert -f docker_compose.yaml
     kompose.version: 1.33.0 (3ce457399)
   labels:
+    # TODO(SG): Fix the xeon for AMD equivalent
     io.kompose.service: tei-xeon-service
+  # TODO(SG): Fix the xeon for AMD equivalent
   name: tei-xeon-service
-  namespace: {{ .Values.global.gaudillm.namespace }}
+  namespace: {{ .Values.global.amdllm.namespace }}
 spec:
   replicas: 1
   selector:
     matchLabels:
+      # TODO(SG): Fix the xeon for AMD equivalent
       io.kompose.service: tei-xeon-service
   strategy:
     type: Recreate
@@ -22,12 +25,14 @@ spec:
         kompose.version: 1.33.0 (3ce457399)
       labels:
         io.kompose.network/chatqna-default: "true"
+        # TODO(SG): Fix the xeon for AMD equivalent
         io.kompose.service: tei-xeon-service
     spec:
       containers:
         - args:
             - --model-id
-            - {{ .Values.global.gaudillm.tei_xeon.model_id }}
+            # TODO(SG): Fix the xeon for AMD equivalent
+            - {{ .Values.global.amdllm.tei_xeon.model_id }}
             - --port
             - '8080'
           env:
@@ -38,22 +43,27 @@ spec:
                   name: hf-token-secret
             - name: HOME
               value: /data
-            {{- if .Values.global.gaudillm.runtime_envs }}
-            {{- range .Values.global.gaudillm.runtime_envs }}
+            {{- if .Values.global.amdllm.runtime_envs }}
+            {{- range .Values.global.amdllm.runtime_envs }}
             - name: {{ .name }}
               value: {{ .value }}
             {{- end }}
             {{- end }}
-          image: {{ .Values.global.gaudillm.tei_xeon.image }}
+          # TODO(SG): Fix the xeon for AMD equivalent
+          image: {{ .Values.global.amdllm.tei_xeon.image }}
+          # TODO(SG): Fix the xeon for AMD equivalent
           name: tei-xeon-server
           ports:
             - containerPort: 8080
               protocol: TCP
           volumeMounts:
             - mountPath: /data
+              # TODO(SG): Fix the xeon for AMD equivalent
               name: tei-xeon-service-claim0
       restartPolicy: Always
       volumes:
+        # TODO(SG): Fix the xeon for AMD equivalent
         - name: tei-xeon-service-claim0
           persistentVolumeClaim:
+            # TODO(SG): Fix the xeon for AMD equivalent
             claimName: tei-xeon-service-claim0

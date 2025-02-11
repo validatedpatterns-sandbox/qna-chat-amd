@@ -10,7 +10,7 @@ metadata:
   labels:
     io.kompose.service: embedding
   name: embedding
-  namespace: {{ .Values.global.gaudillm.namespace }}
+  namespace: {{ .Values.global.amdllm.namespace }}
 spec:
   replicas: 1
   selector:
@@ -32,14 +32,14 @@ spec:
             - name: PYTHONPATH
               value: /home/user/.local/lib/python3.11/site-packages:/home/user
             - name: TEI_EMBEDDING_ENDPOINT
-              value: http://tei-embedding-service.gaudi-llm.svc.cluster.local:8090
-            {{- if .Values.global.gaudillm.runtime_envs }}
-            {{- range .Values.global.gaudillm.runtime_envs }}
+              value: http://tei-embedding-service.amd-llm.svc.cluster.local:8090
+            {{- if .Values.global.amdllm.runtime_envs }}
+            {{- range .Values.global.amdllm.runtime_envs }}
             - name: {{ .name }}
               value: {{ .value }}
             {{- end }}
             {{- end }}
-          image: {{ .Values.global.gaudillm.embedding.image }}
+          image: {{ .Values.global.amdllm.embedding.image }}
           name: embedding-tei-server
           ports:
             - containerPort: 6000

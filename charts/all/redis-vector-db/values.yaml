@@ -1,8 +1,8 @@
 global: 
-  pattern: gaudillm
+  pattern: amdllm
 
-  gaudillm:
-    namespace: gaudi-llm
+  amdllm:
+    namespace: amd-llm
     build_envs: [] # http_proxy/https_prxy can be set here
     runtime_envs: []
     

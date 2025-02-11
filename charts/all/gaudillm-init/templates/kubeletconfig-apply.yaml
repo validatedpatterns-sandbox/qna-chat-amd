@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: kubeletconfig-pidlimit-apply
-  namespace: {{ .Values.global.gaudillm.namespace }}
+  namespace: {{ .Values.global.amdllm.namespace }}
   annotations:
     argocd.argoproj.io/sync-wave: "-1"
 data:

@@ -2,7 +2,7 @@ kind: BuildConfig
 apiVersion: build.openshift.io/v1
 metadata:
   name: retriever
-  namespace: {{ .Values.global.gaudillm.namespace }}
+  namespace: {{ .Values.global.amdllm.namespace }}
 spec:
   output:
     to:
@@ -16,16 +16,16 @@ spec:
   runPolicy: SerialLatestOnly
   source:
     git:
-      ref: {{ .Values.global.gaudillm.retriever.git_ref }}
+      ref: {{ .Values.global.amdllm.retriever.git_ref }}
       uri: https://github.com/opea-project/GenAIComps.git
     type: Git
   strategy:
     type: Docker
     dockerStrategy:
       dockerfilePath: comps/retrievers/langchain/docker/Dockerfile
-      {{- if .Values.global.gaudillm.build_envs }}
+      {{- if .Values.global.amdllm.build_envs }}
       env:
-      {{- range .Values.global.gaudillm.build_envs }}
+      {{- range .Values.global.amdllm.build_envs }}
       - name: {{ .name }}
         value: {{ .value }}
       {{- end }}

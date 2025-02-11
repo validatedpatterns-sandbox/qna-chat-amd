@@ -6,7 +6,7 @@ metadata:
     opendatahub.io/modelServingSupport: '["single"]'
   labels:
     opendatahub.io/dashboard: "true"
-  name: tgi-gaudi-llama-70b-runtime
+  name: tgi-amd-llama-70b-runtime
   namespace: redhat-ods-applications
 objects:
 - apiVersion: serving.kserve.io/v1alpha1
@@ -15,9 +15,11 @@ objects:
     opendatahub.io/dashboard: "true"
   metadata:
     annotations:
+      # TODO(SG): Should match whatever we defined in acceleratorprofile.yaml (instinct.ai/amd or rocm.ai/amd or anything else)
       opendatahub.io/recommended-accelerators: '["habana.ai/gaudi"]'
-      openshift.io/display-name: Text Generation Inference llama 2 70b on Habana Gaudi (4 shards)
-    name: tgi-gaudi-llama-70b-4shards
+      # TODO(SG): Fix the display-name to be in-line with whatever we want to show for AMD (instinct or rocm or anything else)
+      openshift.io/display-name: Text Generation Inference llama 2 70b on AMD Instinct (or ROCm) (4 shards)
+    name: tgi-amd-llama-70b-4shards
   spec:
     containers:
     - args:
@@ -59,6 +61,7 @@ objects:
         value: "5"
       - name: OMPI_MCA_btl_vader_single_copy_mechanism
         value: none
+      # TODO(SG): Provide the correct AMD image
       image: ghcr.io/huggingface/tgi-gaudi:1.2.1
       livenessProbe:
         exec:

@@ -9,7 +9,7 @@ metadata:
   labels:
     io.kompose.service: dataprep-redis
   name: dataprep
-  namespace: {{ .Values.global.gaudillm.namespace }}
+  namespace: {{ .Values.global.amdllm.namespace }}
 spec:
   ports:
     - name: "6007"

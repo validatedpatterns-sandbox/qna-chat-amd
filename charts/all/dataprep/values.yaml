@@ -1,11 +1,13 @@
 global: 
-  pattern: gaudillm
+  pattern: amdllm
 
-  gaudillm:
-    namespace: gaudi-llm
+  amdllm:
+    namespace: amd-llm
     build_envs: [] # http_proxy/https_prxy can be set here
     runtime_envs: []
     
-    dataprep:  
+    dataprep:
+      # TODO(SG): Provide image for AMD (if needed)
       image: image-registry.openshift-image-registry.svc:5000/gaudi-llm/dataprep-redis:latest
+      # TODO(SG): Provide git reference for AMD (if needed)
       git_ref: 8ebe2bf # make sure to validate buildconfig & other change scope before updating

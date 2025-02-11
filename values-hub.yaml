@@ -13,7 +13,7 @@ clusterGroup:
     - redhat-ods-operator:
         operatorGroup: true
         targetNamespaces: 
-    - amd-instinct-llm
+    - amd-llm
 
   subscriptions:    
     nfd:
@@ -59,7 +59,7 @@ clusterGroup:
     - openshift-kmm
     - habana-ai-operator
     - redhat-ods-operator
-    - amd-instinct-llm
+    - amd-llm
   # Explicitly mention the cluster-state based overrides we plan to use for this pattern.
   # We can use self-referential variables because the chart calls the tpl function with these variables defined
   sharedValueFiles:
@@ -112,6 +112,7 @@ clusterGroup:
       namespace: openshift-storage
       project: hub
       path: charts/all/openshift-data-foundations
+    # TODO(SG): What's the AMD equivalent
     habana-ai:
       name: habana-ai
       namespace: habana-ai-operator
@@ -122,15 +123,16 @@ clusterGroup:
       namespace: redhat-ods-operator
       project: redhat-ods-operator
       path: charts/all/rhods-operator
-    rhods-amd-instinct-addons:
-      name: rhods-amd-instinct-addons
+    rhods-amd-addons:
+      name: rhods-amd-addons
       namespace: redhat-ods-operator
       project: redhat-ods-operator
-      path: charts/all/rhods-operator-amd-instinct-addons
+      path: charts/all/rhods-operator-amd-addons
+    # TODO(SG): Is this something that should change for AMD?
     tei-xeon-service:
       name: tei-xeon-service
-      namespace: amd-instinct-llm
-      project: amd-instinct-llm
+      namespace: amd-llm
+      project: amd-llm
       path: charts/all/tei-xeon-service
       ignoreDifferences:
       - group: apps
@@ -143,8 +145,8 @@ clusterGroup:
         - '.spec.paused'
     tei-embedding-service:
       name: tei-embedding-service
-      namespace: amd-instinct-llm
-      project: amd-instinct-llm
+      namespace: amd-llm
+      project: amd-llm
       path: charts/all/tei-embedding-service
       ignoreDifferences:
       - group: apps
@@ -157,8 +159,8 @@ clusterGroup:
         - '.spec.paused'
     retriever:
       name: retriever
-      namespace: amd-instinct-llm
-      project: amd-instinct-llm
+      namespace: amd-llm
+      project: amd-llm
       path: charts/all/retriever
       ignoreDifferences:
       - group: apps
@@ -171,8 +173,8 @@ clusterGroup:
         - '.spec.paused'
     reranking:
       name: reranking
-      namespace: amd-instinct-llm
-      project: amd-instinct-llm
+      namespace: amd-llm
+      project: amd-llm
       path: charts/all/reranking
       ignoreDifferences:
       - group: apps
@@ -185,14 +187,14 @@ clusterGroup:
         - '.spec.paused'
     redis-vector-db:
       name: redis-vector-db
-      namespace: amd-instinct-llm
-      project: amd-instinct-llm
+      namespace: amd-llm
+      project: amd-llm
       path: charts/all/redis-vector-db
-    llm-server-for-amd-instinct:
-      name: llm-server-for-amd-instinct
-      namespace: amd-instinct-llm
-      project: amd-instinct-llm
-      path: charts/all/llm-server-for-amd-instinct
+    llm-server-for-amd:
+      name: llm-server-for-amd
+      namespace: amd-llm
+      project: amd-llm
+      path: charts/all/llm-server-for-amd
       ignoreDifferences:
       - group: apps
         kind: Deployment
@@ -202,11 +204,11 @@ clusterGroup:
         kind: BuildConfig
         jqPathExpressions:
         - '.spec.paused'
-    amd-instinct-llm-init:
-      name: amd-instinct-llm-init
-      namespace: amd-instinct-llm
-      project: amd-instinct-llm
-      path: charts/all/amd-instinct-llm-init
+    amd-llm-init:
+      name: amd-llm-init
+      namespace: amd-llm
+      project: amd-llm
+      path: charts/all/amd-llm-init
       ignoreDifferences:
       - group: machineconfiguration.openshift.io
         kind: KubeletConfig
@@ -216,8 +218,8 @@ clusterGroup:
           - /metadata/annotations/kubectl.kubernetes.io~1last-applied-configuration
     embedding:
       name: embedding
-      namespace: amd-instinct-llm
-      project: amd-instinct-llm
+      namespace: amd-llm
+      project: amd-llm
       path: charts/all/embedding
       ignoreDifferences:
       - group: apps
@@ -230,8 +232,8 @@ clusterGroup:
         - '.spec.paused'
     dataprep:
       name: dataprep
-      namespace: amd-instinct-llm
-      project: amd-instinct-llm
+      namespace: amd-llm
+      project: amd-llm
       path: charts/all/dataprep
       ignoreDifferences:
       - group: apps
@@ -244,8 +246,8 @@ clusterGroup:
         - '.spec.paused'
     chatqna-/ui-server:
       name: chatqna-ui-server
-      namespace: amd-instinct-llm
-      project: amd-instinct-llm
+      namespace: amd-llm
+      project: amd-llm
       path: charts/all/chatqna-ui-server
       ignoreDifferences:
       - group: apps
@@ -257,11 +259,11 @@ clusterGroup:
         kind: BuildConfig
         jqPathExpressions:
         - '.spec.paused'
-    chatqna-amd-instinct-backend:
-      name: chatqna-amd-instinct-backend
-      namespace: amd-instinct-llm
-      project: amd-instinct-llm
-      path: charts/all/chatqna-amd-instinct-backend
+    chatqna-amd-backend:
+      name: chatqna-amd-backend
+      namespace: amd-llm
+      project: amd-llm
+      path: charts/all/chatqna-amd-backend
       ignoreDifferences:
       - group: apps
         kind: Deployment

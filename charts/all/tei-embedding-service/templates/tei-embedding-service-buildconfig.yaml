@@ -1,12 +1,13 @@
 kind: BuildConfig
 apiVersion: build.openshift.io/v1
 metadata:
-  name: tei-gaudi
-  namespace: {{ .Values.global.gaudillm.namespace }}
+  name: tei-amd
+  namespace: {{ .Values.global.amdllm.namespace }}
 spec:
   output:
     to:
       kind: "ImageStreamTag"
+      # TODO(SG): Fix this to reflect the AMD image
       name: "tei-gaudi:latest"
   failedBuildsHistoryLimit: 5
   successfulBuildsHistoryLimit: 5
@@ -16,16 +17,17 @@ spec:
   runPolicy: SerialLatestOnly
   source:
     git:
-      ref: {{ .Values.global.gaudillm.tei_embedding.git_ref }}
+      ref: {{ .Values.global.amdllm.tei_embedding.git_ref }}
+      # TODO(SG): Provide the AMD git repo for text embeddings inference
       uri: https://github.com/huggingface/tei-gaudi.git
     type: Git
   strategy:
     type: Docker
     dockerStrategy:
       dockerfilePath: Dockerfile-hpu
-      {{- if .Values.global.gaudillm.build_envs }}
+      {{- if .Values.global.amdllm.build_envs }}
       env:
-      {{- range .Values.global.gaudillm.build_envs }}
+      {{- range .Values.global.amdllm.build_envs }}
       - name: {{ .name }}
         value: {{ .value }}
       {{- end }}

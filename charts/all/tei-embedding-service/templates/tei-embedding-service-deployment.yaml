@@ -5,11 +5,12 @@ metadata:
     kompose.cmd: kompose convert -f docker_compose.yaml
     kompose.version: 1.33.0 (3ce457399)
     argocd.argoproj.io/sync-wave: "5"
-    image.openshift.io/triggers: '[{"from":{"kind":"ImageStreamTag","name":"tei-gaudi:latest"},"fieldPath":"spec.template.spec.containers[?(@.name==\"tei-embedding-gaudi-server\")].image"}]'
+    # TODO(SG): Provide the correct image for AMD (tei-gaudi)
+    image.openshift.io/triggers: '[{"from":{"kind":"ImageStreamTag","name":"tei-gaudi:latest"},"fieldPath":"spec.template.spec.containers[?(@.name==\"tei-embedding-amd-server\")].image"}]'
   labels:
     io.kompose.service: tei-embedding-service
   name: tei-embedding-service
-  namespace: {{ .Values.global.gaudillm.namespace }}
+  namespace: {{ .Values.global.amdllm.namespace }}
 spec:
   replicas: 1
   selector:
@@ -29,7 +30,7 @@ spec:
       containers:
         - args:
             - --model-id
-            - {{ .Values.global.gaudillm.tei_embedding.model_id }}
+            - {{ .Values.global.amdllm.tei_embedding.model_id }}
             - --port
             - "8090"
           env:
@@ -44,21 +45,23 @@ spec:
             #  value: habana
             - name: HOME
               value: /tmp/temp-data
-            {{- if .Values.global.gaudillm.runtime_envs }}
-            {{- range .Values.global.gaudillm.runtime_envs }}
+            {{- if .Values.global.amdllm.runtime_envs }}
+            {{- range .Values.global.amdllm.runtime_envs }}
             - name: {{ .name }}
               value: {{ .value }}
             {{- end }}
             {{- end }}
-          image: {{ .Values.global.gaudillm.tei_embedding.image }}
-          name: tei-embedding-gaudi-server
+          image: {{ .Values.global.amdllm.tei_embedding.image }}
+          name: tei-embedding-amd-server
           ports:
             - containerPort: 80
               protocol: TCP
           resources:
             limits:
+              # TODO(SG): Provide the correct keyword for AMD
               habana.ai/gaudi: "1"
             requests:
+              # TODO(SG): Provide the correct keyword for AMD
               habana.ai/gaudi: "1"
           volumeMounts:
             - mountPath: /data

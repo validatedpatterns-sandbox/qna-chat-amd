@@ -1,10 +1,11 @@
 apiVersion: dashboard.opendatahub.io/v1
 kind: AcceleratorProfile
 metadata:
-  name: gaudi-2
+  name: amd
   namespace: redhat-ods-applications
 spec:
-  displayName: Gaudi 2
+  displayName: AMD
   enabled: true
+  # TODO(SG): What should the identifier be? instinct.ai/amd OR rocm.ai/amd
   identifier: habana.ai/gaudi
   tolerations: []

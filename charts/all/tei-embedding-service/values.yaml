@@ -1,13 +1,15 @@
 global: 
-  pattern: gaudillm
+  pattern: amdllm
 
-  gaudillm:
-    namespace: gaudi-llm
+  amdllm:
+    namespace: amd-llm
     build_envs: [] # http_proxy/https_prxy can be set here
     runtime_envs: []
 
     tei_embedding:
+      # TODO(SG): Provide git reference for AMD
       git_ref: a7ee6f1fe13ce8aed440d0baa0953cd8f5c23e0a
+      # TODO(SG): Provide image for AMD
       image: image-registry.openshift-image-registry.svc:5000/gaudi-llm/tei-gaudi:latest
       pvc:
         size: 3Gi
