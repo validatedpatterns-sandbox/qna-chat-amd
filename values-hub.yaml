@@ -6,7 +6,8 @@ clusterGroup:
     - vault
     - golang-external-secrets
     - openshift-nfd
-    - habana-ai-operator
+    # TODO(SG): Create the AMD operator namespace (if needed)
+    - amd-gpu-operator-olm
     - openshift-kmm:
         operatorGroup: true
         targetNamespaces: 
@@ -28,10 +29,11 @@ clusterGroup:
       channel: stable
       source: redhat-operators
 
-    habana-ai:
-      name: habana-ai-operator
-      namespace: habana-ai-operator
-      channel: stable
+    amd-ai:
+      name: amd-gpu-operator-olm
+      namespace: amd-gpu-operator-olm
+      # TODO(SG): This is the ONLY channel available for this oeprator
+      channel: alpha
       source: certified-operators
 
     rhods:
@@ -57,7 +59,7 @@ clusterGroup:
     - hub
     - openshift-nfd
     - openshift-kmm
-    - habana-ai-operator
+    - amd-gpu-operator-olm
     - redhat-ods-operator
     - amd-llm
   # Explicitly mention the cluster-state based overrides we plan to use for this pattern.
@@ -113,11 +115,17 @@ clusterGroup:
       project: hub
       path: charts/all/openshift-data-foundations
     # TODO(SG): What's the AMD equivalent
-    habana-ai:
-      name: habana-ai
-      namespace: habana-ai-operator
-      project: habana-ai-operator
-      path: charts/all/habana-ai
+    # Will enable amd-ai charts once we've figured out what to add in the charts
+#    amd-gpu-operator-olm:
+#      name: amd-ai
+#      namespace: amd-gpu-operator-olm
+#      project: amd-gpu-operator-olm
+#      path: charts/all/amd-ai
+#    habana-ai:
+#      name: habana-ai
+#      namespace: habana-ai-operator
+#      project: habana-ai-operator
+#      path: charts/all/habana-ai
     rhods-operator:
       name: rhods-operator
       namespace: redhat-ods-operator
@@ -204,18 +212,20 @@ clusterGroup:
         kind: BuildConfig
         jqPathExpressions:
         - '.spec.paused'
-    amd-llm-init:
-      name: amd-llm-init
-      namespace: amd-llm
-      project: amd-llm
-      path: charts/all/amd-llm-init
-      ignoreDifferences:
-      - group: machineconfiguration.openshift.io
-        kind: KubeletConfig
-        name: 
-        jsonPointers:
-          - /metadata/labels/argocd.argoproj.io~1instance
-          - /metadata/annotations/kubectl.kubernetes.io~1last-applied-configuration
+    # TODO(SG): This was specific to Gaudi. For now, I've just renamed to amd but we should comment out this whole
+    #           application and test it out once everytihg else is working.
+#    amd-llm-init:
+#      name: amd-llm-init
+#      namespace: amd-llm
+#      project: amd-llm
+#      path: charts/all/amd-llm-init
+#      ignoreDifferences:
+#      - group: machineconfiguration.openshift.io
+#        kind: KubeletConfig
+#        name:
+#        jsonPointers:
+#          - /metadata/labels/argocd.argoproj.io~1instance
+#          - /metadata/annotations/kubectl.kubernetes.io~1last-applied-configuration
     embedding:
       name: embedding
       namespace: amd-llm
