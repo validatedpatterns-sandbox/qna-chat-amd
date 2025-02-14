@@ -7,7 +7,7 @@ metadata:
     argocd.argoproj.io/compare-options: IgnoreExtraneous
     argocd.argoproj.io/sync-wave: "5"
   labels:
-    io.kompose.service: dataprep-redis
+    io.kompose.service: dataprep
   name: dataprep
   namespace: {{ .Values.global.amdllm.namespace }}
 spec:
@@ -16,4 +16,4 @@ spec:
       port: 6007
       targetPort: 6007
   selector:
-    io.kompose.service: dataprep-redis
+    io.kompose.service: dataprep

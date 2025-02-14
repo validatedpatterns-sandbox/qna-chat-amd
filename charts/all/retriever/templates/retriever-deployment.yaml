@@ -41,7 +41,7 @@ spec:
             {{- end }}
             {{- end }}
           image: {{ .Values.global.amdllm.retriever.image }}
-          name: retriever-redis-server
+          name: retriever-server
           ports:
             - containerPort: 7000
               protocol: TCP

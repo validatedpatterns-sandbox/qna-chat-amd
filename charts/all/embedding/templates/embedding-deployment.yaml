@@ -40,7 +40,7 @@ spec:
             {{- end }}
             {{- end }}
           image: {{ .Values.global.amdllm.embedding.image }}
-          name: embedding-tei-server
+          name: embedding-server
           ports:
             - containerPort: 6000
               protocol: TCP

@@ -45,7 +45,7 @@ spec:
             {{- end }}
             {{- end }}
           image: {{ .Values.global.amdllm.reranking.image }}
-          name: reranking-tei-amd-server
+          name: reranking-server
           ports:
             - containerPort: 8000
               protocol: TCP

@@ -10,4 +10,4 @@ global:
       # TODO(SG): Provide image for AMD (if needed)
       image: quay.io/sgahlot/opea/embedding:latest
       # TODO(SG): Provide git reference for AMD (if needed)
-      git_ref: 8ebe2bf # make sure to validate buildconfig & other change scope before updating
+      # git_ref: 8ebe2bf # make sure to validate buildconfig & other change scope before updating
