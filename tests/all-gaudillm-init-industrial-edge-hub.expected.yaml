@@ -1,5 +1,5 @@
 ---
-# Source: gaudillm-init/templates/rbac/serviceAccount.yaml
+# Source: amd-llm-init/templates/rbac/serviceAccount.yaml
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -9,7 +9,7 @@ metadata:
     argocd.argoproj.io/hook: "PreSync"
     argocd.argoproj.io/sync-wave: "-10"
 ---
-# Source: gaudillm-init/templates/ensure-builds-cm.yaml
+# Source: amd-llm-init/templates/ensure-builds-cm.yaml
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -42,7 +42,7 @@ data:
       fi
     done
 ---
-# Source: gaudillm-init/templates/init-istio-ca-secret-cm.yaml
+# Source: amd-llm-init/templates/init-istio-ca-secret-cm.yaml
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -61,7 +61,7 @@ data:
       echo "oc get secret --ignore-not-found rhoai-ca-bundle returned non-empty string, not creating a secret"
     fi
 ---
-# Source: gaudillm-init/templates/kubeletconfig-apply.yaml
+# Source: amd-llm-init/templates/kubeletconfig-apply.yaml
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -99,7 +99,7 @@ data:
 
     echo "MCP has finished applying changes, podPidsLimit should be present on the nodes!"
 ---
-# Source: gaudillm-init/templates/zz-patch-kserve-config-cm.yaml
+# Source: amd-llm-init/templates/zz-patch-kserve-config-cm.yaml
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -120,7 +120,7 @@ data:
     echo "Changes:"
     diff -y /tmp/knative-old.yaml /tmp/knative-new.yaml --suppress-common-lines
 ---
-# Source: gaudillm-init/templates/rbac/role.yaml
+# Source: amd-llm-init/templates/rbac/role.yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
@@ -158,7 +158,7 @@ rules:
       - use
       - watch
 ---
-# Source: gaudillm-init/templates/rbac/role.yaml
+# Source: amd-llm-init/templates/rbac/role.yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
@@ -178,7 +178,7 @@ rules:
       - patch
       - watch
 ---
-# Source: gaudillm-init/templates/rbac/crb-rhoai.yaml
+# Source: amd-llm-init/templates/rbac/crb-rhoai.yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
@@ -194,7 +194,7 @@ subjects:
   apiGroup: rbac.authorization.k8s.io
   name: 'kube:admin'
 ---
-# Source: gaudillm-init/templates/rbac/rolebinding.yaml
+# Source: amd-llm-init/templates/rbac/rolebinding.yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
@@ -212,7 +212,7 @@ roleRef:
   name: gaudi-pattern-rhoai-role
   apiGroup: rbac.authorization.k8s.io
 ---
-# Source: gaudillm-init/templates/rbac/rolebinding.yaml
+# Source: amd-llm-init/templates/rbac/rolebinding.yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
@@ -230,7 +230,7 @@ roleRef:
   name: gaudi-pattern-rhoai-role-mcp-label
   apiGroup: rbac.authorization.k8s.io
 ---
-# Source: gaudillm-init/templates/ensure-builds-job.yaml
+# Source: amd-llm-init/templates/ensure-builds-job.yaml
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -268,7 +268,7 @@ spec:
       serviceAccountName: gaudi-pattern-sa
       terminationGracePeriodSeconds: 400
 ---
-# Source: gaudillm-init/templates/init-istio-ca-secret-job.yaml
+# Source: amd-llm-init/templates/init-istio-ca-secret-job.yaml
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -305,7 +305,7 @@ spec:
       serviceAccountName: gaudi-pattern-sa
       terminationGracePeriodSeconds: 400
 ---
-# Source: gaudillm-init/templates/init-kubeletconfig-apply-job.yaml
+# Source: amd-llm-init/templates/init-kubeletconfig-apply-job.yaml
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -340,7 +340,7 @@ spec:
       serviceAccountName: gaudi-pattern-sa
       terminationGracePeriodSeconds: 400
 ---
-# Source: gaudillm-init/templates/zz-patch-kserve-config-job.yaml
+# Source: amd-llm-init/templates/zz-patch-kserve-config-job.yaml
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -380,7 +380,7 @@ spec:
       serviceAccountName: gaudi-pattern-sa
       terminationGracePeriodSeconds: 400
 ---
-# Source: gaudillm-init/templates/external-secret-hftoken.yaml
+# Source: amd-llm-init/templates/external-secret-hftoken.yaml
 apiVersion: "external-secrets.io/v1beta1"
 kind: ExternalSecret
 metadata:
@@ -403,7 +403,7 @@ spec:
       key: secret/global/huggingface
       property: secret
 ---
-# Source: gaudillm-init/templates/kubeletconfig-increase-max-pids.yaml
+# Source: amd-llm-init/templates/kubeletconfig-increase-max-pids.yaml
 apiVersion: machineconfiguration.openshift.io/v1
 kind: KubeletConfig
 metadata:
