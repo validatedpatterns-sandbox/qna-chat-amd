@@ -214,18 +214,18 @@ clusterGroup:
         - '.spec.paused'
     # TODO(SG): This was specific to Gaudi. For now, I've just renamed to amd but we should comment out this whole
     #           application and test it out once everytihg else is working.
-#    amd-llm-init:
-#      name: amd-llm-init
-#      namespace: amd-llm
-#      project: amd-llm
-#      path: charts/all/amd-llm-init
-#      ignoreDifferences:
-#      - group: machineconfiguration.openshift.io
-#        kind: KubeletConfig
-#        name:
-#        jsonPointers:
-#          - /metadata/labels/argocd.argoproj.io~1instance
-#          - /metadata/annotations/kubectl.kubernetes.io~1last-applied-configuration
+    amd-llm-init:
+      name: amd-llm-init
+      namespace: amd-llm
+      project: amd-llm
+      path: charts/all/amd-llm-init
+      ignoreDifferences:
+      - group: machineconfiguration.openshift.io
+        kind: KubeletConfig
+        name:
+        jsonPointers:
+          - /metadata/labels/argocd.argoproj.io~1instance
+          - /metadata/annotations/kubectl.kubernetes.io~1last-applied-configuration
     embedding:
       name: embedding
       namespace: amd-llm
