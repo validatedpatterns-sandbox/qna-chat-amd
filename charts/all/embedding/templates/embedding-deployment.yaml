@@ -30,7 +30,7 @@ spec:
             - name: HOME
               value: /tmp/temp-data
             - name: PYTHONPATH
-              value: /home/user/.local/lib/python3.11/site-packages:/home/user
+              value: /home/user/.local/lib/python3.11/site-packages:/home/user:/home
             - name: TEI_EMBEDDING_ENDPOINT
               value: http://tei-embedding-service.amd-llm.svc.cluster.local:8090
             {{- if .Values.global.amdllm.runtime_envs }}
