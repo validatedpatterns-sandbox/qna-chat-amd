@@ -41,6 +41,8 @@ spec:
               value: {{ .value }}
             {{- end }}
             {{- end }}           
+            - name: PYTHONPATH
+              value: ${PYTHONPATH}:/home/user/GenAIComps
           image: {{ .Values.global.amdllm.chatqna_amd_backend.image }}
           name: chatqna-amd-backend-server
           ports:
