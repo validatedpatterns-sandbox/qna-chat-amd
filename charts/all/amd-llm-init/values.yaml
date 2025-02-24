@@ -11,12 +11,16 @@ job:
   
 serviceAccountName: amd-pattern-sa
 
-secretStore:
-  name: vault-backend
-  kind: ClusterSecretStore
+secret:
+  name: hf-token-secret
 
-hftokensecret:
-  key: secret/global/huggingface
+  store:
+    name: vault-backend
+    kind: ClusterSecretStore
+
+  hugging_face:
+    partial_path: huggingface
+    full_path: secret/data/hub/huggingface
 
 rbac:
   roles:
