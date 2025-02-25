@@ -1,0 +1,14 @@
+global:
+  amdllm:
+    namespace: amd-llm
+
+secret:
+  name: hf-token-secret
+
+  store:
+    name: vault-backend
+    kind: ClusterSecretStore
+
+  hugging_face:
+    partial_path: huggingface
+    full_path: secret/data/hub/huggingface

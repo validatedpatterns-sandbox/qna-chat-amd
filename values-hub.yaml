@@ -136,6 +136,11 @@ clusterGroup:
       namespace: redhat-ods-operator
       project: redhat-ods-operator
       path: charts/all/rhods-operator-amd-addons
+    init-secret:
+      name: init-secret
+      namespace: amd-llm
+      project: amd-llm
+      path: charts/all/init-secret
     # TODO(SG): Is this something that should change for AMD?
     tei-xeon-service:
       name: tei-xeon-service
