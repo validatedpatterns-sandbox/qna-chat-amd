@@ -12,3 +12,4 @@ secret:
   hugging_face:
     partial_path: huggingface
     full_path: secret/hub/huggingface
+    key_name: token
