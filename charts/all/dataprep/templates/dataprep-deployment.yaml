@@ -50,7 +50,7 @@ spec:
             - name: temp-data
               mountPath: /tmp/temp-data
             - name: uploaded-files
-              mountPath: /home/user/comps/dataprep/redis/langchain/uploaded_files
+              mountPath: /home/user/comps/dataprep/src/uploaded_files
       restartPolicy: Always
       volumes:
         - name: temp-data
