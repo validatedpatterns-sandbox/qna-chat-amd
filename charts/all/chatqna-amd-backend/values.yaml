@@ -9,10 +9,8 @@ global:
     runtime_envs: []
     
     chatqna_amd_backend:
-      # TODO(SG): Provide the correct git_ref (if needed) for AMD
-      # git_ref: 2b51374
-      # TODO(SG): Provide AMD image if this image is specific to gaudi
-      image: quay.io/sgahlot/opea/chatqna:latest
+      git_ref: 7c2e7f6
+      image: image-registry.openshift-image-registry.svc:5000/opea/chatqna:latest
       megaservice_envs:
         - name: EMBEDDING_SERVICE_HOST_IP
           value: embedding.amd-llm.svc.cluster.local
