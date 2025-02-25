@@ -7,7 +7,7 @@ spec:
   output:
     to:
       kind: "ImageStreamTag"
-      name: "reranking-tei:latest"
+      name: "reranking:latest"
   failedBuildsHistoryLimit: 5
   successfulBuildsHistoryLimit: 5
   nodeSelector: null
@@ -22,7 +22,7 @@ spec:
   strategy:
     type: Docker
     dockerStrategy:
-      dockerfilePath: comps/reranks/langchain/docker/Dockerfile
+      dockerfilePath: comps/rerankings/src/Dockerfile
       {{- if .Values.global.amdllm.build_envs }}
       env:
       {{- range .Values.global.amdllm.build_envs }}

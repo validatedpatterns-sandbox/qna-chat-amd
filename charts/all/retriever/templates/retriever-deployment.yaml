@@ -5,7 +5,7 @@ metadata:
     kompose.cmd: kompose convert -f docker_compose.yaml
     kompose.version: 1.33.0 (3ce457399)
     argocd.argoproj.io/sync-wave: "5"
-    image.openshift.io/triggers: '[{"from":{"kind":"ImageStreamTag","name":"retriever-redis:latest"},"fieldPath":"spec.template.spec.containers[?(@.name==\"retriever-redis-server\")].image"}]'
+    image.openshift.io/triggers: '[{"from":{"kind":"ImageStreamTag","name":"retriever:latest"},"fieldPath":"spec.template.spec.containers[?(@.name==\"retriever-server\")].image"}]'
   labels:
     io.kompose.service: retriever
   name: retriever
