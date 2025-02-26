@@ -10,7 +10,7 @@ global:
     
     chatqna_amd_backend:
       git_ref: 7c2e7f6
-      image: quay.io/sgahlot/opea/chatqna:latest
+      image: image-registry.openshift-image-registry.svc:5000/opea/chatqna:latest
       megaservice_envs:
         - name: EMBEDDING_SERVICE_HOST_IP
           value: embedding.amd-llm.svc.cluster.local
