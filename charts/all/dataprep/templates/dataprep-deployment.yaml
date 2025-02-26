@@ -6,7 +6,7 @@ metadata:
     kompose.version: 1.33.0 (3ce457399)
     argocd.argoproj.io/compare-options: IgnoreExtraneous
     argocd.argoproj.io/sync-wave: "5"
-    image.openshift.io/triggers: '[{"from":{"kind":"ImageStreamTag","name":"dataprep:latest"},"fieldPath":"spec.template.spec.containers[?(@.name==\"dataprep-server\")].image"}]'
+    image.openshift.io/triggers: '[{"from":{"kind":"ImageStreamTag","name":"dataprep-redis:latest"},"fieldPath":"spec.template.spec.containers[?(@.name==\"dataprep-redis-server\")].image"}]'
   labels:
     io.kompose.service: dataprep
   name: dataprep

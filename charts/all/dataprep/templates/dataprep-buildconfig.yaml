@@ -7,7 +7,7 @@ spec:
   output:
     to:
       kind: "ImageStreamTag"
-      name: "dataprep:latest"
+      name: "dataprep-redis:latest"
   failedBuildsHistoryLimit: 5
   successfulBuildsHistoryLimit: 5
   nodeSelector: null

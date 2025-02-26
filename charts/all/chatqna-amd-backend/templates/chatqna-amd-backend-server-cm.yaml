@@ -29,10 +29,10 @@ data:
           - "6379:6379"
           - "8001:8001"
         image: redis/redis-stack:7.2.0-v9
-      dataprep-service:
+      dataprep-redis-service:
         host: ${DATAPREP_SERVICE_HOST_IP}
         ports: ${DATAPREP_SERVICE_PORT}
-        image: opea/dataprep:latest
+        image: opea/dataprep-redis:latest
         environment:
           REDIS_URL: ${REDIS_URL}
           INDEX_NAME: ${INDEX_NAME}
@@ -61,7 +61,7 @@ data:
       retrieval:
         host: ${RETRIEVER_SERVICE_HOST_IP}
         ports: ${RETRIEVER_SERVICE_PORT}
-        image: opea/retriever:latest
+        image: opea/retriever-redis:latest
         endpoint: /v1/retrieval
       reranking:
         host: ${RERANK_SERVICE_HOST_IP}

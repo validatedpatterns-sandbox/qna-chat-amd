@@ -7,7 +7,7 @@ spec:
   output:
     to:
       kind: "ImageStreamTag"
-      name: "retriever:latest"
+      name: "retriever-redis:latest"
   failedBuildsHistoryLimit: 5
   successfulBuildsHistoryLimit: 5
   nodeSelector: null
