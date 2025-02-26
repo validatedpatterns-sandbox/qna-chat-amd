@@ -7,10 +7,12 @@ global:
     runtime_envs: []
 
     tei_embedding:
+      uri: https://github.com/huggingface/text-embeddings-inference
+
       # TODO(SG): Provide git reference for AMD
-      git_ref: a7ee6f1fe13ce8aed440d0baa0953cd8f5c23e0a
+      git_ref: 9561fc95
       # TODO(SG): Provide image for AMD
-      image: image-registry.openshift-image-registry.svc:5000/gaudi-llm/tei-gaudi:latest
+      image: image-registry.openshift-image-registry.svc:5000/amd-llm/tei:latest
       pvc:
         size: 3Gi
       model_id: BAAI/bge-base-en-v1.5

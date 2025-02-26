@@ -6,7 +6,7 @@ metadata:
     kompose.version: 1.33.0 (3ce457399)
     argocd.argoproj.io/sync-wave: "5"
     # TODO(SG): Provide the correct image for AMD (tei-gaudi)
-    image.openshift.io/triggers: '[{"from":{"kind":"ImageStreamTag","name":"tei-gaudi:latest"},"fieldPath":"spec.template.spec.containers[?(@.name==\"tei-embedding-amd-server\")].image"}]'
+    image.openshift.io/triggers: '[{"from":{"kind":"ImageStreamTag","name":"tei:latest"},"fieldPath":"spec.template.spec.containers[?(@.name==\"tei-embedding-amd-server\")].image"}]'
   labels:
     io.kompose.service: tei-embedding-service
   name: tei-embedding-service
@@ -56,13 +56,13 @@ spec:
           ports:
             - containerPort: 80
               protocol: TCP
-          resources:
-            limits:
-              # TODO(SG): Provide the correct keyword for AMD
-              habana.ai/gaudi: "1"
-            requests:
-              # TODO(SG): Provide the correct keyword for AMD
-              habana.ai/gaudi: "1"
+{{/*          resources:*/}}
+{{/*            limits:*/}}
+{{/*              # TODO(SG): Provide the correct keyword for AMD*/}}
+{{/*              habana.ai/gaudi: "1"*/}}
+{{/*            requests:*/}}
+{{/*              # TODO(SG): Provide the correct keyword for AMD*/}}
+{{/*              habana.ai/gaudi: "1"*/}}
           volumeMounts:
             - mountPath: /data
               name: tei-embedding-service-claim0
