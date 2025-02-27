@@ -12,7 +12,7 @@ global:
       # TODO(SG): Provide git reference for AMD
       # git_ref: 9561fc95
       # TODO(SG): Provide image for AMD
-      image: quay.io/sgahlot/huggingface/tei:1.6
+      image: quay.io/sgahlot/huggingface/tei:0.1
       pvc:
         size: 3Gi
       model_id: BAAI/bge-base-en-v1.5
