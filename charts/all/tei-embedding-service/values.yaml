@@ -10,9 +10,9 @@ global:
       uri: https://github.com/huggingface/text-embeddings-inference
 
       # TODO(SG): Provide git reference for AMD
-      git_ref: 9561fc95
+      # git_ref: 9561fc95
       # TODO(SG): Provide image for AMD
-      image: image-registry.openshift-image-registry.svc:5000/amd-llm/tei:latest
+      image: quay.io/sgahlot/huggingface/tei:1.6
       pvc:
         size: 3Gi
       model_id: BAAI/bge-base-en-v1.5

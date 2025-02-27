@@ -56,13 +56,13 @@ spec:
           ports:
             - containerPort: 80
               protocol: TCP
-{{/*          resources:*/}}
-{{/*            limits:*/}}
-{{/*              # TODO(SG): Provide the correct keyword for AMD*/}}
-{{/*              habana.ai/gaudi: "1"*/}}
-{{/*            requests:*/}}
-{{/*              # TODO(SG): Provide the correct keyword for AMD*/}}
-{{/*              habana.ai/gaudi: "1"*/}}
+          # resources:
+          #   limits:
+          #     # TODO(SG): Provide the correct keyword for AMD
+          #     habana.ai/gaudi: "1"
+          #   requests:
+          #     # TODO(SG): Provide the correct keyword for AMD
+          #     habana.ai/gaudi: "1"
           volumeMounts:
             - mountPath: /data
               name: tei-embedding-service-claim0
