@@ -37,7 +37,7 @@ spec:
                   name: hf-token-secret
             - name: TEI_RERANKING_ENDPOINT
               # TODO(SG): Fix the xeon for AMD equivalent
-              value: http://tei-xeon-service.amd-llm.svc.cluster.local:8808
+              value: http://{{ .Values.global.amdllm.reranking.service }}.{{ .Values.global.amdllm.namespace }}.svc.cluster.local
             {{- if .Values.global.amdllm.runtime_envs }}
             {{- range .Values.global.amdllm.runtime_envs }}
             - name: {{ .name }}
