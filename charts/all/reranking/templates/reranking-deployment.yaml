@@ -36,8 +36,7 @@ spec:
                   key: huggingface
                   name: hf-token-secret
             - name: TEI_RERANKING_ENDPOINT
-              # TODO(SG): Fix the xeon for AMD equivalent
-              value: http://{{ .Values.global.amdllm.reranking.service }}.{{ .Values.global.amdllm.namespace }}.svc.cluster.local
+              value: "http://{{ .Values.global.amdllm.tei_service.name }}.{{ .Values.global.amdllm.namespace }}.svc.cluster.local:{{ .Values.global.amdllm.tei_service.port }}"
             {{- if .Values.global.amdllm.runtime_envs }}
             {{- range .Values.global.amdllm.runtime_envs }}
             - name: {{ .name }}

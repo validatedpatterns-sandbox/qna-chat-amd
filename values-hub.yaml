@@ -141,21 +141,21 @@ clusterGroup:
       namespace: amd-llm
       project: amd-llm
       path: charts/all/init-secret
-#    # TODO(SG): Is this something that should change for AMD?
-#    tei-xeon-service:
-#      name: tei-xeon-service
-#      namespace: amd-llm
-#      project: amd-llm
-#      path: charts/all/tei-xeon-service
-#      ignoreDifferences:
-#      - group: apps
-#        kind: Deployment
-#        jqPathExpressions:
-#        - '.spec.template.spec.containers[].image'
-#      - group: build.openshift.io
-#        kind: BuildConfig
-#        jqPathExpressions:
-#        - '.spec.paused'
+    # TODO(SG): Is this something that should change for AMD?
+    tei-xeon-service:
+      name: tei-xeon-service
+      namespace: amd-llm
+      project: amd-llm
+      path: charts/all/tei-xeon-service
+      ignoreDifferences:
+      - group: apps
+        kind: Deployment
+        jqPathExpressions:
+        - '.spec.template.spec.containers[].image'
+      - group: build.openshift.io
+        kind: BuildConfig
+        jqPathExpressions:
+        - '.spec.paused'
     tei-embedding-service:
       name: tei-embedding-service
       namespace: amd-llm
