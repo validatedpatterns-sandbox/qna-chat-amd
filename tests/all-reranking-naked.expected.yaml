@@ -57,9 +57,9 @@ spec:
                   key: huggingface
                   name: hf-token-secret
             - name: TEI_RERANKING_ENDPOINT
-              value: http://tei-xeon-service.gaudi-llm.svc.cluster.local:8808
+              value: http://tei-embedding-service.gaudi-llm.svc.cluster.local:8090
           image: image-registry.openshift-image-registry.svc:5000/gaudi-llm/reranking-tei:latest
-          name: reranking-tei-gaudi-server
+          name: reranking-tei-server
           ports:
             - containerPort: 8000
               protocol: TCP

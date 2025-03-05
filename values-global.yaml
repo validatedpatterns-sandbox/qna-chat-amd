@@ -11,19 +11,14 @@ global:
     build_envs: [] 
     runtime_envs: []
 
-    # TODO(SG): Use AMD specific image and model id
     tei_embedding:
-      image: tei-gaudi:latest
+      image: ghcr.io/huggingface/text-embeddings-inference:cpu-1.6
       model_id: BAAI/bge-large-en-v1.5 # change to set custom TEI embedding model
+      # model_id: BAAI/bge-reranker-large # change to set custom TEI reranker model on CPU
       endpoint_name: TEI_EMBEDDING_ENDPOINT
       endpoint_value: http://tei-embedding-service.amd-llm.svc.cluster.local:8090
 #   uncomment to customize PVC size if using TEI models bigger thanBAAI/bge-large-en-v1.5
 #      pvc:i
-#        size: 10Gi
-    tei_xeon:
-      image: ghcr.io/huggingface/text-embeddings-inference:cpu-1.2
-      model_id: BAAI/bge-reranker-large # change to set custom TEI reranker model on CPU
-#      pvc:
 #        size: 10Gi
 #    TODO: IMPLEMENT CUSTOMIZING TGI ENDPOINT FROM RHOAI
 

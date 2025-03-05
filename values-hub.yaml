@@ -141,12 +141,11 @@ clusterGroup:
       namespace: amd-llm
       project: amd-llm
       path: charts/all/init-secret
-    # TODO(SG): Is this something that should change for AMD?
-    tei-xeon-service:
-      name: tei-xeon-service
+    tei-embedding-service:
+      name: tei-embedding-service
       namespace: amd-llm
       project: amd-llm
-      path: charts/all/tei-xeon-service
+      path: charts/all/tei-embedding-service
       ignoreDifferences:
       - group: apps
         kind: Deployment

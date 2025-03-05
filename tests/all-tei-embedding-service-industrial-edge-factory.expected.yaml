@@ -1,11 +1,11 @@
 ---
-# Source: tei-xeon-service/templates/tei-xeon-service-claim0-persistentvolumeclaim.yaml
+# Source: tei-embedding-service/templates/tei-embedding-service-claim0-persistentvolumeclaim.yaml
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   labels:
-    io.kompose.service: tei-xeon-service-claim0
-  name: tei-xeon-service-claim0
+    io.kompose.service: tei-embedding-service-claim0
+  name: tei-embedding-service-claim0
   namespace: gaudi-llm
 spec:
   accessModes:
@@ -14,7 +14,7 @@ spec:
     requests:
       storage: 3Gi
 ---
-# Source: tei-xeon-service/templates/tei-xeon-service-service.yaml
+# Source: tei-embedding-service/templates/tei-embedding-service-service.yaml
 apiVersion: v1
 kind: Service
 metadata:
@@ -22,8 +22,8 @@ metadata:
     kompose.cmd: kompose convert -f docker_compose.yaml
     kompose.version: 1.33.0 (3ce457399)
   labels:
-    io.kompose.service: tei-xeon-service
-  name: tei-xeon-service
+    io.kompose.service: tei-embedding-service
+  name: tei-embedding-service
   namespace: gaudi-llm
 spec:
   ports:
@@ -31,9 +31,9 @@ spec:
       port: 8808
       targetPort: 8080
   selector:
-    io.kompose.service: tei-xeon-service
+    io.kompose.service: tei-embedding-service
 ---
-# Source: tei-xeon-service/templates/tei-xeon-service-deployment.yaml
+# Source: tei-embedding-service/templates/tei-embedding-service-deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -41,14 +41,14 @@ metadata:
     kompose.cmd: kompose convert -f docker_compose.yaml
     kompose.version: 1.33.0 (3ce457399)
   labels:
-    io.kompose.service: tei-xeon-service
-  name: tei-xeon-service
+    io.kompose.service: tei-embedding-service
+  name: tei-embedding-service
   namespace: gaudi-llm
 spec:
   replicas: 1
   selector:
     matchLabels:
-      io.kompose.service: tei-xeon-service
+      io.kompose.service: tei-embedding-service
   strategy:
     type: Recreate
   template:
@@ -58,7 +58,7 @@ spec:
         kompose.version: 1.33.0 (3ce457399)
       labels:
         io.kompose.network/chatqna-default: "true"
-        io.kompose.service: tei-xeon-service
+        io.kompose.service: tei-embedding-service
     spec:
       containers:
         - args:
@@ -75,15 +75,15 @@ spec:
             - name: HOME
               value: /data
           image: ghcr.io/huggingface/text-embeddings-inference:cpu-1.2
-          name: tei-xeon-server
+          name: tei-embedding-server
           ports:
             - containerPort: 8080
               protocol: TCP
           volumeMounts:
             - mountPath: /data
-              name: tei-xeon-service-claim0
+              name: tei-embedding-service-claim0
       restartPolicy: Always
       volumes:
-        - name: tei-xeon-service-claim0
+        - name: tei-embedding-service-claim0
           persistentVolumeClaim:
-            claimName: tei-xeon-service-claim0
+            claimName: tei-embedding-service-claim0

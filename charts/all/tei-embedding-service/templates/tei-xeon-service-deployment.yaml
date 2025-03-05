@@ -45,7 +45,7 @@ spec:
             {{- end }}
             {{- end }}
           image: {{ .Values.global.amdllm.service.image }}
-          name: {{ .Values.global.amdllm.base_name }}-amd-server
+          name: {{ .Values.global.amdllm.base_name }}-server
           ports:
             - containerPort: 80
               protocol: TCP
