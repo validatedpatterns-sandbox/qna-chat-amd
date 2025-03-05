@@ -27,7 +27,7 @@ spec:
       containers:
         - args:
             - --model-id
-            - {{ .Values.global.amdllm.tei_embedding.model_id }}
+            - {{ .Values.global.amdllm.service.model_id }}
             - --port
             - "{{ .Values.global.amdllm.service.port }}"
           env:
