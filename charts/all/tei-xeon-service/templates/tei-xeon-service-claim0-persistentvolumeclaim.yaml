@@ -2,15 +2,12 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   labels:
-    # TODO(SG): Fix the xeon for AMD equivalent
-    io.kompose.service: tei-xeon-service-claim0
-  # TODO(SG): Fix the xeon for AMD equivalent
-  name: tei-xeon-service-claim0
+    io.kompose.service: {{ .Values.global.amdllm.service.name }}-claim0
+  name: {{ .Values.global.amdllm.service.name }}-claim0
   namespace: {{ .Values.global.amdllm.namespace }}
 spec:
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      # TODO(SG): Fix xeon to amd equivalent
-      storage: {{ .Values.global.amdllm.tei_xeon.pvc.size }}
+      storage: {{ .Values.global.amdllm.service.pvc.size }}

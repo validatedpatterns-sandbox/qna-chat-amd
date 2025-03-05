@@ -30,11 +30,11 @@ spec:
               value: /tmp/temp-data
             - name: PYTHONPATH
               value: /home/user/.local/lib/python3.11/site-packages:/home/user
-            - name: HUGGINGFACEHUB_API_TOKEN
+            - name: {{ .Values.global.amdllm.secret.env_name }}
               valueFrom:
                 secretKeyRef:
-                  key: huggingface
-                  name: hf-token-secret
+                  key: {{ .Values.global.amdllm.secret.key }}
+                  name: {{ .Values.global.amdllm.secret.name }}
             - name: TEI_RERANKING_ENDPOINT
               value: "http://{{ .Values.global.amdllm.tei_service.name }}.{{ .Values.global.amdllm.namespace }}.svc.cluster.local:{{ .Values.global.amdllm.tei_service.port }}"
             {{- if .Values.global.amdllm.runtime_envs }}

@@ -5,17 +5,14 @@ metadata:
     kompose.cmd: kompose convert -f docker_compose.yaml
     kompose.version: 1.33.0 (3ce457399)
   labels:
-    # TODO(SG): Fix the xeon for AMD equivalent
-    io.kompose.service: tei-xeon-service
-  # TODO(SG): Fix the xeon for AMD equivalent
-  name: tei-xeon-service
+    io.kompose.service: {{ .Values.global.amdllm.service.name }}
+  name: {{ .Values.global.amdllm.service.name }}
   namespace: {{ .Values.global.amdllm.namespace }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      # TODO(SG): Fix the xeon for AMD equivalent
-      io.kompose.service: tei-xeon-service
+      io.kompose.service: {{ .Values.global.amdllm.service.name }}
   strategy:
     type: Recreate
   template:
@@ -25,22 +22,20 @@ spec:
         kompose.version: 1.33.0 (3ce457399)
       labels:
         io.kompose.network/chatqna-default: "true"
-        # TODO(SG): Fix the xeon for AMD equivalent
-        io.kompose.service: tei-xeon-service
+        io.kompose.service: {{ .Values.global.amdllm.service.name }}
     spec:
       containers:
         - args:
             - --model-id
-            # TODO(SG): Fix the xeon for AMD equivalent
-            - {{ .Values.global.amdllm.tei_xeon.model_id }}
+            - {{ .Values.global.amdllm.tei_embedding.model_id }}
             - --port
-            - '8080'
+            - "{{ .Values.global.amdllm.service.port }}"
           env:
-            - name: HF_TOKEN
+            - name: {{ .Values.global.amdllm.secret.env_name }}
               valueFrom:
                 secretKeyRef:
-                  key: huggingface
-                  name: hf-token-secret
+                  key: {{ .Values.global.amdllm.secret.key }}
+                  name: {{ .Values.global.amdllm.secret.name }}
             - name: HOME
               value: /data
             {{- if .Values.global.amdllm.runtime_envs }}
@@ -49,21 +44,16 @@ spec:
               value: {{ .value }}
             {{- end }}
             {{- end }}
-          # TODO(SG): Fix the xeon for AMD equivalent
-          image: {{ .Values.global.amdllm.tei_xeon.image }}
-          # TODO(SG): Fix the xeon for AMD equivalent
-          name: tei-xeon-server
+          image: {{ .Values.global.amdllm.service.image }}
+          name: {{ .Values.global.amdllm.base_name }}-amd-server
           ports:
-            - containerPort: 8080
+            - containerPort: 80
               protocol: TCP
           volumeMounts:
             - mountPath: /data
-              # TODO(SG): Fix the xeon for AMD equivalent
-              name: tei-xeon-service-claim0
+              name: {{ .Values.global.amdllm.service.name }}-claim0
       restartPolicy: Always
       volumes:
-        # TODO(SG): Fix the xeon for AMD equivalent
-        - name: tei-xeon-service-claim0
+        - name: {{ .Values.global.amdllm.service.name }}-claim0
           persistentVolumeClaim:
-            # TODO(SG): Fix the xeon for AMD equivalent
-            claimName: tei-xeon-service-claim0
+            claimName: {{ .Values.global.amdllm.service.name }}-claim0

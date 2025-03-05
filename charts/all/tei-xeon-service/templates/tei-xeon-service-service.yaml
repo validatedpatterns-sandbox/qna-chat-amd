@@ -5,16 +5,13 @@ metadata:
     kompose.cmd: kompose convert -f docker_compose.yaml
     kompose.version: 1.33.0 (3ce457399)
   labels:
-    # TODO(SG): Fix the xeon for AMD equivalent
-    io.kompose.service: tei-xeon-service
-  # TODO(SG): Fix the xeon for AMD equivalent
-  name: tei-xeon-service
+    io.kompose.service: {{ .Values.global.amdllm.service.name }}
+  name: {{ .Values.global.amdllm.service.name }}
   namespace: {{ .Values.global.amdllm.namespace }}
 spec:
   ports:
-    - name: "8808"
-      port: 8808
-      targetPort: 8080
+    - name: "{{ .Values.global.amdllm.service.port }}"
+      port: {{ .Values.global.amdllm.service.port }}
+      targetPort: {{ .Values.global.amdllm.service.port }}
   selector:
-    # TODO(SG): Fix the xeon for AMD equivalent
-    io.kompose.service: tei-xeon-service
+    io.kompose.service: {{ .Values.global.amdllm.service.name }}

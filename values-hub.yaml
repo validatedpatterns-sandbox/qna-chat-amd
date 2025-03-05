@@ -156,20 +156,6 @@ clusterGroup:
         kind: BuildConfig
         jqPathExpressions:
         - '.spec.paused'
-    tei-embedding-service:
-      name: tei-embedding-service
-      namespace: amd-llm
-      project: amd-llm
-      path: charts/all/tei-embedding-service
-      ignoreDifferences:
-      - group: apps
-        kind: Deployment
-        jqPathExpressions:
-        - '.spec.template.spec.containers[].image'
-      - group: build.openshift.io
-        kind: BuildConfig
-        jqPathExpressions:
-        - '.spec.paused'
     retriever:
       name: retriever
       namespace: amd-llm
