@@ -51,7 +51,7 @@ spec:
               protocol: TCP
           volumeMounts:
             - mountPath: /data
-              name: {{ .Values.global.amdllm.reranker.name }}-claim0
+              name: {{ .Values.global.amdllm.reranker.service_name }}-claim0
       restartPolicy: Always
       volumes:
         - name: {{ .Values.global.amdllm.reranker.service_name }}-claim0
