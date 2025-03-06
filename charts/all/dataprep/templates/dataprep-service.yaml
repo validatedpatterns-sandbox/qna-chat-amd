@@ -7,8 +7,8 @@ metadata:
     argocd.argoproj.io/compare-options: IgnoreExtraneous
     argocd.argoproj.io/sync-wave: "5"
   labels:
-    io.kompose.service: dataprep
-  name: dataprep
+    io.kompose.service: {{ .Values.global.amdllm.service_name }}
+  name: {{ .Values.global.amdllm.service_name }}
   namespace: {{ .Values.global.amdllm.namespace }}
 spec:
   ports:
@@ -16,4 +16,4 @@ spec:
       port: 6007
       targetPort: 6007
   selector:
-    io.kompose.service: dataprep
+    io.kompose.service: {{ .Values.global.amdllm.service_name }}

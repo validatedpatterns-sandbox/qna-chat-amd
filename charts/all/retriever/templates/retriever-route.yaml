@@ -2,7 +2,7 @@
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
-  name: retriever-megaservice-route
+  name: {{ .Values.global.amdllm.service_name }}-microservice-route
   namespace: {{ .Values.global.amdllm.namespace }}
 spec:
   host: megaservice-{{ .Values.global.amdllm.namespace }}.apps.{{ .Values.global.clusterDomain }}
@@ -11,6 +11,6 @@ spec:
     targetPort: 7000
   to:
     kind: Service
-    name: retriever
+    name: {{ .Values.global.amdllm.service_name }}
     weight: 100
   wildcardPolicy: None

@@ -6,6 +6,7 @@ global:
     build_envs: [] # http_proxy/https_prxy can be set here
     runtime_envs: []
     
-    dataprep:
-      image: quay.io/sgahlot/opea/dataprep:latest
-      # git_ref: 7c2e7f6 # make sure to validate buildconfig & other change scope before updating
+    service_name: dataprep
+
+    image: quay.io/sgahlot/opea/dataprep:latest
+    # git_ref: 7c2e7f6 # make sure to validate buildconfig & other change scope before updating

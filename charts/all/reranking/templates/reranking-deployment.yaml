@@ -5,7 +5,7 @@ metadata:
     kompose.cmd: kompose convert -f docker_compose.yaml
     kompose.version: 1.33.0 (3ce457399)
     argocd.argoproj.io/sync-wave: "5"
-    image.openshift.io/triggers: '[{"from":{"kind":"ImageStreamTag","name":"reranking:latest"},"fieldPath":"spec.template.spec.containers[?(@.name==\"reranking-server\")].image"}]'
+    image.openshift.io/triggers: '[{"from":{"kind":"ImageStreamTag","name":"{{ .Values.global.amdllm.service_name }}:latest"},"fieldPath":"spec.template.spec.containers[?(@.name==\"{{ .Values.global.amdllm.service_name }}-server\")].image"}]'
   labels:
     io.kompose.service: {{ .Values.global.amdllm.service_name }}
   name: {{ .Values.global.amdllm.service_name }}

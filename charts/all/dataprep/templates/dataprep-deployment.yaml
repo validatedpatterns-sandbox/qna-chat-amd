@@ -6,16 +6,16 @@ metadata:
     kompose.version: 1.33.0 (3ce457399)
     argocd.argoproj.io/compare-options: IgnoreExtraneous
     argocd.argoproj.io/sync-wave: "5"
-    image.openshift.io/triggers: '[{"from":{"kind":"ImageStreamTag","name":"dataprep-redis:latest"},"fieldPath":"spec.template.spec.containers[?(@.name==\"dataprep-redis-server\")].image"}]'
+    image.openshift.io/triggers: '[{"from":{"kind":"ImageStreamTag","name":"{{ .Values.global.amdllm.service_name }}:latest"},"fieldPath":"spec.template.spec.containers[?(@.name==\"{{ .Values.global.amdllm.service_name }}-server\")].image"}]'
   labels:
-    io.kompose.service: dataprep
-  name: dataprep
+    io.kompose.service: {{ .Values.global.amdllm.service_name }}
+  name: {{ .Values.global.amdllm.service_name }}
   namespace: {{ .Values.global.amdllm.namespace }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      io.kompose.service: dataprep
+      io.kompose.service: {{ .Values.global.amdllm.service_name }}
   template:
     metadata:
       annotations:
@@ -23,7 +23,7 @@ spec:
         kompose.version: 1.33.0 (3ce457399)
       labels:
         io.kompose.network/chatqna-default: "true"
-        io.kompose.service: dataprep
+        io.kompose.service: {{ .Values.global.amdllm.service_name }}
     spec:
       containers:
         - env:
@@ -41,8 +41,8 @@ spec:
               value: {{ .value }}
             {{- end }}
             {{- end }}
-          image: {{ .Values.global.amdllm.dataprep.image }}
-          name: dataprep-server
+          image: {{ .Values.global.amdllm.image }}
+          name: {{ .Values.global.amdllm.service_name }}-server
           ports:
             - containerPort: 6007
               protocol: TCP

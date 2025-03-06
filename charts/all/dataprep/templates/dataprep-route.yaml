@@ -4,7 +4,7 @@ kind: Route
 metadata:
   annotations:
     haproxy.router.openshift.io/timeout: 86400s # long timeout for dataprep processing
-  name: dataprep-megaservice-route
+  name: {{ .Values.global.amdllm.service_name }}-microservice-route
   namespace: {{ .Values.global.amdllm.namespace }}
 spec:
   host: megaservice-{{ .Values.global.amdllm.namespace }}.apps.{{ .Values.global.clusterDomain }}
@@ -13,6 +13,6 @@ spec:
     targetPort: 6007
   to:
     kind: Service
-    name: dataprep
+    name: {{ .Values.global.amdllm.service_name }}
     weight: 100
   wildcardPolicy: None

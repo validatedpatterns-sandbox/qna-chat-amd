@@ -5,7 +5,8 @@ global:
     namespace: amd-llm
     build_envs: [] # http_proxy/https_prxy can be set here 
     runtime_envs: []
-    
-    retriever:
-      image: quay.io/sgahlot/opea/retriever:latest
-      # git_ref: 7c2e7f6 # make sure to validate buildconfig & other change scope before updating
+
+    service_name: retriever
+
+    image: quay.io/sgahlot/opea/retriever:latest
+    # git_ref: 7c2e7f6 # make sure to validate buildconfig & other change scope before updating
