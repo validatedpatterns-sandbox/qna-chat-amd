@@ -17,7 +17,7 @@ global:
 
     embedding:
       name: tei-embedding
-      service_name: tei-service
+      service_name: tei-embedding-service
       port: 8091
       model: BAAI/bge-base-en-v1.5
 
