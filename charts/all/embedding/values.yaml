@@ -11,5 +11,5 @@ global:
       # git_ref: 7c2e7f6 # make sure to validate buildconfig & other change scope before updating
 
     tei_service:
-      name: tei-service
+      name: tei-embedding-service
       port: 8091
