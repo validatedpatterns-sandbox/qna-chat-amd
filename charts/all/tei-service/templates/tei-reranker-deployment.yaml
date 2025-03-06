@@ -5,14 +5,14 @@ metadata:
     kompose.cmd: kompose convert -f docker_compose.yaml
     kompose.version: 1.33.0 (3ce457399)
   labels:
-    io.kompose.service: {{ .Values.global.amdllm.service.name }}
-  name: {{ .Values.global.amdllm.service.name }}
+    io.kompose.service: {{ .Values.global.amdllm.reranker.service_name }}
+  name: {{ .Values.global.amdllm.reranker.service_name }}
   namespace: {{ .Values.global.amdllm.namespace }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      io.kompose.service: {{ .Values.global.amdllm.service.name }}
+      io.kompose.service: {{ .Values.global.amdllm.reranker.service_name }}
   strategy:
     type: Recreate
   template:
@@ -22,14 +22,14 @@ spec:
         kompose.version: 1.33.0 (3ce457399)
       labels:
         io.kompose.network/chatqna-default: "true"
-        io.kompose.service: {{ .Values.global.amdllm.service.name }}
+        io.kompose.service: {{ .Values.global.amdllm.reranker.service_name }}
     spec:
       containers:
         - args:
             - --model-id
-            - {{ .Values.global.amdllm.service.model_id }}
+            - {{ .Values.global.amdllm.reranker.model }}
             - --port
-            - "{{ .Values.global.amdllm.service.port }}"
+            - "{{ .Values.global.amdllm.reranker.port }}"
           env:
             - name: {{ .Values.global.amdllm.secret.env_name }}
               valueFrom:
@@ -44,16 +44,16 @@ spec:
               value: {{ .value }}
             {{- end }}
             {{- end }}
-          image: {{ .Values.global.amdllm.service.image }}
-          name: {{ .Values.global.amdllm.base_name }}-server
+          image: {{ .Values.global.amdllm.image }}
+          name: {{ .Values.global.amdllm.reranker.name }}-server
           ports:
             - containerPort: 80
               protocol: TCP
           volumeMounts:
             - mountPath: /data
-              name: {{ .Values.global.amdllm.service.name }}-claim0
+              name: {{ .Values.global.amdllm.reranker.name }}-claim0
       restartPolicy: Always
       volumes:
-        - name: {{ .Values.global.amdllm.service.name }}-claim0
+        - name: {{ .Values.global.amdllm.reranker.service_name }}-claim0
           persistentVolumeClaim:
-            claimName: {{ .Values.global.amdllm.service.name }}-claim0
+            claimName: {{ .Values.global.amdllm.reranker.service_name }}-claim0

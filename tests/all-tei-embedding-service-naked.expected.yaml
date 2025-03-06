@@ -1,5 +1,5 @@
 ---
-# Source: tei-embedding-service/templates/tei-embedding-service-claim0-persistentvolumeclaim.yaml
+# Source: tei-service/templates/tei-persistentVolumeClaims.yaml
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -14,7 +14,7 @@ spec:
     requests:
       storage: 3Gi
 ---
-# Source: tei-embedding-service/templates/tei-embedding-service-service.yaml
+# Source: tei-service/templates/tei-services.yaml
 apiVersion: v1
 kind: Service
 metadata:
@@ -33,7 +33,7 @@ spec:
   selector:
     io.kompose.service: tei-embedding-service
 ---
-# Source: tei-embedding-service/templates/tei-embedding-service-deployment.yaml
+# Source: tei-service/templates/tei-embedding-deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -81,9 +81,9 @@ spec:
               protocol: TCP
           volumeMounts:
             - mountPath: /data
-              name: tei-embedding-service-claim0
+              name: tei-service-claim0
       restartPolicy: Always
       volumes:
-        - name: tei-embedding-service-claim0
+        - name: tei-service-claim0
           persistentVolumeClaim:
-            claimName: tei-embedding-service-claim0
+            claimName: tei-service-claim0

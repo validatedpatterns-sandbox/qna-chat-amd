@@ -1,0 +1,29 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    io.kompose.service: {{ .Values.global.amdllm.embedding.service_name }}-claim0
+  name: {{ .Values.global.amdllm.embedding.service_name }}-claim0
+  namespace: {{ .Values.global.amdllm.namespace }}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.global.amdllm.pvc.size }}
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    io.kompose.service: {{ .Values.global.amdllm.reranker.service_name }}-claim0
+  name: {{ .Values.global.amdllm.reranker.service_name }}-claim0
+  namespace: {{ .Values.global.amdllm.namespace }}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.global.amdllm.pvc.size }}

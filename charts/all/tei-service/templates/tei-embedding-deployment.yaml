@@ -4,17 +4,17 @@ metadata:
   annotations:
     kompose.cmd: kompose convert -f docker_compose.yaml
     kompose.version: 1.33.0 (3ce457399)
-    argocd.argoproj.io/sync-wave: "5"
-    image.openshift.io/triggers: '[{"from":{"kind":"ImageStreamTag","name":"reranking:latest"},"fieldPath":"spec.template.spec.containers[?(@.name==\"reranking-server\")].image"}]'
   labels:
-    io.kompose.service: {{ .Values.global.amdllm.service_name }}
-  name: {{ .Values.global.amdllm.service_name }}
+    io.kompose.service: {{ .Values.global.amdllm.embedding.service_name }}
+  name: {{ .Values.global.amdllm.embedding.service_name }}
   namespace: {{ .Values.global.amdllm.namespace }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      io.kompose.service: {{ .Values.global.amdllm.service_name }}
+      io.kompose.service: {{ .Values.global.amdllm.embedding.service_name }}
+  strategy:
+    type: Recreate
   template:
     metadata:
       annotations:
@@ -22,21 +22,22 @@ spec:
         kompose.version: 1.33.0 (3ce457399)
       labels:
         io.kompose.network/chatqna-default: "true"
-        io.kompose.service: {{ .Values.global.amdllm.service_name }}
+        io.kompose.service: {{ .Values.global.amdllm.embedding.service_name }}
     spec:
       containers:
-        - env:
-            - name: HOME
-              value: /tmp/temp-data
-            - name: PYTHONPATH
-              value: /home/user/.local/lib/python3.11/site-packages:/home/user
+        - args:
+            - --model-id
+            - {{ .Values.global.amdllm.embedding.model }}
+            - --port
+            - "{{ .Values.global.amdllm.embedding.port }}"
+          env:
             - name: {{ .Values.global.amdllm.secret.env_name }}
               valueFrom:
                 secretKeyRef:
                   key: {{ .Values.global.amdllm.secret.key }}
                   name: {{ .Values.global.amdllm.secret.name }}
-            - name: TEI_RERANKING_ENDPOINT
-              value: "http://{{ .Values.global.amdllm.tei_service.name }}.{{ .Values.global.amdllm.namespace }}.svc.cluster.local:{{ .Values.global.amdllm.tei_service.port }}"
+            - name: HOME
+              value: /data
             {{- if .Values.global.amdllm.runtime_envs }}
             {{- range .Values.global.amdllm.runtime_envs }}
             - name: {{ .name }}
@@ -44,14 +45,15 @@ spec:
             {{- end }}
             {{- end }}
           image: {{ .Values.global.amdllm.image }}
-          name: {{ .Values.global.amdllm.service_name }}-server
+          name: {{ .Values.global.amdllm.embedding.name }}-server
           ports:
-            - containerPort: 8000
+            - containerPort: 80
               protocol: TCP
           volumeMounts:
-            - name: temp-data
-              mountPath: /tmp/temp-data
+            - mountPath: /data
+              name: {{ .Values.global.amdllm.embedding.service_name }}-claim0
       restartPolicy: Always
       volumes:
-        - name: temp-data
-          emptyDir: {}
+        - name: {{ .Values.global.amdllm.embedding.service_name }}-claim0
+          persistentVolumeClaim:
+            claimName: {{ .Values.global.amdllm.embedding.service_name }}-claim0

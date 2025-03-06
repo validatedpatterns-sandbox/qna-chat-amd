@@ -1,13 +1,13 @@
 kind: BuildConfig
 apiVersion: build.openshift.io/v1
 metadata:
-  name: embedding
+  name: {{ .Values.global.amdllm.service_name }}
   namespace: {{ .Values.global.amdllm.namespace }}
 spec:
   output:
     to:
       kind: "ImageStreamTag"
-      name: "embedding-tei:latest"
+      name: "{{ .Values.global.amdllm.service_name }}:latest"
   failedBuildsHistoryLimit: 5
   successfulBuildsHistoryLimit: 5
   nodeSelector: null
@@ -16,7 +16,7 @@ spec:
   runPolicy: SerialLatestOnly
   source:
     git:
-      ref: {{ .Values.global.amdllm.embedding.git_ref }}
+      ref: {{ .Values.global.amdllm.git_ref }}
       uri: https://github.com/opea-project/GenAIComps.git
     type: Git
   strategy:

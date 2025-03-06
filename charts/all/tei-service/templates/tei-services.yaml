@@ -1,0 +1,37 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker_compose.yaml
+    kompose.version: 1.33.0 (3ce457399)
+  labels:
+    io.kompose.service: {{ .Values.global.amdllm.embedding.service_name }}
+  name: {{ .Values.global.amdllm.embedding.service_name }}
+  namespace: {{ .Values.global.amdllm.namespace }}
+spec:
+  ports:
+    - name: "{{ .Values.global.amdllm.embedding.port }}"
+      port: {{ .Values.global.amdllm.embedding.port }}
+      targetPort: {{ .Values.global.amdllm.embedding.port }}
+  selector:
+    io.kompose.service: {{ .Values.global.amdllm.embedding.service_name }}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker_compose.yaml
+    kompose.version: 1.33.0 (3ce457399)
+  labels:
+    io.kompose.service: {{ .Values.global.amdllm.reranker.service_name }}
+  name: {{ .Values.global.amdllm.reranker.service_name }}
+  namespace: {{ .Values.global.amdllm.namespace }}
+spec:
+  ports:
+    - name: "{{ .Values.global.amdllm.reranker.port }}"
+      port: {{ .Values.global.amdllm.reranker.port }}
+      targetPort: {{ .Values.global.amdllm.reranker.port }}
+  selector:
+    io.kompose.service: {{ .Values.global.amdllm.reranker.service_name }}

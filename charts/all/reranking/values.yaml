@@ -6,9 +6,10 @@ global:
     build_envs: [] # http_proxy/https_prxy can be set here
     runtime_envs: []
 
-    reranking:  
-      image: quay.io/sgahlot/opea/reranking:latest
-      # git_ref: 7c2e7f6 # make sure to validate buildconfig & other change scope before updating
+    service_name: reranking
+
+    image: quay.io/sgahlot/opea/reranking:latest
+    # git_ref: 7c2e7f6 # make sure to validate buildconfig & other change scope before updating
 
     secret:
       env_name: HUGGINGFACEHUB_API_TOKEN
@@ -16,6 +17,6 @@ global:
       key: huggingface
 
     tei_service:
-      name: tei-embedding-service
+      name: tei-reranker-service
       port: 8090
 

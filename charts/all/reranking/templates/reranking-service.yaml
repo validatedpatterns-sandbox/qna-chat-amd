@@ -5,8 +5,8 @@ metadata:
     kompose.cmd: kompose convert -f docker_compose.yaml
     kompose.version: 1.33.0 (3ce457399)
   labels:
-    io.kompose.service: reranking
-  name: reranking
+    io.kompose.service: {{ .Values.global.amdllm.service_name }}
+  name: {{ .Values.global.amdllm.service_name }}
   namespace: {{ .Values.global.amdllm.namespace }}
 spec:
   ports:
@@ -14,4 +14,4 @@ spec:
       port: 8000
       targetPort: 8000
   selector:
-    io.kompose.service: reranking
+    io.kompose.service: {{ .Values.global.amdllm.service_name }}

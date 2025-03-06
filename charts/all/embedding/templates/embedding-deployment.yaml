@@ -6,16 +6,16 @@ metadata:
     kompose.version: 1.33.0 (3ce457399)
     argocd.argoproj.io/compare-options: IgnoreExtraneous
     argocd.argoproj.io/sync-wave: "5"
-    image.openshift.io/triggers: '[{"from":{"kind":"ImageStreamTag","name":"embedding-tei:latest"},"fieldPath":"spec.template.spec.containers[?(@.name==\"embedding-tei-server\")].image"}]'
+    image.openshift.io/triggers: '[{"from":{"kind":"ImageStreamTag","name":"embedding:latest"},"fieldPath":"spec.template.spec.containers[?(@.name==\"embedding-server\")].image"}]'
   labels:
-    io.kompose.service: embedding
-  name: embedding
+    io.kompose.service: {{ .Values.global.amdllm.service_name }}
+  name: {{ .Values.global.amdllm.service_name }}
   namespace: {{ .Values.global.amdllm.namespace }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      io.kompose.service: embedding
+      io.kompose.service: {{ .Values.global.amdllm.service_name }}
   template:
     metadata:
       annotations:
@@ -23,7 +23,7 @@ spec:
         kompose.version: 1.33.0 (3ce457399)
       labels:
         io.kompose.network/chatqna-default: "true"
-        io.kompose.service: embedding
+        io.kompose.service: {{ .Values.global.amdllm.service_name }}
     spec:
       containers:
         - env:
@@ -32,15 +32,15 @@ spec:
             - name: PYTHONPATH
               value: /home/user/.local/lib/python3.11/site-packages:/home/user:/home
             - name: TEI_EMBEDDING_ENDPOINT
-              value: http://tei-embedding-service.amd-llm.svc.cluster.local:8090
+              value: "http://{{ .Values.global.amdllm.tei_service.name }}.{{ .Values.global.amdllm.namespace }}.svc.cluster.local:{{ .Values.global.amdllm.tei_service.port }}"
             {{- if .Values.global.amdllm.runtime_envs }}
             {{- range .Values.global.amdllm.runtime_envs }}
             - name: {{ .name }}
               value: {{ .value }}
             {{- end }}
             {{- end }}
-          image: {{ .Values.global.amdllm.embedding.image }}
-          name: embedding-server
+          image: {{ .Values.global.amdllm.image }}
+          name: {{ .Values.global.amdllm.service_name }}-server
           ports:
             - containerPort: 6000
               protocol: TCP
