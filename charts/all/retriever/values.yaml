@@ -7,6 +7,30 @@ global:
     runtime_envs: []
 
     service_name: retriever
+    service_port: 7000
+    route_path: /v1/retrieval
+    docker_file_Path: comps/retrievers/src/Dockerfile
+    working_dir: /home/user/comps/retrievers/src
 
+    git_repo_uri: https://github.com/opea-project/GenAIComps.git
     image: quay.io/sgahlot/opea/retriever:latest
     # git_ref: 7c2e7f6 # make sure to validate buildconfig & other change scope before updating
+
+    env:
+      home:
+        name: HOME
+        value: /tmp/temp-data
+      python:
+        name: PYTHONPATH
+        value: /home/user/.local/lib/python3.11/site-packages:/home/user
+      rag:
+        name: INDEX_NAME
+        value: rag-redis
+      redis:
+        name: REDIS_URL
+        value: redis://redis-vector-db.amd-llm.svc.cluster.local:6379
+
+    volume:
+      tmp:
+        name: temp-data
+        path: /tmp/temp-data

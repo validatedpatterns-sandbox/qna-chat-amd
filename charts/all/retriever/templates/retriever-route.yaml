@@ -6,9 +6,9 @@ metadata:
   namespace: {{ .Values.global.amdllm.namespace }}
 spec:
   host: megaservice-{{ .Values.global.amdllm.namespace }}.apps.{{ .Values.global.clusterDomain }}
-  path: /v1/retrieval
+  path: {{ .Values.global.amdllm.route_path }}
   port:
-    targetPort: 7000
+    targetPort: {{ .Values.global.amdllm.service_port }}
   to:
     kind: Service
     name: {{ .Values.global.amdllm.service_name }}

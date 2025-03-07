@@ -4,8 +4,8 @@ metadata:
   annotations:
     kompose.cmd: kompose convert -f docker_compose.yaml
     kompose.version: 1.33.0 (3ce457399)
-    # argocd.argoproj.io/compare-options: IgnoreExtraneous
-    # argocd.argoproj.io/sync-wave: "5"
+    argocd.argoproj.io/compare-options: IgnoreExtraneous
+    argocd.argoproj.io/sync-wave: "5"
   labels:
     io.kompose.service: {{ .Values.global.amdllm.service_name }}
   name: {{ .Values.global.amdllm.service_name }}

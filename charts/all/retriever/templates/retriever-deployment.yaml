@@ -26,14 +26,14 @@ spec:
     spec:
       containers:
         - env:
-            - name: HOME
-              value: /tmp/temp-data
-            - name: PYTHONPATH
-              value: /home/user/.local/lib/python3.11/site-packages:/home/user
-            - name: INDEX_NAME
-              value: rag-redis
-            - name: REDIS_URL
-              value: redis://redis-vector-db.amd-llm.svc.cluster.local:6379
+            - name: {{ .Values.global.amdllm.env.home.name }}
+              value: {{ .Values.global.amdllm.env.home.value }}
+            - name: {{ .Values.global.amdllm.env.python.name }}
+              value: {{ .Values.global.amdllm.env.python.value }}
+            - name: {{ .Values.global.amdllm.env.rag.name }}
+              value: {{ .Values.global.amdllm.env.rag.value }}
+            - name: {{ .Values.global.amdllm.env.redis.name }}
+              value: {{ .Values.global.amdllm.env.redis.value }}
             {{- if .Values.global.amdllm.runtime_envs }}
             {{- range .Values.global.amdllm.runtime_envs }}
             - name: {{ .name }}
@@ -43,13 +43,13 @@ spec:
           image: {{ .Values.global.amdllm.image }}
           name: {{ .Values.global.amdllm.service_name }}-server
           ports:
-            - containerPort: 7000
+            - containerPort: {{ .Values.global.amdllm.service_port }}
               protocol: TCP
-          workingDir: /home/user/comps/retrievers/src
+          workingDir: {{ .Values.global.amdllm.working_dir }}
           volumeMounts:
-            - name: temp-data
-              mountPath: /tmp/temp-data
+            - name: {{ .Values.global.amdllm.volume.tmp.name }}
+              mountPath: {{ .Values.global.amdllm.volume.tmp.path }}
       restartPolicy: Always
       volumes:
-        - name: temp-data
+        - name: {{ .Values.global.amdllm.volume.tmp.name }}
           emptyDir: {}

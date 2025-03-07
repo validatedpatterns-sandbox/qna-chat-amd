@@ -8,7 +8,7 @@ metadata:
   namespace: {{ .Values.global.amdllm.namespace }}
 spec:
   host: megaservice-{{ .Values.global.amdllm.namespace }}.apps.{{ .Values.global.clusterDomain }}
-  path: /v1/dataprep
+  path: {{ .Values.global.amdllm.route_path }}
   port:
     targetPort: {{ .Values.global.amdllm.service_port }}
   to:

@@ -5,10 +5,31 @@ global:
     namespace: amd-llm
     build_envs: [] # http_proxy/https_prxy can be set here
     runtime_envs: []
-    
-    service_name: dataprep
 
+    service_name: dataprep
+    service_port: 5000
+    route_path: /v1/dataprep
+    docker_file_Path: comps/dataprep/src/Dockerfile
+
+    git_repo_uri: https://github.com/opea-project/GenAIComps.git
     image: quay.io/sgahlot/opea/dataprep:latest
     # git_ref: 7c2e7f6 # make sure to validate buildconfig & other change scope before updating
 
-    service_port: 9000
+    env:
+      home:
+        name: HOME
+        value: /tmp/temp-data
+      python:
+        name: PYTHONPATH
+        value: /home/user/.local/lib/python3.11/site-packages:/home/user
+      redis:
+        name: REDIS_URL
+        value: redis://redis-vector-db.amd-llm.svc.cluster.local:6379
+
+    volume:
+      tmp:
+        name: temp-data
+        path: /tmp/temp-data
+      uploaded_files:
+        name: uploaded-files
+        path: /home/user/comps/dataprep/src/uploaded_files

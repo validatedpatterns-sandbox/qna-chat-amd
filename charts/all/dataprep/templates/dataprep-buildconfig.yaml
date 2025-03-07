@@ -17,12 +17,12 @@ spec:
   source:
     git:
       ref: {{ .Values.global.amdllm.git_ref }}
-      uri: https://github.com/opea-project/GenAIComps.git
+      uri: {{ .Values.global.amdllm.docker_file_Path }}
     type: Git
   strategy:
     type: Docker
     dockerStrategy:
-      dockerfilePath: comps/dataprep/src/Dockerfile
+      dockerfilePath: {{ .Values.global.amdllm.docker_file_Path }}
       {{- if .Values.global.amdllm.build_envs }}
       env:
       {{- range .Values.global.amdllm.build_envs }}

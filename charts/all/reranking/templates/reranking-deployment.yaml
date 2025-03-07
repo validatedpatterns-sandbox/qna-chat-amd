@@ -26,16 +26,16 @@ spec:
     spec:
       containers:
         - env:
-            - name: HOME
-              value: /tmp/temp-data
-            - name: PYTHONPATH
-              value: /home/user/.local/lib/python3.11/site-packages:/home/user
-            - name: {{ .Values.global.amdllm.secret.env_name }}
+            - name: {{ .Values.global.amdllm.env.home.name }}
+              value: {{ .Values.global.amdllm.env.home.value }}
+            - name: {{ .Values.global.amdllm.env.python.name }}
+              value: {{ .Values.global.amdllm.env.python.value }}
+            - name: {{ .Values.global.amdllm.env.hugging_face_api.name }}
               valueFrom:
                 secretKeyRef:
                   key: {{ .Values.global.amdllm.secret.key }}
                   name: {{ .Values.global.amdllm.secret.name }}
-            - name: TEI_RERANKING_ENDPOINT
+            - name: {{ .Values.global.amdllm.env.tei_service.name }}
               value: "http://{{ .Values.global.amdllm.tei_service.name }}.{{ .Values.global.amdllm.namespace }}.svc.cluster.local:{{ .Values.global.amdllm.tei_service.port }}"
             {{- if .Values.global.amdllm.runtime_envs }}
             {{- range .Values.global.amdllm.runtime_envs }}
@@ -46,12 +46,12 @@ spec:
           image: {{ .Values.global.amdllm.image }}
           name: {{ .Values.global.amdllm.service_name }}-server
           ports:
-            - containerPort: 8000
+            - containerPort: {{ .Values.global.amdllm.service_port }}
               protocol: TCP
           volumeMounts:
-            - name: temp-data
-              mountPath: /tmp/temp-data
+            - name: {{ .Values.global.amdllm.volume.tmp.name }}
+              mountPath: {{ .Values.global.amdllm.volume.tmp.path }}
       restartPolicy: Always
       volumes:
-        - name: temp-data
+        - name: {{ .Values.global.amdllm.volume.tmp.name }}
           emptyDir: {}

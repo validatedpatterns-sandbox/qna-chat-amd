@@ -12,8 +12,8 @@ metadata:
   namespace: {{ .Values.global.amdllm.namespace }}
 spec:
   ports:
-    - name: "6000"
-      port: 6000
-      targetPort: 6000
+    - name: "{{ .Values.global.amdllm.service_port }}"
+      port: {{ .Values.global.amdllm.service_port }}
+      targetPort: {{ .Values.global.amdllm.service_port }}
   selector:
     io.kompose.service: {{ .Values.global.amdllm.service_name }}

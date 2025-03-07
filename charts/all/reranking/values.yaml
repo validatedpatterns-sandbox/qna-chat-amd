@@ -7,7 +7,12 @@ global:
     runtime_envs: []
 
     service_name: reranking
+    service_port: 8000
+    route_path: /v1/reranking
+    python_path: "/home/user/.local/lib/python3.11/site-packages:/home/user"
+    docker_file_Path: comps/rerankings/src/Dockerfile
 
+    git_repo_uri: https://github.com/opea-project/GenAIComps.git
     image: quay.io/sgahlot/opea/reranking:latest
     # git_ref: 7c2e7f6 # make sure to validate buildconfig & other change scope before updating
 
@@ -19,4 +24,21 @@ global:
     tei_service:
       name: tei-reranker-service
       port: 8090
+
+    env:
+      home:
+        name: HOME
+        value: /tmp/temp-data
+      python:
+        name: PYTHONPATH
+        value: /home/user/.local/lib/python3.11/site-packages:/home/user
+      hugging_face_api:
+        name: HUGGINGFACEHUB_API_TOKEN
+      tei_service:
+        name: TEI_EMBEDDING_ENDPOINT
+
+    volume:
+      tmp:
+        name: temp-data
+        path: /tmp/temp-data
 
