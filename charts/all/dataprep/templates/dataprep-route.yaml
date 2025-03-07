@@ -10,7 +10,7 @@ spec:
   host: megaservice-{{ .Values.global.amdllm.namespace }}.apps.{{ .Values.global.clusterDomain }}
   path: /v1/dataprep
   port:
-    targetPort: 6007
+    targetPort: {{ .Values.global.amdllm.service_port }}
   to:
     kind: Service
     name: {{ .Values.global.amdllm.service_name }}

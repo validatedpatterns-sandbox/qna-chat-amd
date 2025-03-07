@@ -44,7 +44,7 @@ spec:
           image: {{ .Values.global.amdllm.image }}
           name: {{ .Values.global.amdllm.service_name }}-server
           ports:
-            - containerPort: 6007
+            - containerPort: {{ .Values.global.amdllm.service_port }}
               protocol: TCP
           volumeMounts:
             - name: temp-data

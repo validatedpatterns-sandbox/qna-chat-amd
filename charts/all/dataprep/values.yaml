@@ -10,3 +10,5 @@ global:
 
     image: quay.io/sgahlot/opea/dataprep:latest
     # git_ref: 7c2e7f6 # make sure to validate buildconfig & other change scope before updating
+
+    service_port: 9000
