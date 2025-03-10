@@ -7,7 +7,7 @@ spec:
   output:
     to:
       kind: "ImageStreamTag"
-      name: "{{ .Values.global.amdllm.service_name }}:latest-not-used"
+      name: "{{ .Values.global.amdllm.service_name }}:latest"
   failedBuildsHistoryLimit: 5
   successfulBuildsHistoryLimit: 5
   nodeSelector: null
@@ -17,7 +17,7 @@ spec:
   source:
     git:
       ref: {{ .Values.global.amdllm.git_ref }}
-      uri: {{ .Values.global.amdllm.git_repo_uri }}
+      uri: {{ .Values.global.amdllm.git_repo_uri }}-unused
     type: Git
   strategy:
     type: Docker
