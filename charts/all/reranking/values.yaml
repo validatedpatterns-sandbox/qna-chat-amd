@@ -35,7 +35,7 @@ global:
       hugging_face_api:
         name: HUGGINGFACEHUB_API_TOKEN
       tei_service:
-        name: TEI_EMBEDDING_ENDPOINT
+        name: TEI_RERANKING_ENDPOINT
 
     volume:
       tmp:
