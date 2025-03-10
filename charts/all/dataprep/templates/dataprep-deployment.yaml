@@ -33,8 +33,8 @@ spec:
               value: {{ .Values.global.amdllm.env.python.value }}
             - name: {{ .Values.global.amdllm.env.redis.name }}
               value: {{ .Values.global.amdllm.env.redis.value }}
-            - name: INDEX_NAME
-              value: rag-redis
+            - name: {{ .Values.global.amdllm.env.index.name }}
+              value: {{ .Values.global.amdllm.env.index.value }}
             {{- if .Values.global.amdllm.runtime_envs }}
             {{- range .Values.global.amdllm.runtime_envs }}
             - name: {{ .name }}

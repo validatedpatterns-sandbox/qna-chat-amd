@@ -7,7 +7,7 @@ spec:
   output:
     to:
       kind: "ImageStreamTag"
-      name: "{{ .Values.global.amdllm.service_name }}:latest"
+      name: "{{ .Values.global.amdllm.service_name }}:latest-not-used"
   failedBuildsHistoryLimit: 5
   successfulBuildsHistoryLimit: 5
   nodeSelector: null
