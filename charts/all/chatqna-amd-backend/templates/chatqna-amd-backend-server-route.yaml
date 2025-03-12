@@ -2,14 +2,14 @@
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
-  name: megaservice-main-route
+  name: {{ .Values.global.amdllm.service_name }}-main-route
   namespace: {{ .Values.global.amdllm.namespace }}
 spec:
   host: megaservice-{{ .Values.global.amdllm.namespace }}.apps.{{ .Values.global.clusterDomain }}
   port:
-    targetPort: 8888
+    targetPort: {{ .Values.global.amdllm.service_port }}
   to:
     kind: Service
-    name: chatqna-amd-backend-server
+    name: {{ .Values.global.amdllm.service_name }}
     weight: 100
   wildcardPolicy: None

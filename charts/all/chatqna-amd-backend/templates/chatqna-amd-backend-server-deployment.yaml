@@ -6,16 +6,16 @@ metadata:
     kompose.version: 1.33.0 (3ce457399)
     argocd.argoproj.io/compare-options: IgnoreExtraneous
     argocd.argoproj.io/sync-wave: "5"
-    image.openshift.io/triggers: '[{"from":{"kind":"ImageStreamTag","name":"chatqna:latest"},"fieldPath":"spec.template.spec.containers[?(@.name==\"chatqna-amd-backend-server\")].image"}]'
+    image.openshift.io/triggers: '[{"from":{"kind":"ImageStreamTag","name":"{{ .Values.global.amdllm.service_name }}:latest"},"fieldPath":"spec.template.spec.containers[?(@.name==\"{{ .Values.global.amdllm.service_name }}-server\")].image"}]'
   labels:
-    io.kompose.service: chatqna-amd-backend-server
-  name: chatqna-amd-backend-server
+    io.kompose.service: {{ .Values.global.amdllm.service_name }}
+  name: {{ .Values.global.amdllm.service_name }}
   namespace: {{ .Values.global.amdllm.namespace }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      io.kompose.service: chatqna-amd-backend-server
+      io.kompose.service: {{ .Values.global.amdllm.service_name }}
   template:
     metadata:
       annotations:
@@ -23,7 +23,7 @@ spec:
         kompose.version: 1.33.0 (3ce457399)
       labels:
         io.kompose.network/amd-default: "true"
-        io.kompose.service: chatqna-amd-backend-server
+        io.kompose.service: {{ .Values.global.amdllm.service_name }}
     spec:
       containers:
         - env:
@@ -35,26 +35,30 @@ spec:
               value: {{ .value }}
             {{- end }}
             {{- end }}           
-            {{- if .Values.global.amdllm.chatqna_amd_backend.megaservice_envs }}
-            {{- range .Values.global.amdllm.chatqna_amd_backend.megaservice_envs }}
+            {{- if .Values.global.amdllm.megaservice_envs }}
+            {{- range .Values.global.amdllm.megaservice_envs }}
             - name: {{ .name }}
               value: {{ .value }}
             {{- end }}
-            {{- end }}           
-            - name: PYTHONPATH
-              value: ${PYTHONPATH}:/home/user/GenAIComps
-          image: {{ .Values.global.amdllm.chatqna_amd_backend.image }}
-          name: chatqna-amd-backend-server
+            {{- end }}
+            {{- if .Values.global.amdllm.env }}
+            {{- range .Values.global.amdllm.env }}
+            - name: {{ .name }}
+              value: {{ .value }}
+            {{- end }}
+            {{- end }}
+          image: {{ .Values.global.amdllm.image }}
+          name: {{ .Values.global.amdllm.service_name }}-server
           ports:
-            - containerPort: 8888
+            - containerPort: {{ .Values.global.amdllm.service_port }}
               protocol: TCP
           volumeMounts:
-            - mountPath: /home/user/megaservice-config.yaml
-              name: megaservice-config
-              subPath: megaservice-config.yaml
+            - name: {{ .Values.global.amdllm.volume.megaservice_config.name }}
+              mountPath: {{ .Values.global.amdllm.volume.megaservice_config.path }}
+              subPath: {{ .Values.global.amdllm.volume.megaservice_config.subPath }}
       restartPolicy: Always
       volumes:
-        - name: megaservice-config 
+        - name: {{ .Values.global.amdllm.volume.megaservice_config.name }}
           configMap:
-            name: megaservice-config
+            name: {{ .Values.global.amdllm.volume.megaservice_config.name }}
             defaultMode: 0755

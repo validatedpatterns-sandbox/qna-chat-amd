@@ -2,12 +2,12 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: megaservice-config
+  name: {{ .Values.global.amdllm.service_name }}-config
   namespace: {{ .Values.global.amdllm.namespace }}
   annotations:
     argocd.argoproj.io/sync-wave: "-1"
 data:
-  chatqna.yaml: |
+  {{ .Values.global.amdllm.service_name }}.yaml: |
     # Copyright (c) 2024 Intel Corporation
     #
     # Licensed under the Apache License, Version 2.0 (the "License");

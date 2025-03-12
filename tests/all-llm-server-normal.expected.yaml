@@ -1,5 +1,5 @@
 ---
-# Source: llm-server/templates/llm-service.yaml
+# Source: llm/templates/llm-service.yaml
 apiVersion: v1
 kind: Service
 metadata:
@@ -20,7 +20,7 @@ spec:
   selector:
     io.kompose.service: llm
 ---
-# Source: llm-server/templates/llm-deployment.yaml
+# Source: llm/templates/llm-deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -29,7 +29,7 @@ metadata:
     kompose.version: 1.33.0 (3ce457399)
     argocd.argoproj.io/compare-options: IgnoreExtraneous
     argocd.argoproj.io/sync-wave: "5"
-    image.openshift.io/triggers: '[{"from":{"kind":"ImageStreamTag","name":"llm-tgi:latest"},"fieldPath":"spec.template.spec.containers[?(@.name==\"llm-tgi-gaudi-server\")].image"}]'
+    image.openshift.io/triggers: '[{"from":{"kind":"ImageStreamTag","name":"llm-tgi:latest"},"fieldPath":"spec.template.spec.containers[?(@.name==\"llm-tgi-server\")].image"}]'
   labels:
     io.kompose.service: llm
   name: llm
@@ -49,14 +49,7 @@ spec:
         io.kompose.service: llm
     spec:
       containers:
-        - command:
-          - /bin/bash
-          - -c
-          - |
-            cp /usr/lib/ssl/cert.pem /tmp/bundle.crt && \
-            cat /rhoai-ca/tls.crt  | tee -a '/tmp/bundle.crt' && \
-            python llm.py
-          env:
+        - env:
             - name: HOME
               value: /tmp/temp-data
             - name: PYTHONPATH
@@ -71,7 +64,7 @@ spec:
             - name: TGI_LLM_ENDPOINT
               value: https://tgi-70b-gaudi-gaudi-llm.apps.region.example.com
           image: llm-tgi:latest
-          name: llm-tgi-gaudi-server
+          name: llm-tgi
           ports:
             - containerPort: 9000
               protocol: TCP
@@ -89,11 +82,11 @@ spec:
             secretName: rhoai-ca-bundle
             defaultMode: 420
 ---
-# Source: llm-server/templates/llm-buildconfig.yaml
+# Source: llm/templates/llm-buildconfig.yaml
 kind: BuildConfig
 apiVersion: build.openshift.io/v1
 metadata:
-  name: llm-tgi-gaudi-server
+  name: llm-tgi
   namespace: gaudi-llm
 spec:
   output:
@@ -118,7 +111,7 @@ spec:
   triggers:
   - type: ConfigChange
 ---
-# Source: llm-server/templates/llm-imagestream.yaml
+# Source: llm/templates/llm-imagestream.yaml
 apiVersion: image.openshift.io/v1
 kind: ImageStream
 metadata:
@@ -128,7 +121,7 @@ spec:
   lookupPolicy:
     local: true
 ---
-# Source: llm-server/templates/llm-route.yaml
+# Source: llm/templates/llm-route.yaml
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:

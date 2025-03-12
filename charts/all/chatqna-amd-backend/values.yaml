@@ -7,25 +7,40 @@ global:
     namespace: amd-llm
     build_envs: [] # http_proxy/https_prxy can be set here
     runtime_envs: []
-    
-    chatqna_amd_backend:
-      # git_ref: 7c2e7f6
-      image: quay.io/sgahlot/opea/chatqna:latest
-      megaservice_envs:
-        - name: EMBEDDING_SERVICE_HOST_IP
-          value: embedding.amd-llm.svc.cluster.local
-        - name: EMBEDDING_SERVICE_PORT
-          value: '"6000"'
-        - name: RETRIEVER_SERVICE_HOST_IP 
-          value: retriever.amd-llm.svc.cluster.local
-        - name: RETRIEVER_SERVICE_PORT 
-          value: '"7000"'
-        - name: RERANK_SERVICE_HOST_IP 
-          value: reranking.amd-llm.svc.cluster.local
-        - name: RERANK_SERVICE_PORT
-          value: '"8000"'
-        # TODO(SG): have to figure out what is this service pointing to?
-        - name: LLM_SERVICE_HOST_IP 
-          value: llm.amd-llm.svc.cluster.local
-        - name: LLM_SERVICE_PORT 
-          value: '"9000"'
+
+    service_name: chatqna
+    service_port: 5006
+    container_port: 8888
+    docker_file_Path: Dockerfile
+
+    git_repo_uri: https://github.com/opea-project/GenAIExamples.git
+    image: quay.io/sgahlot/opea/chatqna:latest
+
+    # git_ref: 7c2e7f6
+    megaservice_envs:
+      - name: EMBEDDING_SERVICE_HOST_IP
+        value: embedding.amd-llm.svc.cluster.local
+      - name: EMBEDDING_SERVICE_PORT
+        value: '"5002"'
+      - name: RETRIEVER_SERVICE_HOST_IP
+        value: retriever.amd-llm.svc.cluster.local
+      - name: RETRIEVER_SERVICE_PORT
+        value: '"5004"'
+      - name: RERANK_SERVICE_HOST_IP
+        value: reranking.amd-llm.svc.cluster.local
+      - name: RERANK_SERVICE_PORT
+        value: '"5003"'
+      - name: LLM_SERVICE_HOST_IP
+        value: llm.amd-llm.svc.cluster.local
+      - name: LLM_SERVICE_PORT
+        value: '"5005"'
+
+    env:
+      - name: PYTHONPATH
+        value: ${PYTHONPATH}:/home/user/GenAIComps
+
+    volume:
+      megaservice_config:
+        name: megaservice-config
+        path: /home/user/megaservice-config.yaml
+        subPath: megaservice-config.yaml

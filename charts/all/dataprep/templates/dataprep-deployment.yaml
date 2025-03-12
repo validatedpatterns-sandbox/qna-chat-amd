@@ -27,14 +27,12 @@ spec:
     spec:
       containers:
         - env:
-            - name: {{ .Values.global.amdllm.env.home.name }}
-              value: {{ .Values.global.amdllm.env.home.value }}
-            - name: {{ .Values.global.amdllm.env.python.name }}
-              value: {{ .Values.global.amdllm.env.python.value }}
-            - name: {{ .Values.global.amdllm.env.redis.name }}
-              value: {{ .Values.global.amdllm.env.redis.value }}
-            - name: {{ .Values.global.amdllm.env.index.name }}
-              value: {{ .Values.global.amdllm.env.index.value }}
+            {{- if .Values.global.amdllm.env }}
+            {{- range .Values.global.amdllm.env }}
+            - name: {{ .name }}
+              value: {{ .value }}
+            {{- end }}
+            {{- end }}
             {{- if .Values.global.amdllm.runtime_envs }}
             {{- range .Values.global.amdllm.runtime_envs }}
             - name: {{ .name }}

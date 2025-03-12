@@ -1,5 +1,5 @@
 ---
-# Source: llm-server/templates/llm-service.yaml
+# Source: llm/templates/llm-service.yaml
 apiVersion: v1
 kind: Service
 metadata:
@@ -20,7 +20,7 @@ spec:
   selector:
     io.kompose.service: llm
 ---
-# Source: llm-server/templates/llm-deployment.yaml
+# Source: llm/templates/llm-deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -89,7 +89,7 @@ spec:
             secretName: rhoai-ca-bundle
             defaultMode: 420
 ---
-# Source: llm-server/templates/llm-buildconfig.yaml
+# Source: llm/templates/llm-buildconfig.yaml
 kind: BuildConfig
 apiVersion: build.openshift.io/v1
 metadata:
@@ -118,7 +118,7 @@ spec:
   triggers:
   - type: ConfigChange
 ---
-# Source: llm-server/templates/llm-imagestream.yaml
+# Source: llm/templates/llm-imagestream.yaml
 apiVersion: image.openshift.io/v1
 kind: ImageStream
 metadata:
@@ -128,7 +128,7 @@ spec:
   lookupPolicy:
     local: true
 ---
-# Source: llm-server/templates/llm-route.yaml
+# Source: llm/templates/llm-route.yaml
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:

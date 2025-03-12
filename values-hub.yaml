@@ -192,7 +192,7 @@ clusterGroup:
       name: llm-server
       namespace: amd-llm
       project: amd-llm
-      path: charts/all/llm-server
+      path: charts/all/llm
       ignoreDifferences:
       - group: apps
         kind: Deployment
