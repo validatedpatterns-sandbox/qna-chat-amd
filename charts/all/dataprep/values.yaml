@@ -7,7 +7,8 @@ global:
     runtime_envs: []
 
     service_name: dataprep
-    service_port: 5000
+    service_port: 5001
+    container_port: 5000
     route_path: /v1/dataprep
     docker_file_Path: comps/dataprep/src/Dockerfile
 

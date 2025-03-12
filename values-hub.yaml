@@ -188,11 +188,11 @@ clusterGroup:
       namespace: amd-llm
       project: amd-llm
       path: charts/all/redis-vector-db
-    llm-server-for-amd:
-      name: llm-server-for-amd
+    llm-server:
+      name: llm-server
       namespace: amd-llm
       project: amd-llm
-      path: charts/all/llm-server-for-amd
+      path: charts/all/llm-server
       ignoreDifferences:
       - group: apps
         kind: Deployment
@@ -202,8 +202,6 @@ clusterGroup:
         kind: BuildConfig
         jqPathExpressions:
         - '.spec.paused'
-    # TODO(SG): This was specific to Gaudi. For now, I've just renamed to amd but we should comment out this whole
-    #           application and test it out once everytihg else is working.
     amd-llm-init:
       name: amd-llm-init
       namespace: amd-llm
@@ -259,13 +257,6 @@ clusterGroup:
         kind: BuildConfig
         jqPathExpressions:
         - '.spec.paused'
-    # TODO(SG): Commenting out as this is failing in ArgoCD
-    # Error from the pod:
-    # Traceback (most recent call last):
-    #  File "/home/user/chatqna.py", line 7, in <module>
-    #    from comps import ChatQnAGateway, MicroService, ServiceOrchestrator, ServiceType
-    #ImportError: cannot import name 'ChatQnAGateway' from 'comps' (/home/user/GenAIComps/comps/__init__.py)
-
     chatqna-amd-backend:
       name: chatqna-amd-backend
       namespace: amd-llm

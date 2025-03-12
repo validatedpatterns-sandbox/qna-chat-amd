@@ -7,7 +7,8 @@ global:
     runtime_envs: []
 
     service_name: embedding
-    service_port: 6000
+    service_port: 5002
+    container_port: 6000
     route_path: /v1/embeddings
     docker_file_Path: comps/embeddings/src/Dockerfile
 

@@ -2,15 +2,15 @@
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
-  name: llm-megaservice-route
+  name: {{ .Values.global.amdllm.service_name }}-microservice-route
   namespace: {{ .Values.global.amdllm.namespace }}
 spec:
   host: megaservice-{{ .Values.global.amdllm.namespace }}.apps.{{ .Values.global.clusterDomain }}
-  path: /v1/chat/completions
+  path: {{ .Values.global.amdllm.route_path }}
   port:
-    targetPort: 9000
+    targetPort: {{ .Values.global.amdllm.service_port }}
   to:
     kind: Service
-    name: llm
+    name: {{ .Values.global.amdllm.service_name }}
     weight: 100
   wildcardPolicy: None

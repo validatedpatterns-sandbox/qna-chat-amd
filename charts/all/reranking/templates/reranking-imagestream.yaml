@@ -2,7 +2,7 @@
 apiVersion: image.openshift.io/v1
 kind: ImageStream
 metadata:
-  name: {{ .Values.global.amdllm.service_name }}
+  name: {{ .Values.global.amdllm.service_name }}-server
   namespace: {{ .Values.global.amdllm.namespace }}
 spec:
   lookupPolicy:

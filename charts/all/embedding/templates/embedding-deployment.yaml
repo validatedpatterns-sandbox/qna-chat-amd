@@ -42,7 +42,7 @@ spec:
           image: {{ .Values.global.amdllm.image }}
           name: {{ .Values.global.amdllm.service_name }}-server
           ports:
-            - containerPort: {{ .Values.global.amdllm.service_port }}
+            - containerPort: {{ .Values.global.amdllm.container_port }}
               protocol: TCP
           volumeMounts:
             - name: {{ .Values.global.amdllm.volume.tmp.name }}

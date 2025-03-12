@@ -1,0 +1,52 @@
+global: 
+  pattern: amdllm
+
+  clusterDomain: lab.com
+
+  amdllm:
+    namespace: amd-llm
+    servingRuntime:
+      namespace: rag-demo
+      name: tgi-70b-1
+    build_envs: [] # http_proxy/https_prxy can be set here
+    runtime_envs: []
+
+    service_name: llm-tgi
+    service_port: 5005
+    container_port: 9000
+    route_path: /v1/chat/completions
+    docker_file_Path: comps/llms/src/text-generation/Dockerfile
+
+    git_repo_uri: https://github.com/opea-project/GenAIComps.git
+    image: quay.io/sgahlot/opea/llm-tgi:latest
+    # git_ref: 8ebe2bf # make sure to validate buildconfig & other change scope before updating
+
+    secret:
+      hugging_face:
+        name: hf-token-secret
+        key: huggingface
+      rhoai_ca:
+        name: rhoai-ca-bundle
+
+    env:
+      home:
+        name: HOME
+        value: /tmp/temp-data
+      python:
+        name: PYTHONPATH
+        value: /home/user/.local/lib/python3.11/site-packages:/home/user
+      hugging_face_api:
+        name: HUGGINGFACEHUB_API_TOKEN
+      ssl_cert:
+        name: SSL_CERT_FILE
+        value: /tmp/bundle.crt
+      tgi_llm:
+        name: TGI_LLM_ENDPOINT
+
+    volume:
+      tmp:
+        name: temp-data
+        path: /tmp/temp-data
+      rhoai_ca:
+        name: odh-ca-bundle
+        path: /rhoai-ca

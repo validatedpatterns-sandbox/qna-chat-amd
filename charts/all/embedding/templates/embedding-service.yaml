@@ -14,6 +14,6 @@ spec:
   ports:
     - name: "{{ .Values.global.amdllm.service_port }}"
       port: {{ .Values.global.amdllm.service_port }}
-      targetPort: {{ .Values.global.amdllm.service_port }}
+      targetPort: {{ .Values.global.amdllm.container_port }}
   selector:
     io.kompose.service: {{ .Values.global.amdllm.service_name }}

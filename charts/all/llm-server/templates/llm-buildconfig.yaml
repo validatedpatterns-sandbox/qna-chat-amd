@@ -1,13 +1,13 @@
 kind: BuildConfig
 apiVersion: build.openshift.io/v1
 metadata:
-  name: llm-tgi-amd-server
+  name: {{ .Values.global.amdllm.service_name }}
   namespace: {{ .Values.global.amdllm.namespace }}
 spec:
   output:
     to:
       kind: "ImageStreamTag"
-      name: "llm-tgi:latest"
+      name: "{{ .Values.global.amdllm.service_name }}:latest"
   failedBuildsHistoryLimit: 5
   successfulBuildsHistoryLimit: 5
   nodeSelector: null
@@ -16,13 +16,13 @@ spec:
   runPolicy: SerialLatestOnly
   source:
     git:
-      ref: {{ .Values.global.amdllm.llm_server_for_amd.git_ref }}
-      uri: https://github.com/opea-project/GenAIComps.git
+      ref: {{ .Values.global.amdllm.llm_server_for_amd.git_ref }}-unused
+      uri: {{ .Values.global.amdllm.git_repo_uri }}
     type: Git
   strategy:
     type: Docker
     dockerStrategy:
-      dockerfilePath: comps/llms/text-generation/tgi/Dockerfile
+      dockerfilePath: {{ .Values.global.amdllm.docker_file_Path }}
       {{- if .Values.global.amdllm.build_envs }}
       env:
       {{- range .Values.global.amdllm.build_envs }}

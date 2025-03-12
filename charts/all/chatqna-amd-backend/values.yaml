@@ -24,6 +24,7 @@ global:
           value: reranking.amd-llm.svc.cluster.local
         - name: RERANK_SERVICE_PORT
           value: '"8000"'
+        # TODO(SG): have to figure out what is this service pointing to?
         - name: LLM_SERVICE_HOST_IP 
           value: llm.amd-llm.svc.cluster.local
         - name: LLM_SERVICE_PORT 
