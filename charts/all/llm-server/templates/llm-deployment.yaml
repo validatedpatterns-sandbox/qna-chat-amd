@@ -26,13 +26,6 @@ spec:
         io.kompose.service: {{ .Values.global.amdllm.service_name }}
     spec:
       containers:
-        - command:
-          - /bin/bash
-          - -c
-          - |
-            cp /usr/lib/ssl/cert.pem /tmp/bundle.crt && \
-            cat /rhoai-ca/tls.crt  | tee -a '/tmp/bundle.crt' && \
-            python llm.py
           env:
             - name: {{ .Values.global.amdllm.env.home.name }}
               value: {{ .Values.global.amdllm.env.home.value }}
