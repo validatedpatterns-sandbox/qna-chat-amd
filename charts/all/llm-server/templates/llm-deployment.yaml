@@ -26,7 +26,7 @@ spec:
         io.kompose.service: {{ .Values.global.amdllm.service_name }}
     spec:
       containers:
-          env:
+        - env:
             - name: {{ .Values.global.amdllm.env.home.name }}
               value: {{ .Values.global.amdllm.env.home.value }}
             - name: {{ .Values.global.amdllm.env.python.name }}
