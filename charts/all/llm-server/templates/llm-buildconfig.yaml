@@ -16,8 +16,8 @@ spec:
   runPolicy: SerialLatestOnly
   source:
     git:
-      ref: {{ .Values.global.amdllm.llm_server_for_amd.git_ref }}-unused
-      uri: {{ .Values.global.amdllm.git_repo_uri }}
+      ref: {{ .Values.global.amdllm.git_ref }}
+      uri: {{ .Values.global.amdllm.git_repo_uri }}-unused
     type: Git
   strategy:
     type: Docker
