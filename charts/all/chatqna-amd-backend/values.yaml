@@ -41,6 +41,6 @@ global:
 
     volume:
       megaservice_config:
-        name: megaservice-config
-        path: /home/user/megaservice-config.yaml
-        subPath: megaservice-config.yaml
+        name: chatqna-config
+        path: /home/user/chatqna-config.yaml
+        subPath: chatqna-config.yaml
