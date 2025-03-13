@@ -11,9 +11,9 @@ metadata:
   namespace: {{ .Values.global.amdllm.namespace }}
 spec:
   ports:
-    - name: "{{ .Values.global.amdllm.embedding.port }}"
-      port: {{ .Values.global.amdllm.embedding.port }}
-      targetPort: {{ .Values.global.amdllm.embedding.port }}
+    - name: "{{ .Values.global.amdllm.embedding.service_port }}"
+      port: {{ .Values.global.amdllm.embedding.service_port }}
+      targetPort: {{ .Values.global.amdllm.embedding.service_port }}
   selector:
     io.kompose.service: {{ .Values.global.amdllm.embedding.service_name }}
 
@@ -30,8 +30,8 @@ metadata:
   namespace: {{ .Values.global.amdllm.namespace }}
 spec:
   ports:
-    - name: "{{ .Values.global.amdllm.reranker.port }}"
-      port: {{ .Values.global.amdllm.reranker.port }}
-      targetPort: {{ .Values.global.amdllm.reranker.port }}
+    - name: "{{ .Values.global.amdllm.reranker.service_port }}"
+      port: {{ .Values.global.amdllm.reranker.service_port }}
+      targetPort: {{ .Values.global.amdllm.reranker.service_port }}
   selector:
     io.kompose.service: {{ .Values.global.amdllm.reranker.service_name }}

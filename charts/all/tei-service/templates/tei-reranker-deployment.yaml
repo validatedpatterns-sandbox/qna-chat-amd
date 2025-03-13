@@ -29,7 +29,7 @@ spec:
             - --model-id
             - {{ .Values.global.amdllm.reranker.model }}
             - --port
-            - "{{ .Values.global.amdllm.reranker.port }}"
+            - "{{ .Values.global.amdllm.reranker.container_port }}"
           env:
             - name: {{ .Values.global.amdllm.secret.env_name }}
               valueFrom:

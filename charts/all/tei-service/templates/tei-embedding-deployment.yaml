@@ -29,7 +29,7 @@ spec:
             - --model-id
             - {{ .Values.global.amdllm.embedding.model }}
             - --port
-            - "{{ .Values.global.amdllm.embedding.port }}"
+            - "{{ .Values.global.amdllm.embedding.container_port }}"
           env:
             - name: {{ .Values.global.amdllm.secret.env_name }}
               valueFrom:

@@ -12,13 +12,15 @@ global:
     reranker:
       name: tei-reranker
       service_name: tei-reranker-service
-      port: 8090
+      service_port: 5006
+      container_port: 8090
       model: BAAI/bge-reranker-base
 
     embedding:
       name: tei-embedding
       service_name: tei-embedding-service
-      port: 8091
+      service_port: 5007
+      container_port: 8091
       model: BAAI/bge-base-en-v1.5
 
     pvc:

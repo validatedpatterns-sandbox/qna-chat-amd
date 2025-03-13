@@ -18,18 +18,18 @@ global:
 
     # git_ref: 7c2e7f6
     megaservice_envs:
-      - name: EMBEDDING_SERVICE_HOST_IP
-        value: embedding.amd-llm.svc.cluster.local
-      - name: EMBEDDING_SERVICE_PORT
-        value: '"5002"'
+      - name: EMBEDDING_SERVER_HOST_IP
+        value: tei-embedding-service.amd-llm.svc.cluster.local
+      - name: EMBEDDING_SERVER_PORT
+        value: '"5007"'
       - name: RETRIEVER_SERVICE_HOST_IP
         value: retriever.amd-llm.svc.cluster.local
       - name: RETRIEVER_SERVICE_PORT
         value: '"5004"'
-      - name: RERANK_SERVICE_HOST_IP
-        value: reranking.amd-llm.svc.cluster.local
-      - name: RERANK_SERVICE_PORT
-        value: '"5003"'
+      - name: RERANK_SERVER__HOST_IP
+        value: tei-reranker-service.amd-llm.svc.cluster.local
+      - name: RERANK_SERVER__PORT
+        value: '"5006"'
       - name: LLM_SERVICE_HOST_IP
         value: llm.amd-llm.svc.cluster.local
       - name: LLM_SERVICE_PORT
