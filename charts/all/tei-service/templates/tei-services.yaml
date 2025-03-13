@@ -13,7 +13,7 @@ spec:
   ports:
     - name: "{{ .Values.global.amdllm.embedding.service_port }}"
       port: {{ .Values.global.amdllm.embedding.service_port }}
-      targetPort: {{ .Values.global.amdllm.embedding.service_port }}
+      targetPort: {{ .Values.global.amdllm.embedding.container_port }}
   selector:
     io.kompose.service: {{ .Values.global.amdllm.embedding.service_name }}
 
@@ -32,6 +32,6 @@ spec:
   ports:
     - name: "{{ .Values.global.amdllm.reranker.service_port }}"
       port: {{ .Values.global.amdllm.reranker.service_port }}
-      targetPort: {{ .Values.global.amdllm.reranker.service_port }}
+      targetPort: {{ .Values.global.amdllm.reranker.container_port }}
   selector:
     io.kompose.service: {{ .Values.global.amdllm.reranker.service_name }}
