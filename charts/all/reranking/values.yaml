@@ -20,25 +20,20 @@ global:
     secret:
       name: hf-token-secret
       key: huggingface
+      env_var_name: HUGGINGFACEHUB_API_TOKEN
 
     tei_service:
       name: tei-reranker-service
       port: 8090
+      env_var_name: TEI_RERANKING_ENDPOINT
 
     env:
-      home:
-        name: HOME
+      - name: HOME
         value: /tmp/temp-data
-      python:
-        name: PYTHONPATH
+      - name: PYTHONPATH
         value: /home/user/.local/lib/python3.11/site-packages:/home/user
-      hugging_face_api:
-        name: HUGGINGFACEHUB_API_TOKEN
-      tei_service:
-        name: TEI_RERANKING_ENDPOINT
 
     volume:
-      tmp:
-        name: temp-data
+      - name: temp-data
         path: /tmp/temp-data
 

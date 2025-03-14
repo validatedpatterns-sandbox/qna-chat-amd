@@ -52,13 +52,13 @@ spec:
           ports:
             - containerPort: {{ .Values.global.amdllm.service_port }}
               protocol: TCP
-          volumeMounts:
-            - name: {{ .Values.global.amdllm.volume.megaservice_config.name }}
-              mountPath: {{ .Values.global.amdllm.volume.megaservice_config.path }}
-              subPath: {{ .Values.global.amdllm.volume.megaservice_config.subPath }}
+          #volumeMounts:
+          #  - name: {{ .Values.global.amdllm.volume.megaservice_config.name }}
+          #    mountPath: {{ .Values.global.amdllm.volume.megaservice_config.path }}
+          #    subPath: {{ .Values.global.amdllm.volume.megaservice_config.subPath }}
       restartPolicy: Always
-      volumes:
-        - name: {{ .Values.global.amdllm.volume.megaservice_config.name }}
-          configMap:
-            name: {{ .Values.global.amdllm.volume.megaservice_config.name }}
-            defaultMode: 0755
+      #volumes:
+      #  - name: {{ .Values.global.amdllm.volume.megaservice_config.name }}
+      #    configMap:
+      #      name: {{ .Values.global.amdllm.volume.megaservice_config.name }}
+      #      defaultMode: 0755

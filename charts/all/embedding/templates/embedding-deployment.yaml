@@ -27,11 +27,13 @@ spec:
     spec:
       containers:
         - env:
-            - name: {{ .Values.global.amdllm.env.home.name }}
-              value: {{ .Values.global.amdllm.env.home.value }}
-            - name: {{ .Values.global.amdllm.env.python.name }}
-              value: {{ .Values.global.amdllm.env.python.value }}
-            - name: {{ .Values.global.amdllm.env.tei_service.name }}
+            {{- if .Values.global.amdllm.env }}
+            {{- range .Values.global.amdllm.env }}
+            - name: {{ .name }}
+              value: {{ .value }}
+            {{- end }}
+            {{- end }}
+            - name: {{ .Values.global.amdllm.tei_service.env_var_name }}
               value: "http://{{ .Values.global.amdllm.tei_service.name }}.{{ .Values.global.amdllm.namespace }}.svc.cluster.local:{{ .Values.global.amdllm.tei_service.port }}"
             {{- if .Values.global.amdllm.runtime_envs }}
             {{- range .Values.global.amdllm.runtime_envs }}
@@ -45,9 +47,17 @@ spec:
             - containerPort: {{ .Values.global.amdllm.container_port }}
               protocol: TCP
           volumeMounts:
-            - name: {{ .Values.global.amdllm.volume.tmp.name }}
-              mountPath: {{ .Values.global.amdllm.volume.tmp.path }}
+            {{- if .Values.global.amdllm.volume }}
+            {{- range .Values.global.amdllm.volume }}
+            - name: {{ .name }}
+              mountPath: {{ .path }}
+            {{- end }}
+            {{- end }}
       restartPolicy: Always
       volumes:
-        - name: {{ .Values.global.amdllm.volume.tmp.name }}
+        {{- if .Values.global.amdllm.volume }}
+        {{- range .Values.global.amdllm.volume }}
+        - name: {{ .name }}
           emptyDir: {}
+        {{- end }}
+        {{- end }}

@@ -45,13 +45,17 @@ spec:
             - containerPort: {{ .Values.global.amdllm.container_port }}
               protocol: TCP
           volumeMounts:
-            - name: {{ .Values.global.amdllm.volume.tmp.name }}
-              mountPath: {{ .Values.global.amdllm.volume.tmp.path }}
-            - name: {{ .Values.global.amdllm.volume.uploaded_files.name }}
-              mountPath: {{ .Values.global.amdllm.volume.uploaded_files.path }}
+            {{- if .Values.global.amdllm.volume }}
+            {{- range .Values.global.amdllm.volume }}
+            - name: {{ .name }}
+              mountPath: {{ .path }}
+            {{- end }}
+            {{- end }}
       restartPolicy: Always
       volumes:
-        - name: {{ .Values.global.amdllm.volume.tmp.name }}
+        {{- if .Values.global.amdllm.volume }}
+        {{- range .Values.global.amdllm.volume }}
+        - name: {{ .name }}
           emptyDir: {}
-        - name: {{ .Values.global.amdllm.volume.uploaded_files.name }}
-          emptyDir: {}
+        {{- end }}
+        {{- end }}

@@ -19,18 +19,14 @@ global:
     tei_service:
       name: tei-embedding-service
       port: 8091
+      env_var_name: TEI_EMBEDDING_ENDPOINT
 
     env:
-      home:
-        name: HOME
+      - name: HOME
         value: /tmp/temp-data
-      python:
-        name: PYTHONPATH
+      - name: PYTHONPATH
         value: /home/user/.local/lib/python3.11/site-packages:/home/user:/home
-      tei_service:
-        name: TEI_EMBEDDING_ENDPOINT
 
     volume:
-      tmp:
-        name: temp-data
+      - name: temp-data
         path: /tmp/temp-data

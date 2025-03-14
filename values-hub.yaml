@@ -141,6 +141,23 @@ clusterGroup:
       namespace: amd-llm
       project: amd-llm
       path: charts/all/init-secret
+    redis-vector-db:
+      name: redis-vector-db
+      namespace: amd-llm
+      project: amd-llm
+      path: charts/all/redis-vector-db
+    amd-llm-init:
+      name: amd-llm-init
+      namespace: amd-llm
+      project: amd-llm
+      path: charts/all/amd-llm-init
+      ignoreDifferences:
+      - group: machineconfiguration.openshift.io
+        kind: KubeletConfig
+        name:
+        jsonPointers:
+          - /metadata/labels/argocd.argoproj.io~1instance
+          - /metadata/annotations/kubectl.kubernetes.io~1last-applied-configuration
     tei-service:
       name: tei-service
       namespace: amd-llm
@@ -183,11 +200,6 @@ clusterGroup:
         kind: BuildConfig
         jqPathExpressions:
         - '.spec.paused'
-    redis-vector-db:
-      name: redis-vector-db
-      namespace: amd-llm
-      project: amd-llm
-      path: charts/all/redis-vector-db
     llm-server:
       name: llm-server
       namespace: amd-llm
@@ -202,18 +214,6 @@ clusterGroup:
         kind: BuildConfig
         jqPathExpressions:
         - '.spec.paused'
-    amd-llm-init:
-      name: amd-llm-init
-      namespace: amd-llm
-      project: amd-llm
-      path: charts/all/amd-llm-init
-      ignoreDifferences:
-      - group: machineconfiguration.openshift.io
-        kind: KubeletConfig
-        name:
-        jsonPointers:
-          - /metadata/labels/argocd.argoproj.io~1instance
-          - /metadata/annotations/kubectl.kubernetes.io~1last-applied-configuration
     embedding:
       name: embedding
       namespace: amd-llm

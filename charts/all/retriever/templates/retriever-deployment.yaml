@@ -26,14 +26,13 @@ spec:
     spec:
       containers:
         - env:
-            - name: {{ .Values.global.amdllm.env.home.name }}
-              value: {{ .Values.global.amdllm.env.home.value }}
-            - name: {{ .Values.global.amdllm.env.python.name }}
-              value: {{ .Values.global.amdllm.env.python.value }}
-            - name: {{ .Values.global.amdllm.env.rag.name }}
-              value: {{ .Values.global.amdllm.env.rag.value }}
-            - name: {{ .Values.global.amdllm.env.redis.name }}
-              value: {{ .Values.global.amdllm.env.redis.value }}
+            {{- if .Values.global.amdllm.env }}
+            {{- range .Values.global.amdllm.env }}
+            - name: {{ .name }}
+              value: {{ .value }}
+            {{- end }}
+            {{- end }}
+
             {{- if .Values.global.amdllm.runtime_envs }}
             {{- range .Values.global.amdllm.runtime_envs }}
             - name: {{ .name }}
@@ -47,9 +46,17 @@ spec:
               protocol: TCP
           workingDir: {{ .Values.global.amdllm.working_dir }}
           volumeMounts:
-            - name: {{ .Values.global.amdllm.volume.tmp.name }}
-              mountPath: {{ .Values.global.amdllm.volume.tmp.path }}
+            {{- if .Values.global.amdllm.volume }}
+            {{- range .Values.global.amdllm.volume }}
+            - name: {{ .name }}
+              mountPath: {{ .path }}
+            {{- end }}
+            {{- end }}
       restartPolicy: Always
       volumes:
-        - name: {{ .Values.global.amdllm.volume.tmp.name }}
+        {{- if .Values.global.amdllm.volume }}
+        {{- range .Values.global.amdllm.volume }}
+        - name: {{ .name }}
           emptyDir: {}
+        {{- end }}
+        {{- end }}

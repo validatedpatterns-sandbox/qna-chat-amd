@@ -27,9 +27,7 @@ global:
         value: rag-redis
 
     volume:
-      tmp:
-        name: temp-data
+      - name: temp-data
         path: /tmp/temp-data
-      uploaded_files:
-        name: uploaded-files
+      - name: uploaded-files
         path: /home/user/comps/dataprep/src/uploaded_files

@@ -18,20 +18,15 @@ global:
     # git_ref: 7c2e7f6 # make sure to validate buildconfig & other change scope before updating
 
     env:
-      home:
-        name: HOME
+      - name: HOME
         value: /tmp/temp-data
-      python:
-        name: PYTHONPATH
+      - name: PYTHONPATH
         value: /home/user/.local/lib/python3.11/site-packages:/home/user
-      rag:
-        name: INDEX_NAME
+      - name: INDEX_NAME
         value: rag-redis
-      redis:
-        name: REDIS_URL
+      - name: REDIS_URL
         value: redis://redis-vector-db.amd-llm.svc.cluster.local:6379
 
     volume:
-      tmp:
-        name: temp-data
+      - name: temp-data
         path: /tmp/temp-data
