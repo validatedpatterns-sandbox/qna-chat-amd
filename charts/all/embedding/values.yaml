@@ -18,7 +18,7 @@ global:
 
     tei_service:
       name: tei-embedding-service
-      port: 8091
+      port: 5007
       env_var_name: TEI_EMBEDDING_ENDPOINT
 
     env:

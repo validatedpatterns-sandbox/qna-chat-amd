@@ -24,7 +24,7 @@ global:
 
     tei_service:
       name: tei-reranker-service
-      port: 8090
+      port: 5006
       env_var_name: TEI_RERANKING_ENDPOINT
 
     env:
