@@ -16,6 +16,7 @@ function display_menu_and_get_choice() {
     "Embedding"
     "Rerank"
     "Retriever"
+    "ChatQnA - main"
     "Quit"
   )
 
@@ -92,6 +93,15 @@ function display_menu_and_get_choice() {
       invoke_endpoint $op $endpoint "$content_type" "$body_option" "$body"
       break
       ;;
+    "ChatQnA - main")
+      local op='chatqna'
+      local endpoint="chatqna"
+      local body_option="--data"
+      local body='{ "messages": "What is the revenue of Nike in 2023?" }'
+      local content_type='application/json'
+      invoke_endpoint $op $endpoint "$content_type" "$body_option" "$body"
+      break
+      ;;
     "Quit")
       exit
       ;;
@@ -107,8 +117,12 @@ function invoke_endpoint() {
   local body_option=$4
   local body=$5
 
+  if [ -f "$svc.out" ]; then
+    rm "$svc.out"   # delete an existing out file
+  fi
+
   set -x
-  local response_code=$( curl -s -S -w '%{response_code}, exitCode=%{exitcode}\n' -X POST $OCP_HOST/v1/$endpoint --header "Content-Type: $content_type" $body_option "$body" -o $svc.out )
+  local response_code=$( curl --max-time 300 -s -S -w '%{response_code}, exitCode=%{exitcode}\n' -X POST $OCP_HOST/v1/$endpoint --header "Content-Type: $content_type" $body_option "$body" -o $svc.out )
   set +x
 
   local response_body="$(cat $svc.out)"
