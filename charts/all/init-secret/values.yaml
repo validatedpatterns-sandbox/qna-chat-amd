@@ -3,13 +3,23 @@ global:
     namespace: amd-llm
 
 secret:
-  name: hf-token-secret
-
-  store:
-    name: vault-backend
-    kind: ClusterSecretStore
-
   hugging_face:
-    partial_path: huggingface
-    full_path: secret/hub/huggingface
-    key_name: token
+    ocp:
+      secret_name: hf-token-secret
+      key: huggingface
+    vault:
+      secret_name: huggingface
+      path: secret/hub/huggingface
+      key: token
+  rhoai_model:
+    ocp:
+      secret_name: rhoai-model-secret
+      key: inference_endpoint
+    vault:
+      secret_name: rhoai_model
+      path: secret/hub/rhoai_model
+      key: inference_endpoint
+
+secret_store:
+  name: vault-backend
+  kind: ClusterSecretStore

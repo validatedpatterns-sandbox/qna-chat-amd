@@ -27,6 +27,9 @@ global:
         key: huggingface
       rhoai_ca:
         name: rhoai-ca-bundle
+      rhoai_model:
+        name: rhoai-model-secret
+        key: inference_endpoint
 
     env:
       home:

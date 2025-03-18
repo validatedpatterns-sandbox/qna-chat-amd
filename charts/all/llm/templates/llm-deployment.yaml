@@ -39,7 +39,10 @@ spec:
             - name: {{ .Values.global.amdllm.env.ssl_cert.name }}
               value: {{ .Values.global.amdllm.env.ssl_cert.value }}
             - name: {{ .Values.global.amdllm.env.tgi_llm.name }}
-              value: https://{{ .Values.global.amdllm.servingRuntime.name }}-{{ .Values.global.amdllm.servingRuntime.namespace }}.apps.{{ .Values.global.clusterDomain }}
+              valueFrom:
+                secretKeyRef:
+                  key: {{ .Values.global.amdllm.secret.rhoai_model.key }}
+                  name: {{ .Values.global.amdllm.secret.rhoai_model.name }}
             {{- if .Values.global.amdllm.runtime_envs }}
             {{- range .Values.global.amdllm.runtime_envs }}
             - name: {{ .name }}
