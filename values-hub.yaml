@@ -158,11 +158,11 @@ clusterGroup:
         jsonPointers:
           - /metadata/labels/argocd.argoproj.io~1instance
           - /metadata/annotations/kubectl.kubernetes.io~1last-applied-configuration
-    tei-service:
-      name: tei-service
+    text-embeddings-inference:
+      name: text-embeddings-inference
       namespace: amd-llm
       project: amd-llm
-      path: charts/all/tei-service
+      path: charts/all/tei
       ignoreDifferences:
       - group: apps
         kind: Deployment
