@@ -27,22 +27,23 @@ spec:
     spec:
       containers:
         - env:
-            - name: {{ .Values.global.amdllm.env.home.name }}
-              value: {{ .Values.global.amdllm.env.home.value }}
-            - name: {{ .Values.global.amdllm.env.python.name }}
-              value: {{ .Values.global.amdllm.env.python.value }}
-            - name: {{ .Values.global.amdllm.env.hugging_face_api.name }}
+            {{- if .Values.global.amdllm.env }}
+            {{- range .Values.global.amdllm.env }}
+            - name: {{ .name }}
+              value: {{ .value }}
+            {{- end }}
+            {{- end }}
+            {{- if .Values.global.amdllm.secret_env }}
+            {{- range .Values.global.amdllm.secret_env }}
+            - name: {{ .name }}
               valueFrom:
                 secretKeyRef:
-                  key: {{ .Values.global.amdllm.secret.hugging_face.key }}
-                  name: {{ .Values.global.amdllm.secret.hugging_face.name }}
-            - name: {{ .Values.global.amdllm.env.ssl_cert.name }}
-              value: {{ .Values.global.amdllm.env.ssl_cert.value }}
-            - name: {{ .Values.global.amdllm.env.tgi_llm.name }}
-              valueFrom:
-                secretKeyRef:
-                  key: {{ .Values.global.amdllm.secret.rhoai_model.key }}
-                  name: {{ .Values.global.amdllm.secret.rhoai_model.name }}
+                  key: {{ .secret.key }}
+                  name: {{ .secret.name }}
+              value: {{ .value }}
+            {{- end }}
+            {{- end }}
+
             {{- if .Values.global.amdllm.runtime_envs }}
             {{- range .Values.global.amdllm.runtime_envs }}
             - name: {{ .name }}

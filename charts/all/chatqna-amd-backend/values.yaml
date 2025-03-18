@@ -31,7 +31,7 @@ global:
       - name: RERANK_SERVER_PORT
         value: '"5006"'
       - name: LLM_SERVER_HOST_IP
-        value: llm.amd-llm.svc.cluster.local
+        value: llm-tgi.amd-llm.svc.cluster.local
       - name: LLM_SERVER_PORT
         value: '"5005"'
 
