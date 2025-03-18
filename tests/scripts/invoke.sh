@@ -116,27 +116,24 @@ function invoke_endpoint() {
   local content_type=$3
   local body_option=$4
   local body=$5
-
-  if [ -f "$svc.out" ]; then
-    rm "$svc.out"   # delete an existing out file
-  fi
+  local tmp_file=$(mktemp)
 
   set -x
-  local response_code=$( curl --max-time 300 -s -S -w '%{response_code}, exitCode=%{exitcode}\n' -X POST $OCP_HOST/v1/$endpoint --header "Content-Type: $content_type" $body_option "$body" -o $svc.out )
+  local response_code=$( curl --max-time 300 -s -S -w '%{response_code}, exitCode=%{exitcode}\n' -X POST $OCP_HOST/v1/$endpoint --header "Content-Type: $content_type" $body_option "$body" -o $tmp_file )
   set +x
 
-  local response_body="$(cat $svc.out)"
+  local response_body="$(cat $tmp_file)"
   local body_truncated=${response_body:0:55}
   if [ "${response_body} != ${body_truncated}" ]; then
     body_truncated="${body_truncated}..."
   fi
 
-  local body="$(cat $svc.out)"
+  local body="$(cat $tmp_file)"
   printf "\n statusCode: $response_code"
   printf "\n       body: $body_truncated"
 
   if [ -n "${body}" ]; then
-    printf "\n\n Full response body is in [$svc.out]\n"
+    printf "\n\n Full response body is in [$tmp_file]\n"
   fi
 }
 
