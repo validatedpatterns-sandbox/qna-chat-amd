@@ -9,7 +9,7 @@ global:
     runtime_envs: []
 
     service_name: chatqna
-    service_port: 5006
+    service_port: 5008
     container_port: 8888
     docker_file_Path: Dockerfile
 
