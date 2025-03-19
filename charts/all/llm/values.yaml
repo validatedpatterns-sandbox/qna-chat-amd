@@ -47,5 +47,5 @@ global:
         name: temp-data
         path: /tmp/temp-data
       rhoai_ca:
-        name: odh-ca-bundle
+        name: rhoai-ca-bundle
         path: /rhoai-ca

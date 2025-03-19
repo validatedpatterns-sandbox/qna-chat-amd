@@ -12,6 +12,7 @@ function display_menu_and_get_choice() {
   options=(
     "Dataprep - Nike pdf"
     "Dataprep - URL link"
+    "Dataprep - Delete ALL"
     "Dataprep - Get ingested data"
     "Embedding"
     "Rerank"
@@ -34,7 +35,7 @@ function display_menu_and_get_choice() {
 
       printf "\n Adding a knowledge base using [$file_name] document...\n"
       printf '\n Invoking this endpoint will take some time and might time-out as well.'
-      printf '\n Try invoking the dataprep get endpoint after a minute (or so) to see the knowledge base...\n\n'
+      printf '\n Try invoking the dataprep get endpoint after a minute (or so) to see the knowledge base...\n'
 
       invoke_endpoint $op $endpoint "$content_type" "$body_option" "$body"
       break
@@ -48,7 +49,19 @@ function display_menu_and_get_choice() {
       local content_type='multipart/form-data'
 
       printf "\n Adding a knowledge base using [$body] link...\n"
-      printf '\n Try invoking the dataprep get endpoint after a minute (or so) to see the knowledge base...\n\n'
+      printf '\n Try invoking the dataprep get endpoint after a minute (or so) to see the knowledge base...\n'
+
+      invoke_endpoint $op $endpoint "$content_type" "$body_option" "$body"
+      break
+      ;;
+    "Dataprep - Delete ALL")
+      local op='dataprep-del'
+      local endpoint="dataprep/delete"
+      local content_type='application/json'
+      local body_option="--data"
+      local body='{ "file_path": "all" }'
+
+      printf '\n Invoking this endpoint will DELETE all the uploaded files and links\n'
 
       invoke_endpoint $op $endpoint "$content_type" "$body_option" "$body"
       break
@@ -60,7 +73,7 @@ function display_menu_and_get_choice() {
       local body_option="--data"
       local body=""
 
-      printf '\n Invoking this endpoint should return the current knowledge base\n\n'
+      printf '\n Invoking this endpoint should return the current knowledge base\n'
 
       invoke_endpoint $op $endpoint "$content_type" "$body_option" "$body"
       break
@@ -118,22 +131,25 @@ function invoke_endpoint() {
   local body=$5
   local tmp_file=$(mktemp)
 
-  set -x
+#  set -x
   local response_code=$( curl --max-time 300 -s -S -w '%{response_code}, exitCode=%{exitcode}\n' -X POST $OCP_HOST/v1/$endpoint --header "Content-Type: $content_type" $body_option "$body" -o $tmp_file )
-  set +x
+#  set +x
 
   local response_body="$(cat $tmp_file)"
-  local body_truncated=${response_body:0:55}
-  if [ "${response_body} != ${body_truncated}" ]; then
-    body_truncated="${body_truncated}..."
+  local body_truncated=""
+  if [ -n "$response_body" ]; then
+    local body_truncated=${response_body:0:55}
+    if [ "${response_body}" != "${body_truncated}" ]; then
+      body_truncated="${body_truncated}..."
+    fi
   fi
 
-  local body="$(cat $tmp_file)"
   printf "\n statusCode: $response_code"
-  printf "\n       body: $body_truncated"
-
-  if [ -n "${body}" ]; then
-    printf "\n\n Full response body is in [$tmp_file]\n"
+  if [ -n "$response_body" ]; then
+    printf "\n       body: $body_truncated\n"
+    if [ "${response_body}" != "${body_truncated}" ]; then
+      printf "\n\n Full response body is in [$tmp_file]\n"
+    fi
   fi
 }
 

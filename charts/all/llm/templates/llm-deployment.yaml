@@ -66,5 +66,5 @@ spec:
           emptyDir: {}
         - name: {{ .Values.global.amdllm.volume.rhoai_ca.name }}
           secret:
-            secretName: {{ .Values.global.amdllm.secret.rhoai_ca.name }}
+            secretName: {{ .Values.global.amdllm.volume.rhoai_ca.name }}
             defaultMode: 420
