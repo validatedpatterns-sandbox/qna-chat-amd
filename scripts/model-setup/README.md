@@ -40,6 +40,17 @@ Once MinIO is setup, you can access it within your project. The yaml that was ap
 ### Create workbench
 To use RHOAI for this project, you need to create a workbench first. In the newly created data science project, create a new Workbench by clicking `Create workbench` button in the `Workbenches` tab.
 
+Use the following values:
+* _Notebook image_:
+  * Image selection: **PyTorch**
+  * Version selection: **2024.1**
+* _Deployment size_:
+  * Container size: **Medium**
+  * Accelerator: **NVIDIA GPU**
+  * Number of accelerators: **1**
+* _Cluster storage_: **50GB**
+
+#### Environment variables
 When creating the workbench, add the following environment variables:
 * AWS_ACCESS_KEY_ID
   * MinIO user name
@@ -55,17 +66,13 @@ When creating the workbench, add the following environment variables:
 
 _The environment variables can be added one by one, or all together by uploading a secret yaml file._
 
-_**A sample secret yaml file is provided in `workbench-env.yaml.template`. To use this file, copy it to `workbench-env.yaml` and change the `<base64_VALUE>` values in it to correct ones as mentioned above**_
+To upload a yaml file, instead of adding environment variables one-by-one, follow the given steps:
+* Click on `Add variable` under Environment variables section
+* Select `Secret` in the `Select environment variable type` dropdown
+* Select `Upload` in the `Select one` dropdown
+* Drag and drop your `secret` yaml file in the `Drag and drop a file or upload one` text area
 
-Use the following values for other fields:
-* _Notebook image_:
-  * Image selection: **PyTorch**
-  * Version selection: **2024.1**
-* _Deployment size_:
-  * Container size: **Medium**
-  * Accelerator: **NVIDIA GPU**
-  * Number of accelerators: **1**
-* _Cluster storage_: **50GB**
+_**A sample secret yaml file is provided in `workbench-env.yaml.template`. To use this file, copy it to `workbench-env.yaml` and change the `<base64_VALUE>` values in it to correct ones as mentioned above**_
 
 Create the workbench with above settings.
 
@@ -83,6 +90,30 @@ To create a Data connection, use the following steps:
   * _Access key_: value specified for `AWS_DEFAULT_REGION` field in `Create Workbench` section
   * _Bucket_: value specified for `AWS_S3_BUCKET` field in `Create Workbench` section
 * Create the data connection by clicking on `Add data connection` button
+
+
+### Open workbench
+Open the newly created workbench by following these steps:
+* Select your newly created project by clicking on `Data Science Projects` in the sidebar menu
+* Click on `Workbenches` tab and open the newly created workbench by clicking on the `Open` link
+* The workbench will open up in a new tab
+* _When the workbench is opened for the first time, you will be shown an `Authorize Access` page._
+  * _Click `Allow selected permissions` button in this page._
+
+
+### Clone repo
+Now that the workbench is created and running, follow these steps to setup the project:
+* In the workbench, click on `Terminal` icon in the `Launcher` tab.
+* Clone this repository in the `Terminal` by running the following command:
+  `git clone https://github.com/sgahlot/qna-chat-amd.git`
+
+
+### Run Jupyter notebook
+_The notebook mentioned in this section is used to download the `meta-llama/Llama-3.1-8B-Instruct` model and upload it to MinIO_
+
+* Once the repository is cloned, select the folder where you cloned the repository (in the sidebar) and navigate to `scripts/model-setup` directory and open up [download-n-upload-model-to-minio.ipynb](./download-n-upload-model-to-minio.ipynb)
+* Run this notebook by selecting `Run` -> `Run All Cells` menu item
+* _When the notebook successfully runs, llama model should have been uploaded to MinIO under `<AWS_S3_BUCKET>/Llama-3.1-8B-Instruct` directory_.
 
 
 ### Deploy model
