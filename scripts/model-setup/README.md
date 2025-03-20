@@ -37,46 +37,6 @@ Once MinIO is setup, you can access it within your project. The yaml that was ap
   * Take note of the `minio-api` route location as that will be needed in next section.
 
 
-### Create workbench
-To use RHOAI for this project, you need to create a workbench first. In the newly created data science project, create a new Workbench by clicking `Create workbench` button in the `Workbenches` tab.
-
-Use the following values:
-* _Notebook image_:
-  * Image selection: **PyTorch**
-  * Version selection: **2024.1**
-* _Deployment size_:
-  * Container size: **Medium**
-  * Accelerator: **NVIDIA GPU**
-  * Number of accelerators: **1**
-* _Cluster storage_: **50GB**
-
-#### Environment variables
-When creating the workbench, add the following environment variables:
-* AWS_ACCESS_KEY_ID
-  * MinIO user name
-* AWS_SECRET_ACCESS_KEY
-  * MinIO password
-* AWS_S3_ENDPOINT
-  * `minio-api` route location
-* AWS_S3_BUCKET
-  * This bucket should _either be existing or will be created_ by one of the
-    Jupyter notebooks to upload the model
-* AWS_DEFAULT_REGION
-  * Set it to `us-east-1`
-
-_The environment variables can be added one by one, or all together by uploading a secret yaml file._
-
-To upload a yaml file, instead of adding environment variables one-by-one, follow the given steps:
-* Click on `Add variable` under Environment variables section
-* Select `Secret` in the `Select environment variable type` dropdown
-* Select `Upload` in the `Select one` dropdown
-* Drag and drop your `secret` yaml file in the `Drag and drop a file or upload one` text area
-
-_**A sample secret yaml file is provided in `workbench-env.yaml.template`. To use this file, copy it to `workbench-env.yaml` and change the `<base64_VALUE>` values in it to correct ones as mentioned above**_
-
-Create the workbench with above settings.
-
-
 ### Create Data connection
 Create a new data connection that can be used by the init-container (`storage-initializer`) to fetch the model uploaded in next step when deploying the model.
 
@@ -90,6 +50,23 @@ To create a Data connection, use the following steps:
   * _Access key_: value specified for `AWS_DEFAULT_REGION` field in `Create Workbench` section
   * _Bucket_: value specified for `AWS_S3_BUCKET` field in `Create Workbench` section
 * Create the data connection by clicking on `Add data connection` button
+
+
+### Create workbench
+To use RHOAI for this project, you need to create a workbench first. In the newly created data science project, create a new Workbench by clicking `Create workbench` button in the `Workbenches` tab.
+
+Use the following values:
+* _Notebook image_:
+  * Image selection: **PyTorch**
+  * Version selection: **2024.1**
+* _Deployment size_:
+  * Container size: **Medium**
+  * Accelerator: **NVIDIA GPU**
+  * Number of accelerators: **1**
+* _Cluster storage_: **50GB**
+* Connections: Click on `Attach existing connections` button and **Attach** the Data Connection created in previous step. This will pass on the data connection values to the RHOAI workbench when it is started.
+
+Create the workbench with above settings.
 
 
 ### Open workbench
