@@ -5,9 +5,6 @@ global:
 
   amdllm:
     namespace: amd-llm
-    servingRuntime:
-      namespace: rag-demo
-      name: tgi-70b-1
     build_envs: [] # http_proxy/https_prxy can be set here
     runtime_envs: []
 

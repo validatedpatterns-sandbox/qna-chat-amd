@@ -17,6 +17,7 @@ function display_menu_and_get_choice() {
     "Embedding"
     "Rerank"
     "Retriever"
+    "LLM"
     "ChatQnA - main"
     "Quit"
   )
@@ -106,6 +107,15 @@ function display_menu_and_get_choice() {
       invoke_endpoint $op $endpoint "$content_type" "$body_option" "$body"
       break
       ;;
+    "LLM")
+      local op='llm'
+      local endpoint="chat/completions"
+      local body_option="--data"
+      local body='{ "model": "llama-31b", "messages": "What is Deep Learning?", "max_tokens":17 }'
+      local content_type='application/json'
+      invoke_endpoint $op $endpoint "$content_type" "$body_option" "$body"
+      break
+      ;;
     "ChatQnA - main")
       local op='chatqna'
       local endpoint="chatqna"
@@ -131,9 +141,10 @@ function invoke_endpoint() {
   local body=$5
   local tmp_file=$(mktemp)
 
-#  set -x
+  # To see the command (with all the parameters etc.), uncomment the lines with "set +/-x"
+  # set -x
   local response_code=$( curl --max-time 300 -s -S -w '%{response_code}, exitCode=%{exitcode}\n' -X POST $OCP_HOST/v1/$endpoint --header "Content-Type: $content_type" $body_option "$body" -o $tmp_file )
-#  set +x
+  # set +x
 
   local response_body="$(cat $tmp_file)"
   local body_truncated=""
