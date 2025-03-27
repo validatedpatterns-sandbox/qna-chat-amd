@@ -9,7 +9,5 @@ global:
     runtime_envs: []
     
     chatqna_ui_server:
-      # TODO(SG): Provide the correct git reference for AMD (if needed)
-      git_ref: 2b51374
-      # TODO(SG): Provide the correct image for AMD (if needed)
-      image: image-registry.openshift-image-registry.svc:5000/gaudi-llm/chatqna-ui:latest
+      git_ref: 6ead1b1
+      image: image-registry.openshift-image-registry.svc:5000/opea/chatqna-ui:latest
