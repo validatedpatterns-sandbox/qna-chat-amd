@@ -1,7 +1,4 @@
-#!/bin/sh
-
-# Change me before running this script
-#OCP_HOST='http://megaservice-amd-llm.apps.cluster-n2qkx.n2qkx.sandbox32.opentlc.com'
+#!/usr/bin/env bash
 
 
 function display_menu_and_get_choice() {
@@ -167,6 +164,7 @@ function invoke_endpoint() {
 
 if [ -z "$OCP_HOST" ]; then
   printf '\n Please set "OCP_HOST" environment variable. It should be pointing to the main base-route for each micro-service'
+  printf '\n You can use the location of route "chatqna-backend-main-route" for setting OCP_HOST'
   printf '\n Exiting!!!\n'
   exit
 fi

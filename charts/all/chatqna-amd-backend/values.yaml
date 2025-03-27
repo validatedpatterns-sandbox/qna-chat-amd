@@ -8,15 +8,15 @@ global:
     build_envs: [] # http_proxy/https_prxy can be set here
     runtime_envs: []
 
-    service_name: chatqna
+    service_name: chatqna-backend
     service_port: 5008
     container_port: 8888
     docker_file_Path: Dockerfile
 
     git_repo_uri: https://github.com/opea-project/GenAIExamples.git
-    image: quay.io/sgahlot/opea/chatqna:latest
+    image: image-registry.openshift-image-registry.svc:5000/opea/chatqna:latest
+    git_ref: 61a8bef   # make sure to validate buildconfig & other change scope before updating
 
-    # git_ref: 7c2e7f6
     megaservice_envs:
       - name: EMBEDDING_SERVER_HOST_IP
         value: tei-embedding-service.amd-llm.svc.cluster.local

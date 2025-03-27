@@ -200,8 +200,8 @@ clusterGroup:
         kind: BuildConfig
         jqPathExpressions:
         - '.spec.paused'
-    llm-server:
-      name: llm-server
+    llm:
+      name: llm
       namespace: amd-llm
       project: amd-llm
       path: charts/all/llm

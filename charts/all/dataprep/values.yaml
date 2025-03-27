@@ -13,8 +13,8 @@ global:
     docker_file_Path: comps/dataprep/src/Dockerfile
 
     git_repo_uri: https://github.com/opea-project/GenAIComps.git
-    image: quay.io/sgahlot/opea/dataprep:latest
-    # git_ref: 7c2e7f6 # make sure to validate buildconfig & other change scope before updating
+    image: image-registry.openshift-image-registry.svc:5000/opea/dataprep:latest
+    git_ref: 3e559df   # make sure to validate buildconfig & other change scope before updating
 
     env:
       - name: HOME
@@ -25,6 +25,8 @@ global:
         value: redis://redis-vector-db.amd-llm.svc.cluster.local:6379
       - name: INDEX_NAME
         value: rag-redis
+      - name: NLTK_DATA
+        value: /tmp/temp-data/nltk_data
 
     volume:
       - name: temp-data

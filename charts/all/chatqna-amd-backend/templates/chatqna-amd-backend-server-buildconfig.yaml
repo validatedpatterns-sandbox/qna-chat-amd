@@ -17,7 +17,7 @@ spec:
   resources: {}
   runPolicy: SerialLatestOnly
   source:
-    contextDir: ChatQnA/docker
+    contextDir: ChatQnA
     git:
       ref: {{ .Values.global.amdllm.git_ref }}
       uri: {{ .Values.global.amdllm.git_repo_uri }}
