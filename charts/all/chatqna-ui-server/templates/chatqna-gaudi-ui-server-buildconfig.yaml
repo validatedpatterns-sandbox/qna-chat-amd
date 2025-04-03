@@ -15,7 +15,7 @@ spec:
   resources: {}
   runPolicy: SerialLatestOnly
   source:
-    contextDir: ChatQnA/docker/ui
+    contextDir: ChatQnA/ui
     git:
       ref: {{ .Values.global.amdllm.chatqna_ui_server.git_ref }}
       uri: https://github.com/opea-project/GenAIExamples.git
