@@ -44,7 +44,9 @@ spec:
             - name: CHAT_BASE_URL
               value: http://megaservice-{{ .Values.global.amdllm.namespace }}.apps.{{ .Values.global.clusterDomain }}/v1/chatqna
             - name: UPLOAD_FILE_BASE_URL
-              value: http://megaservice-{{ .Values.global.amdllm.namespace }}.apps.{{ .Values.global.clusterDomain }}/v1/dataprep
+              value: http://megaservice-{{ .Values.global.amdllm.namespace }}.apps.{{ .Values.global.clusterDomain }}/v1/dataprep/ingest
+            - name: GET_FILE
+              value: http://megaservice-{{ .Values.global.amdllm.namespace }}.apps.{{ .Values.global.clusterDomain }}/v1/dataprep/get
             {{- if .Values.global.amdllm.runtime_envs }}
             {{- range .Values.global.amdllm.runtime_envs }}
             - name: {{ .name }}
