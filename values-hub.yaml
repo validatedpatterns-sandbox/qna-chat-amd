@@ -5,7 +5,7 @@ clusterGroup:
     - open-cluster-management
     - vault
     - golang-external-secrets
-    - openshift-nfd
+#    - openshift-nfd
     # TODO(SG): Create the AMD operator namespace (if needed)
     - amd-gpu-operator
     - openshift-kmm:
@@ -17,11 +17,11 @@ clusterGroup:
     - amd-llm
 
   subscriptions:    
-    nfd:
-      name: nfd
-      namespace: openshift-nfd
-      channel: stable
-      source: redhat-operators
+#    nfd:
+#      name: nfd
+#      namespace: openshift-nfd
+#      channel: stable
+#      source: redhat-operators
 
     kmm:
       name: kernel-module-management
@@ -57,7 +57,7 @@ clusterGroup:
 
   projects:
     - hub
-    - openshift-nfd
+#    - openshift-nfd
     - openshift-kmm
     - amd-gpu-operator
     - redhat-ods-operator
@@ -93,17 +93,17 @@ clusterGroup:
       namespace: golang-external-secrets
       project: hub
       path: common/golang-external-secrets
-    nfd:
-      name: nfd
-      namespace: openshift-nfd
-      project: openshift-nfd
-      path: charts/all/nfd
-      ignoreDifferences:
-      - group: nfd.openshift.io
-        kind: NodeFeatureDiscovery
-        jqPathExpressions:
-        - '.spec.customConfig'
-        - '.spec.topologyupdater'
+#    nfd:
+#      name: nfd
+#      namespace: openshift-nfd
+#      project: openshift-nfd
+#      path: charts/all/nfd
+#      ignoreDifferences:
+#      - group: nfd.openshift.io
+#        kind: NodeFeatureDiscovery
+#        jqPathExpressions:
+#        - '.spec.customConfig'
+#        - '.spec.topologyupdater'
     kmm:
       name: kmm
       namespace: openshift-kmm
