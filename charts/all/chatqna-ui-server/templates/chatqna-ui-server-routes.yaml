@@ -1,0 +1,31 @@
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: {{ .Values.global.amdllm.service_name }}-secure
+  namespace: {{ .Values.global.amdllm.namespace }}
+spec:
+  host: {{ .Values.global.amdllm.service_name }}-secure-{{ .Values.global.amdllm.namespace }}.apps.{{ .Values.global.clusterDomain }}
+  port:
+    targetPort: {{ .Values.global.amdllm.service_port }}
+  tls:
+    termination: edge
+  to:
+    name: {{ .Values.global.amdllm.service_name }}
+
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: {{ .Values.global.amdllm.service_name }}-route
+  namespace: {{ .Values.global.amdllm.namespace }}
+spec:
+  host: {{ .Values.global.amdllm.service_name }}-{{ .Values.global.amdllm.namespace }}.apps.{{ .Values.global.clusterDomain }}
+  port:
+    targetPort: {{ .Values.global.amdllm.service_port }}
+  to:
+    kind: Service
+    name: {{ .Values.global.amdllm.service_name }}
+    weight: 100
+  wildcardPolicy: None
+---

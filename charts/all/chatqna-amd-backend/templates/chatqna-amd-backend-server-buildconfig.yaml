@@ -33,5 +33,10 @@ spec:
         value: {{ .value }}
       {{- end }}
       {{- end }}
+
+  {{- if .Values.global.amdllm.build.enable }}
   triggers:
-  - type: ConfigChange
+    - type: ConfigChange
+  {{- else}}
+  triggers: []
+  {{- end }}

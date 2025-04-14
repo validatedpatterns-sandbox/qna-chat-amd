@@ -1,13 +1,13 @@
 kind: BuildConfig
 apiVersion: build.openshift.io/v1
 metadata:
-  name: chatqna-ui-server
+  name: {{ .Values.global.amdllm.service_name }}
   namespace: {{ .Values.global.amdllm.namespace }}
 spec:
   output:
     to:
       kind: "ImageStreamTag"
-      name: "chatqna-ui:latest"
+      name: "{{ .Values.global.amdllm.service_name }}:latest"
   failedBuildsHistoryLimit: 5
   successfulBuildsHistoryLimit: 5
   nodeSelector: null
@@ -15,15 +15,15 @@ spec:
   resources: {}
   runPolicy: SerialLatestOnly
   source:
-    contextDir: ChatQnA/ui
+    contextDir: {{ .Values.global.amdllm.source_context_dir }}
     git:
-      ref: {{ .Values.global.amdllm.chatqna_ui_server.git_ref }}
-      uri: https://github.com/opea-project/GenAIExamples.git
+      ref: {{ .Values.global.amdllm.git_ref }}
+      uri: {{ .Values.global.amdllm.git_repo_uri }}
     type: Git
   strategy:
     type: Docker
     dockerStrategy:
-      dockerfilePath: docker/Dockerfile
+      dockerfilePath: {{ .Values.global.amdllm.docker_file_Path }}
       {{- if .Values.global.amdllm.build_envs }}
       env:
       {{- range .Values.global.amdllm.build_envs }}
@@ -31,5 +31,10 @@ spec:
         value: {{ .value }}
       {{- end }}
       {{- end }}
+
+  {{- if .Values.global.amdllm.build.enable }}
   triggers:
-  - type: ConfigChange
+    - type: ConfigChange
+  {{- else}}
+  triggers: []
+  {{- end }}

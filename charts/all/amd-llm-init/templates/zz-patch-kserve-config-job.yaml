@@ -20,7 +20,7 @@ spec:
           # now we wait for Kserve to become Ready installing... 
           oc wait --for=condition=Ready=True -n knative-serving knativeserving knative-serving --timeout=-1s
           # Then we patch progressDeadline in Kserve Config since 70b might download longer > 600secs onto kserve
-          '/tmp/patch-kserve-progress-deadline.sh'          
+          '/tmp/patch-kserve-progress-deadline.sh'
         name: patch-kserve-progress-deadline
         volumeMounts:
           - mountPath: /tmp/patch-kserve-progress-deadline.sh

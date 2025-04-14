@@ -13,9 +13,15 @@ global:
     docker_file_Path: comps/retrievers/src/Dockerfile
     working_dir: /home/user/comps/retrievers/src
 
+    image:
+      pre_built: quay.io/sgahlot/opea/retriever:latest
+      from_source: image-registry.openshift-image-registry.svc:5000/opea/retriever:latest
+
     git_repo_uri: https://github.com/opea-project/GenAIComps.git
-    image: image-registry.openshift-image-registry.svc:5000/opea/retriever:latest
     git_ref: 3e559df   # make sure to validate buildconfig & other change scope before updating
+
+    build:
+      enable: false
 
     env:
       - name: HOME

@@ -2,15 +2,15 @@
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
-  name: {{ .Values.global.amdllm.service_name }}-microservice-route
+  name: {{ .Values.global.amdllm.service_name }}
   namespace: {{ .Values.global.amdllm.namespace }}
 spec:
   host: megaservice-{{ .Values.global.amdllm.namespace }}.apps.{{ .Values.global.clusterDomain }}
   path: {{ .Values.global.amdllm.route_path }}
   port:
     targetPort: {{ .Values.global.amdllm.service_port }}
+  tls:
+    termination: edge
   to:
-    kind: Service
     name: {{ .Values.global.amdllm.service_name }}
-    weight: 100
-  wildcardPolicy: None
+---

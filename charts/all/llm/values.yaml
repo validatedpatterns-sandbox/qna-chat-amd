@@ -14,8 +14,11 @@ global:
     route_path: /v1/chat/completions
     docker_file_Path: comps/llms/src/text-generation/Dockerfile
 
+    image:
+      pre_built: quay.io/sgahlot/opea/llm-tgi:latest
+      from_source: image-registry.openshift-image-registry.svc:5000/opea/llm-tgi:latest
+
     git_repo_uri: https://github.com/opea-project/GenAIComps.git
-    image: image-registry.openshift-image-registry.svc:5000/opea/llm-tgi:latest
     git_ref: 3e559df   # make sure to validate buildconfig & other change scope before updating
 
     secret_env:
@@ -27,6 +30,9 @@ global:
         secret:
           name: rhoai-model-secret
           key: inference_endpoint
+
+    build:
+      enable: false
 
     env:
       - name: HOME
@@ -42,6 +48,6 @@ global:
       tmp:
         name: temp-data
         path: /tmp/temp-data
-      rhoai_ca:
-        name: rhoai-ca-bundle
-        path: /rhoai-ca
+#      rhoai_ca:
+#        name: rhoai-ca-bundle
+#        path: /rhoai-ca

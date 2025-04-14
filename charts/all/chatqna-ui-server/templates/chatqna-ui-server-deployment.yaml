@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker_compose.yaml
+    kompose.version: 1.33.0 (3ce457399)
+    argocd.argoproj.io/compare-options: IgnoreExtraneous
+    argocd.argoproj.io/sync-wave: "5"
+    image.openshift.io/triggers: '[{"from":{"kind":"ImageStreamTag","name":"{{ .Values.global.amdllm.service_name }}:latest"},"fieldPath":"spec.template.spec.containers[?(@.name==\"{{ .Values.global.amdllm.service_name }}-server\")].image"},{"from":{"kind":"ImageStreamTag","name":"{{ .Values.global.amdllm.service_name }}:latest"},"fieldPath":"spec.template.spec.containers[?(@.name==\"copy-ui-to-workdir\")].image"}]'
+  labels:
+    io.kompose.service: {{ .Values.global.amdllm.service_name }}
+  name: {{ .Values.global.amdllm.service_name }}
+  namespace: {{ .Values.global.amdllm.namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: {{ .Values.global.amdllm.service_name }}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f docker_compose.yaml
+        kompose.version: 1.33.0 (3ce457399)
+      labels:
+        io.kompose.network/amd-default: "true"
+        io.kompose.service: {{ .Values.global.amdllm.service_name }}
+    spec:
+      initContainers:
+        - name: copy-ui-to-workdir
+          image: {{ .Values.global.amdllm.image }}
+          command:
+            - /bin/bash
+            - -c
+          args:
+            - |
+              cp -v -r /home/user/* {{ .Values.global.amdllm.volume.temp.path }}
+          volumeMounts:
+            - name: {{ .Values.global.amdllm.volume.temp.name }}
+              mountPath: {{ .Values.global.amdllm.volume.temp.path }}
+      containers:
+        - env:
+            - name: HOME
+              value: {{ .Values.global.amdllm.volume.temp.path }}
+            - name: LOGFLAG
+              value: '"True"'
+            - name: CHAT_BASE_URL
+              value: https://megaservice-{{ .Values.global.amdllm.namespace }}.apps.{{ .Values.global.clusterDomain }}/v1/chatqna
+            - name: UPLOAD_FILE_BASE_URL
+              value: https://megaservice-{{ .Values.global.amdllm.namespace }}.apps.{{ .Values.global.clusterDomain }}/v1/dataprep/ingest
+            - name: GET_FILE
+              value: https://megaservice-{{ .Values.global.amdllm.namespace }}.apps.{{ .Values.global.clusterDomain }}/v1/dataprep/get
+            {{- if .Values.global.amdllm.runtime_envs }}
+            {{- range .Values.global.amdllm.runtime_envs }}
+            - name: {{ .name }}
+              value: {{ .value }}
+            {{- end }}
+            {{- end }}
+          image: {{ .Values.global.amdllm.image }}
+          name: {{ .Values.global.amdllm.service_name }}-server
+          ports:
+            - containerPort: {{ .Values.global.amdllm.container_port }}
+              protocol: TCP
+          workingDir: {{ .Values.global.amdllm.working_dir }}
+          volumeMounts:
+            - name: {{ .Values.global.amdllm.volume.temp.name }}
+              mountPath: {{ .Values.global.amdllm.volume.temp.path }}
+      restartPolicy: Always
+      volumes:
+        - name: {{ .Values.global.amdllm.volume.temp.name }}
+          emptyDir: {}

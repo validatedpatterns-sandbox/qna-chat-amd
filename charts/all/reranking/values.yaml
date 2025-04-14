@@ -13,8 +13,11 @@ global:
     python_path: "/home/user/.local/lib/python3.11/site-packages:/home/user"
     docker_file_Path: comps/rerankings/src/Dockerfile
 
+    image:
+      pre_built: quay.io/sgahlot/opea/reranking:latest
+      from_source: image-registry.openshift-image-registry.svc:5000/opea/reranking:latest
+
     git_repo_uri: https://github.com/opea-project/GenAIComps.git
-    image: image-registry.openshift-image-registry.svc:5000/opea/reranking:latest
     git_ref: 3e559df   # make sure to validate buildconfig & other change scope before updating
 
     secret:
@@ -26,6 +29,9 @@ global:
       name: tei-reranker-service
       port: 5006
       env_var_name: TEI_RERANKING_ENDPOINT
+
+    build:
+      enable: false
 
     env:
       - name: HOME

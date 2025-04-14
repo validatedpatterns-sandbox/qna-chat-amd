@@ -17,10 +17,13 @@ function show_logs() {
       ;;
   esac
 
+  #set -x
+  #printf "\n searching for pod_name=$pod_name\n"
   local RUNNING_PODS=$(oc get pods -n $NAMESPACE -l $label --field-selector status.phase=Running)
   # printf "\n$RUNNING_PODS\n"
 
   pod=$(echo "$RUNNING_PODS" | awk -v pattern="^$pod_name" '$1 ~ pattern {print $1}')
+  #set +x
   printf "\n -> Streaming logs from [$pod]\n"
 
   oc logs -f "$pod" -n $NAMESPACE
@@ -83,6 +86,10 @@ function process_cmd_args() {
             pod_name='chatqna-backend'
             mega_or_micro_service="mega"
             ;;
+          [uU])
+            pod_name='chatqna-ui'
+            mega_or_micro_service="mega"
+            ;;
           [tT][eE])
             pod_name='tei-embedding'
             ;;
@@ -126,6 +133,7 @@ function USAGE() {
         -te|TE  tei-embedding   (embedding micro-service uses this)
         -tr|TR  tei-reranker    (reranking micro-service uses this)
         -c|C    chatqna         (mega-service)
+        -u|U    chatqna-ui      (mega-service UI)
 
     Examples:
       $0 -p d

@@ -12,9 +12,15 @@ global:
     route_path: /v1/dataprep
     docker_file_Path: comps/dataprep/src/Dockerfile
 
+    image:
+      pre_built: quay.io/sgahlot/opea/dataprep:latest
+      from_source: image-registry.openshift-image-registry.svc:5000/opea/dataprep:latest
+
     git_repo_uri: https://github.com/opea-project/GenAIComps.git
-    image: image-registry.openshift-image-registry.svc:5000/opea/dataprep:latest
     git_ref: 3e559df   # make sure to validate buildconfig & other change scope before updating
+
+    build:
+      enable: false
 
     env:
       - name: HOME

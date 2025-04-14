@@ -7,7 +7,22 @@ global:
     namespace: amd-llm
     build_envs: [] # http_proxy/https_prxy can be set here
     runtime_envs: []
-    
-    chatqna_ui_server:
-      git_ref: 61a8bef
-      image: image-registry.openshift-image-registry.svc:5000/opea/chatqna-ui:latest
+
+    service_name: chatqna-ui
+    service_port: 5009
+    container_port: 5173
+    source_context_dir: ChatQnA/ui
+    docker_file_Path: docker/Dockerfile
+    working_dir: /tmp/temp-data/svelte
+
+    image: quay.io/sgahlot/opea/chatqna-ui:latest
+    git_ref: 04304c45
+    git_repo_uri: https://github.com/sgahlot/GenAIExamples.git
+
+    build:
+      enable: false
+
+    volume:
+      temp:
+        name: temp-data
+        path: /tmp/temp-data

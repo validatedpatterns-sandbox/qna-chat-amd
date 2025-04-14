@@ -1,11 +1,11 @@
 apiVersion: console.openshift.io/v1
 kind: ConsoleLink
 metadata:
-  name: opea-chatqna-on-amd
+  name: {{ .Values.global.amdllm.service_name }}
   annotations:
     argocd.argoproj.io/sync-wave: "6"
 spec:
-  href: 'https://opea-chatqna-amd-{{ .Values.global.amdllm.namespace }}.apps.{{ .Values.global.clusterDomain }}'
+  href: 'https://{{ .Values.global.amdllm.service_name }}-{{ .Values.global.amdllm.namespace }}.apps.{{ .Values.global.clusterDomain }}'
   location: ApplicationMenu
   # This text will appear in a box called "Launcher" under "namespace" or "project" in the web console
   text: OPEA ChatQnA on AMD Instinct
