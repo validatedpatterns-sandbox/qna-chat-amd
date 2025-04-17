@@ -40,7 +40,7 @@ spec:
             {{- end }}
             {{- end }}
           image:
-            {{- if .Values.global.amdllm.build.enable }}
+            {{- if .Values.global.build.enabled }}
             {{ .Values.global.amdllm.image.from_source }}
             {{- else}}
             {{ .Values.global.amdllm.image.pre_built }}

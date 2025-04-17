@@ -31,9 +31,6 @@ global:
           name: rhoai-model-secret
           key: inference_endpoint
 
-    build:
-      enable: false
-
     env:
       - name: HOME
         value: /tmp/temp-data

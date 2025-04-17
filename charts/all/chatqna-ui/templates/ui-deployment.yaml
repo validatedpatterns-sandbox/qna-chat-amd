@@ -27,7 +27,12 @@ spec:
     spec:
       initContainers:
         - name: copy-ui-to-workdir
-          image: {{ .Values.global.amdllm.image }}
+          image:
+            {{- if .Values.global.build.enabled }}
+            {{ .Values.global.amdllm.image.from_source }}
+            {{- else}}
+            {{ .Values.global.amdllm.image.pre_built }}
+            {{- end }}
           command:
             - /bin/bash
             - -c
@@ -55,7 +60,12 @@ spec:
               value: {{ .value }}
             {{- end }}
             {{- end }}
-          image: {{ .Values.global.amdllm.image }}
+          image:
+            {{- if .Values.global.build.enabled }}
+            {{ .Values.global.amdllm.image.from_source }}
+            {{- else}}
+            {{ .Values.global.amdllm.image.pre_built }}
+            {{- end }}
           name: {{ .Values.global.amdllm.service_name }}-server
           ports:
             - containerPort: {{ .Values.global.amdllm.container_port }}

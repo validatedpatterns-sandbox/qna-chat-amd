@@ -5,24 +5,17 @@ clusterGroup:
     - open-cluster-management
     - vault
     - golang-external-secrets
-#    - openshift-nfd
     # TODO(SG): Create the AMD operator namespace (if needed)
     - amd-gpu-operator
     - openshift-kmm:
         operatorGroup: true
-        targetNamespaces: 
+        targetNamespaces:
     - redhat-ods-operator:
         operatorGroup: true
-        targetNamespaces: 
+        targetNamespaces:
     - amd-llm
 
-  subscriptions:    
-#    nfd:
-#      name: nfd
-#      namespace: openshift-nfd
-#      channel: stable
-#      source: redhat-operators
-
+  subscriptions:
     kmm:
       name: kernel-module-management
       namespace: openshift-kmm
@@ -57,11 +50,11 @@ clusterGroup:
 
   projects:
     - hub
-#    - openshift-nfd
     - openshift-kmm
     - amd-gpu-operator
     - redhat-ods-operator
     - amd-llm
+
   # Explicitly mention the cluster-state based overrides we plan to use for this pattern.
   # We can use self-referential variables because the chart calls the tpl function with these variables defined
   sharedValueFiles:
@@ -82,6 +75,7 @@ clusterGroup:
   # about and sets, so this is also possible, for example:
   #   - '/overrides/values-{{ $.Values.global.hubClusterDomain }}.yaml'
   #   - '/overrides/values-{{ $.Values.global.localClusterDomain }}.yaml'
+
   applications:
     vault:
       name: vault
@@ -93,17 +87,6 @@ clusterGroup:
       namespace: golang-external-secrets
       project: hub
       path: common/golang-external-secrets
-#    nfd:
-#      name: nfd
-#      namespace: openshift-nfd
-#      project: openshift-nfd
-#      path: charts/all/nfd
-#      ignoreDifferences:
-#      - group: nfd.openshift.io
-#        kind: NodeFeatureDiscovery
-#        jqPathExpressions:
-#        - '.spec.customConfig'
-#        - '.spec.topologyupdater'
     kmm:
       name: kmm
       namespace: openshift-kmm
@@ -152,125 +135,125 @@ clusterGroup:
       project: amd-llm
       path: charts/all/amd-llm-init
       ignoreDifferences:
-      - group: machineconfiguration.openshift.io
-        kind: KubeletConfig
-        name:
-        jsonPointers:
-          - /metadata/labels/argocd.argoproj.io~1instance
-          - /metadata/annotations/kubectl.kubernetes.io~1last-applied-configuration
+        - group: machineconfiguration.openshift.io
+          kind: KubeletConfig
+          name:
+          jsonPointers:
+            - /metadata/labels/argocd.argoproj.io~1instance
+            - /metadata/annotations/kubectl.kubernetes.io~1last-applied-configuration
     text-embeddings-inference:
       name: text-embeddings-inference
       namespace: amd-llm
       project: amd-llm
       path: charts/all/tei
       ignoreDifferences:
-      - group: apps
-        kind: Deployment
-        jqPathExpressions:
-        - '.spec.template.spec.containers[].image'
-      - group: build.openshift.io
-        kind: BuildConfig
-        jqPathExpressions:
-        - '.spec.paused'
+        - group: apps
+          kind: Deployment
+          jqPathExpressions:
+            - '.spec.template.spec.containers[].image'
+        - group: build.openshift.io
+          kind: BuildConfig
+          jqPathExpressions:
+            - '.spec.paused'
     retriever:
       name: retriever
       namespace: amd-llm
       project: amd-llm
       path: charts/all/retriever
       ignoreDifferences:
-      - group: apps
-        kind: Deployment
-        jqPathExpressions:
-        - '.spec.template.spec.containers[].image'
-      - group: build.openshift.io
-        kind: BuildConfig
-        jqPathExpressions:
-        - '.spec.paused'
+        - group: apps
+          kind: Deployment
+          jqPathExpressions:
+            - '.spec.template.spec.containers[].image'
+        - group: build.openshift.io
+          kind: BuildConfig
+          jqPathExpressions:
+            - '.spec.paused'
     reranking:
       name: reranking
       namespace: amd-llm
       project: amd-llm
       path: charts/all/reranking
       ignoreDifferences:
-      - group: apps
-        kind: Deployment
-        jqPathExpressions:
-        - '.spec.template.spec.containers[].image'
-      - group: build.openshift.io
-        kind: BuildConfig
-        jqPathExpressions:
-        - '.spec.paused'
+        - group: apps
+          kind: Deployment
+          jqPathExpressions:
+            - '.spec.template.spec.containers[].image'
+        - group: build.openshift.io
+          kind: BuildConfig
+          jqPathExpressions:
+            - '.spec.paused'
     llm:
       name: llm
       namespace: amd-llm
       project: amd-llm
       path: charts/all/llm
       ignoreDifferences:
-      - group: apps
-        kind: Deployment
-        jqPathExpressions:
-        - '.spec.template.spec.containers[].image'
-      - group: build.openshift.io
-        kind: BuildConfig
-        jqPathExpressions:
-        - '.spec.paused'
+        - group: apps
+          kind: Deployment
+          jqPathExpressions:
+            - '.spec.template.spec.containers[].image'
+        - group: build.openshift.io
+          kind: BuildConfig
+          jqPathExpressions:
+            - '.spec.paused'
     embedding:
       name: embedding
       namespace: amd-llm
       project: amd-llm
       path: charts/all/embedding
       ignoreDifferences:
-      - group: apps
-        kind: Deployment
-        jqPathExpressions:
-        - '.spec.template.spec.containers[].image'
-      - group: build.openshift.io
-        kind: BuildConfig
-        jqPathExpressions:
-        - '.spec.paused'
+        - group: apps
+          kind: Deployment
+          jqPathExpressions:
+            - '.spec.template.spec.containers[].image'
+        - group: build.openshift.io
+          kind: BuildConfig
+          jqPathExpressions:
+            - '.spec.paused'
     dataprep:
       name: dataprep
       namespace: amd-llm
       project: amd-llm
       path: charts/all/dataprep
       ignoreDifferences:
-      - group: apps
-        kind: Deployment
-        jqPathExpressions:
-        - '.spec.template.spec.containers[].image'
-      - group: build.openshift.io
-        kind: BuildConfig
-        jqPathExpressions:
-        - '.spec.paused'
-    chatqna-/ui-server:
-      name: chatqna-ui-server
+        - group: apps
+          kind: Deployment
+          jqPathExpressions:
+            - '.spec.template.spec.containers[].image'
+        - group: build.openshift.io
+          kind: BuildConfig
+          jqPathExpressions:
+            - '.spec.paused'
+    chatqna-ui:
+      name: chatqna-ui
       namespace: amd-llm
       project: amd-llm
-      path: charts/all/chatqna-ui-server
+      path: charts/all/chatqna-ui
       ignoreDifferences:
-      - group: apps
-        kind: Deployment
-        jqPathExpressions:
-        - '.spec.template.spec.containers[].image'
-        - '.spec.template.spec.initContainers[].image'
-      - group: build.openshift.io
-        kind: BuildConfig
-        jqPathExpressions:
-        - '.spec.paused'
-    chatqna-amd-backend:
-      name: chatqna-amd-backend
+        - group: apps
+          kind: Deployment
+          jqPathExpressions:
+            - '.spec.template.spec.containers[].image'
+            - '.spec.template.spec.initContainers[].image'
+        - group: build.openshift.io
+          kind: BuildConfig
+          jqPathExpressions:
+            - '.spec.paused'
+    chatqna-backend:
+      name: chatqna-backend
       namespace: amd-llm
       project: amd-llm
       path: charts/all/chatqna-amd-backend
       ignoreDifferences:
-      - group: apps
-        kind: Deployment
-        jqPathExpressions:
-        - '.spec.template.spec.containers[].image'
-      - group: build.openshift.io
-        kind: BuildConfig
-        jqPathExpressions:
-        - '.spec.paused'
+        - group: apps
+          kind: Deployment
+          jqPathExpressions:
+            - '.spec.template.spec.containers[].image'
+        - group: build.openshift.io
+          kind: BuildConfig
+          jqPathExpressions:
+            - '.spec.paused'
 
   imperative:
     # NOTE: We *must* use lists and not hashes. As hashes lose ordering once parsed by helm
@@ -286,6 +269,7 @@ clusterGroup:
         # per playbook timeout in seconds
         timeout: 234
         # verbosity: "-v"
+
   managedClusterGroups:
     exampleRegion:
       name: group-one

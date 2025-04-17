@@ -1,5 +1,5 @@
 ---
-# Source: chatqna-amd-backend/templates/chatqna-amd-backend-server-service.yaml
+# Source: chatqna-amd-backend/templates/backend-service.yaml
 apiVersion: v1
 kind: Service
 metadata:
@@ -20,7 +20,7 @@ spec:
   selector:
     io.kompose.service: chatqna-gaudi-backend-server
 ---
-# Source: chatqna-amd-backend/templates/chatqna-amd-backend-server-deployment.yaml
+# Source: chatqna-amd-backend/templates/backend-deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -84,7 +84,7 @@ spec:
             name: megaservice-config
             defaultMode: 0755
 ---
-# Source: chatqna-amd-backend/templates/chatqna-amd-backend-server-buildconfig.yaml
+# Source: chatqna-amd-backend/templates/backend-buildconfig.yaml
 kind: BuildConfig
 apiVersion: build.openshift.io/v1
 metadata:
@@ -116,7 +116,7 @@ spec:
   triggers:
   - type: ConfigChange
 ---
-# Source: chatqna-amd-backend/templates/chatqna-amd-backend-server-imagestream.yaml
+# Source: chatqna-amd-backend/templates/backend-imagestream.yaml
 apiVersion: image.openshift.io/v1
 kind: ImageStream
 metadata:
@@ -126,7 +126,7 @@ spec:
   lookupPolicy:
     local: true
 ---
-# Source: chatqna-amd-backend/templates/chatqna-amd-backend-server-route.yaml
+# Source: chatqna-amd-backend/templates/backend-route.yaml
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:

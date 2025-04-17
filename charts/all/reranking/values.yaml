@@ -30,9 +30,6 @@ global:
       port: 5006
       env_var_name: TEI_RERANKING_ENDPOINT
 
-    build:
-      enable: false
-
     env:
       - name: HOME
         value: /tmp/temp-data

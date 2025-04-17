@@ -19,9 +19,6 @@ global:
     git_repo_uri: https://github.com/opea-project/GenAIComps.git
     git_ref: 3e559df   # make sure to validate buildconfig & other change scope before updating
 
-    build:
-      enable: false
-
     env:
       - name: HOME
         value: /tmp/temp-data

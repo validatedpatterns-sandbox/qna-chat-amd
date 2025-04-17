@@ -24,9 +24,6 @@ global:
       port: 5007
       env_var_name: TEI_EMBEDDING_ENDPOINT
 
-    build:
-      enable: false
-
     env:
       - name: HOME
         value: /tmp/temp-data

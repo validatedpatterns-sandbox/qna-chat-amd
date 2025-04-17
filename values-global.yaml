@@ -5,46 +5,13 @@ global:
     useCSV: false
     syncPolicy: Automatic
     installPlanApproval: Automatic
-
   amd_llm:
     namespace: amd-llm
-    build_envs: [] 
+    build_envs: []
     runtime_envs: []
+  build:
+    enabled: false
 
-    tei_embedding:
-      image: ghcr.io/huggingface/text-embeddings-inference:cpu-1.6
-      model_id: BAAI/bge-large-en-v1.5 # change to set custom TEI embedding model
-      # model_id: BAAI/bge-reranker-large # change to set custom TEI reranker model on CPU
-      endpoint_name: TEI_EMBEDDING_ENDPOINT
-      endpoint_value: http://tei-embedding-service.amd-llm.svc.cluster.local:8090
-#   uncomment to customize PVC size if using TEI models bigger thanBAAI/bge-large-en-v1.5
-#      pvc:i
-#        size: 10Gi
-#    TODO: IMPLEMENT CUSTOMIZING TGI ENDPOINT FROM RHOAI
-
-
-    servingRuntime:
-      namespace: amd-llm
-      name: tgi-70b-gaudi   # TODO(SG): Use AMD specific ServingRuntime
-
-    chatqna_amd_backend:
-      image: chatqna:latest
-    chatqna_ui_server:  
-      image: chatqna-ui:latest
-    dataprep:  
-      image: dataprep-redis:latest
-    embedding:  
-      image: embedding-tei:latest
-    amd_llm_init: {}
-    llm_server_for_amd:
-      image: llm-tgi:latest
-    redis_vector_db:  
-      image: redis/redis-stack:7.2.0-v9
-    reranking:  
-      image: reranking-tei:latest
-    retriever:
-      image: retriever-redis:latest
-  
 main:
   clusterGroupName: hub
   multiSourceConfig:

@@ -1,8 +1,11 @@
+{{- if .Values.global.build.enabled }}
 kind: BuildConfig
 apiVersion: build.openshift.io/v1
 metadata:
   name: {{ .Values.global.amdllm.service_name }}
   namespace: {{ .Values.global.amdllm.namespace }}
+  annotations:
+    argocd.argoproj.io/compare-options: IgnoreExtraneous
 spec:
   output:
     to:
@@ -15,7 +18,7 @@ spec:
   resources: {}
   runPolicy: SerialLatestOnly
   source:
-    contextDir: {{ .Values.global.amdllm.source_context_dir }}
+    contextDir: ChatQnA
     git:
       ref: {{ .Values.global.amdllm.git_ref }}
       uri: {{ .Values.global.amdllm.git_repo_uri }}
@@ -32,9 +35,6 @@ spec:
       {{- end }}
       {{- end }}
 
-  {{- if .Values.global.amdllm.build.enable }}
   triggers:
     - type: ConfigChange
-  {{- else}}
-  triggers: []
-  {{- end }}
+{{- end }}
