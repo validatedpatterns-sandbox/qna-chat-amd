@@ -33,7 +33,7 @@ spec:
   selector:
     io.kompose.service: tei-embedding-service
 ---
-# Source: tei-service/templates/tei-embedding-deployment.yaml
+# Source: tei-service/templates/tei-deployments.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:

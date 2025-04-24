@@ -1,3 +1,4 @@
+{{- range $key, $value := .Values.global.amdllm.deployments }}
 ---
 apiVersion: v1
 kind: Service
@@ -6,32 +7,14 @@ metadata:
     kompose.cmd: kompose convert -f docker_compose.yaml
     kompose.version: 1.33.0 (3ce457399)
   labels:
-    io.kompose.service: {{ .Values.global.amdllm.embedding.service_name }}
-  name: {{ .Values.global.amdllm.embedding.service_name }}
-  namespace: {{ .Values.global.amdllm.namespace }}
+    io.kompose.service: {{ $value.service_name }}
+  name: {{ $value.service_name }}
+  namespace: {{ $.Values.global.amdllm.namespace }}
 spec:
   ports:
-    - name: "{{ .Values.global.amdllm.embedding.service_port }}"
-      port: {{ .Values.global.amdllm.embedding.service_port }}
-      targetPort: {{ .Values.global.amdllm.embedding.container_port }}
+    - name: "{{ $value.service_port }}"
+      port: {{ $value.service_port }}
+      targetPort: {{ $value.container_port }}
   selector:
-    io.kompose.service: {{ .Values.global.amdllm.embedding.service_name }}
-
----
-apiVersion: v1
-kind: Service
-metadata:
-  annotations:
-    kompose.cmd: kompose convert -f docker_compose.yaml
-    kompose.version: 1.33.0 (3ce457399)
-  labels:
-    io.kompose.service: {{ .Values.global.amdllm.reranker.service_name }}
-  name: {{ .Values.global.amdllm.reranker.service_name }}
-  namespace: {{ .Values.global.amdllm.namespace }}
-spec:
-  ports:
-    - name: "{{ .Values.global.amdllm.reranker.service_port }}"
-      port: {{ .Values.global.amdllm.reranker.service_port }}
-      targetPort: {{ .Values.global.amdllm.reranker.container_port }}
-  selector:
-    io.kompose.service: {{ .Values.global.amdllm.reranker.service_name }}
+    io.kompose.service: {{ $value.name }}
+{{- end}}

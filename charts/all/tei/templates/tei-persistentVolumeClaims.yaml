@@ -1,29 +1,16 @@
+{{- range $key, $value := .Values.global.amdllm.deployments }}
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   labels:
-    io.kompose.service: {{ .Values.global.amdllm.embedding.service_name }}-claim0
-  name: {{ .Values.global.amdllm.embedding.service_name }}-claim0
-  namespace: {{ .Values.global.amdllm.namespace }}
+    io.kompose.service: {{ $value.name }}-claim0
+  name: {{ $value.name }}-claim0
+  namespace: {{ $.Values.global.amdllm.namespace }}
 spec:
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: {{ .Values.global.amdllm.pvc.size }}
-
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  labels:
-    io.kompose.service: {{ .Values.global.amdllm.reranker.service_name }}-claim0
-  name: {{ .Values.global.amdllm.reranker.service_name }}-claim0
-  namespace: {{ .Values.global.amdllm.namespace }}
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: {{ .Values.global.amdllm.pvc.size }}
+      storage: {{ $.Values.global.amdllm.pvc.size }}
+{{- end}}
