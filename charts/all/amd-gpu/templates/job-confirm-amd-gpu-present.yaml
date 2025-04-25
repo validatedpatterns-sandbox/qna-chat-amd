@@ -3,24 +3,24 @@ kind: Job
 metadata:
   annotations:
     argocd.argoproj.io/sync-wave: "10"
-  name: confirm-habana-is-enabled
+  name: job-confirm-amd-gpu-present
 spec:
   template:
     spec:
       containers:
-        - image: {{ .Values.habanacheckjob.image }}
+        - image: {{ .Values.amdcheckjob.image }}
           command:
             - /bin/bash
             - -c
             - |
-               hl-smi -Q memory.total -f csv
+               cat
           imagePullPolicy: IfNotPresent
-          name: confirm-habana-is-enabled
+          name: confirm-amd-gpu-present
           resources:
             limits:
-              habana.ai/gaudi: "1"
+              amd.com/gpu: "1"
             requests:
-              habana.ai/gaudi: "1"
+              amd.com/gpu: "1"
       restartPolicy: Never
       serviceAccount: {{ .Values.serviceAccountName }}
       serviceAccountName: {{ .Values.serviceAccountName }}

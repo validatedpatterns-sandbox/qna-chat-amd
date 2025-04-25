@@ -5,8 +5,10 @@ clusterGroup:
     - open-cluster-management
     - vault
     - golang-external-secrets
-    # TODO(SG): Create the AMD operator namespace (if needed)
-    - amd-gpu-operator
+    - openshift-nfd
+    - amd-gpu-operator:
+        operatorGroup: true
+        targetNamespaces:
     - openshift-kmm:
         operatorGroup: true
         targetNamespaces:
@@ -16,18 +18,24 @@ clusterGroup:
     - amd-llm
 
   subscriptions:
+    nfd:
+      name: nfd
+      namespace: openshift-nfd
+      channel: stable
+      source: redhat-operators
+
     kmm:
       name: kernel-module-management
       namespace: openshift-kmm
       channel: stable
       source: redhat-operators
 
-    amd-ai:
+    amd-gpu:
       name: amd-gpu-operator
       namespace: amd-gpu-operator
-      # TODO(SG): This is the ONLY channel available for this oeprator
       channel: alpha
       source: certified-operators
+      sourceNamespace: openshift-marketplace
 
     rhods:
       name: rhods-operator
@@ -50,6 +58,7 @@ clusterGroup:
 
   projects:
     - hub
+    - openshift-nfd
     - openshift-kmm
     - amd-gpu-operator
     - redhat-ods-operator
@@ -87,6 +96,17 @@ clusterGroup:
       namespace: golang-external-secrets
       project: hub
       path: common/golang-external-secrets
+    nfd:
+      name: nfd
+      namespace: openshift-nfd
+      project: openshift-nfd
+      path: charts/all/nfd
+      ignoreDifferences:
+        - group: nfd.openshift.io
+          kind: NodeFeatureDiscovery
+          jqPathExpressions:
+            - '.spec.customConfig'
+            - '.spec.topologyupdater'
     kmm:
       name: kmm
       namespace: openshift-kmm
@@ -97,18 +117,11 @@ clusterGroup:
       namespace: openshift-storage
       project: hub
       path: charts/all/openshift-data-foundations
-    # TODO(SG): What's the AMD equivalent
-    # Will enable amd-ai charts once we've figured out what to add in the charts
-#    amd-gpu-operator:
-#      name: amd-ai
-#      namespace: amd-gpu-operator
-#      project: amd-gpu-operator
-#      path: charts/all/amd-ai
-#    habana-ai:
-#      name: habana-ai
-#      namespace: habana-ai-operator
-#      project: habana-ai-operator
-#      path: charts/all/habana-ai
+    amd-gpu-operator:
+      name: amd-gpu
+      namespace: amd-gpu-operator
+      project: amd-gpu-operator
+      path: charts/all/amd-gpu
     rhods-operator:
       name: rhods-operator
       namespace: redhat-ods-operator

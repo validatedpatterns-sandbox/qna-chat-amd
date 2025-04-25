@@ -1,2 +1,7 @@
 nfd:
   namespace: openshift-nfd
+  images:
+    v415: 'registry.redhat.io/openshift4/ose-node-feature-discovery-rhel9@sha256:661b6697dee34626a3a98b50cdba787402ab214d2807b8460df92e3c79cdfcc5'
+    v416: 'registry.redhat.io/openshift4/ose-node-feature-discovery-rhel9@sha256:bb95bc317ab78e8af4ef34dd66f9f62c2f8c261dfb5eab40918142812802f8b7'
+    v417: 'registry.redhat.io/openshift4/ose-node-feature-discovery-rhel9@sha256:154cf3f1ddaf895d7ecd04947bd455a930132f72acc6e8bde8c26bc123184ace'
+    v418: 'registry.redhat.io/openshift4/ose-node-feature-discovery-rhel9@sha256:510cb4351253492455664b6c323f54dc2f6f2f8791c5e92ba6b7e60b8adb357c'

@@ -14,6 +14,10 @@ global:
     route_path: /v1/chat/completions
     docker_file_Path: comps/llms/src/text-generation/Dockerfile
 
+    servingRuntime:
+      name: amdserve
+      namespace: amdserve
+
     image:
       pre_built: quay.io/sgahlot/opea/llm-tgi:latest
       from_source: image-registry.openshift-image-registry.svc:5000/opea/llm-tgi:latest
@@ -38,13 +42,17 @@ global:
         value: /home/user/.local/lib/python3.11/site-packages:/home/user
       - name: SSL_CERT_FILE
         value: /tmp/bundle.crt
+      - name: REQUESTS_CA_BUNDLE
+        value: /tmp/bundle.crt
       - name: LLM_MODEL_ID
-        value: llama-31b
-
+        value: jary-serve
     volume:
       tmp:
         name: temp-data
         path: /tmp/temp-data
+      cert:
+        name: endpoint-cert
+        path: /tmp
 #      rhoai_ca:
 #        name: rhoai-ca-bundle
 #        path: /rhoai-ca

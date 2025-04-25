@@ -43,6 +43,8 @@ spec:
               value: {{ .value }}
             {{- end }}
             {{- end }}
+{{/*            - name: LLM_ENDPOINT*/}}
+{{/*              value: https://{{ .Values.global.amdllm.servingRuntime.name }}-{{ .Values.global.amdllm.servingRuntime.namespace }}.apps.{{ .Values.global.clusterDomain }}*/}}
 
             {{- if .Values.global.amdllm.runtime_envs }}
             {{- range .Values.global.amdllm.runtime_envs }}
@@ -63,7 +65,12 @@ spec:
           volumeMounts:
             - name: {{ .Values.global.amdllm.volume.tmp.name }}
               mountPath: {{ .Values.global.amdllm.volume.tmp.path }}
+            - name: {{ .Values.global.amdllm.volume.cert.name }}
+              mountPath: {{ .Values.global.amdllm.volume.cert.path }}
       restartPolicy: Always
       volumes:
         - name: {{ .Values.global.amdllm.volume.tmp.name }}
           emptyDir: {}
+        - name: {{ .Values.global.amdllm.volume.cert.name }}
+          secret:
+            secretName: {{ .Values.global.amdllm.volume.cert.name }}

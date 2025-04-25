@@ -19,6 +19,14 @@ secret:
       secret_name: rhoai_model
       path: secret/hub/rhoai_model
       key: inference_endpoint
+  endpoint_cert:
+    ocp:
+      secret_name: endpoint-cert
+      key: bundle.crt
+    vault:
+      secret_name: endpoint_cert
+      path: secret/hub/endpoint_cert
+      key: bundle.crt
 
 secret_store:
   name: vault-backend

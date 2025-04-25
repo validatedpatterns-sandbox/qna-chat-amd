@@ -12,14 +12,16 @@ metadata:
   name: {{ $k }}-operator-group
   namespace: {{ $k }}
 spec:
+  {{- if (hasKey $v "targetNamespaces") }}
   targetNamespaces:
-    {{- if (hasKey $v "targetNamespaces") }}
+      {{- if (hasKey $v "targetNamespaces") }}
       {{- range $v.targetNamespaces }}{{- /* We loop through the list of tergetnamespaces */}}
   - {{ . }}
       {{- end }}{{- /* End range targetNamespaces */}}
     {{- else }}
   - {{ $k }}
-    {{- end }}{{- /* End of if operatorGroup */}}
+    {{- end }}{{- /* End of inner targetNamespaces for list */}}
+  {{- end }}{{- /* end of outer targetNamespaces for spec label */}}
   {{- end }}{{- /* range $k, $v := $ns */}}
   {{- end }}{{- /* End of if operatorGroup */}}
   {{- else if kindIs "string" $ns }}

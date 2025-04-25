@@ -6,6 +6,8 @@ metadata:
 spec:
   displayName: AMD
   enabled: true
-  # TODO(SG): What should the identifier be? instinct.ai/amd OR rocm.ai/amd
-  identifier: habana.ai/gaudi
-  tolerations: []
+  identifier: amd.com/gpu
+  tolerations:
+    - effect: NoSchedule
+      key: amd.com/gpu
+      operator: Exists

@@ -1,31 +1,24 @@
 config:
    devicePlugin:
-     image: vault.habana.ai/docker-k8s-device-plugin/docker-k8s-device-plugin
-     version: 1.15.1
-   driver:
-     image: image-registry.openshift-image-registry.svc:5000/habana-ai-operator/habana-ai-driver
-     version: 1.15.1-15
-   habanaRuntime:
-     image: vault.habana.ai/habana-ocp-operator/1.15.1/habana-runtime
-     version: 1.15.1-15
-   nodeMetrics:
-     image: vault.habana.ai/gaudi-metric-exporter/metric-exporter
-     version: 1.15.1-15
+     image: rocm/k8s-device-plugin:latest
+   nodeLabeller:
+     image: rocm/k8s-device-plugin:labeller-latest
+   rocmVersion: 6.2.2 # pinned @ 6.2.2 because of https://github.com/ROCm/gpu-operator/issues/66
 
-habanacheckjob:
-  image: vault.habana.ai/gaudi-docker/1.15.1/rhel9.2/habanalabs/pytorch-installer-2.2.0:latest
+amdcheckjob:
+  image: redhat/ubi9-minimal:latest
 
 machineconfigName:
   fwpath: 99-worker-kernel-args-firmware-path
 
 job:
   image: image-registry.openshift-image-registry.svc:5000/openshift/cli:latest
-  namespace: habana-ai-operator
+  namespace: amd-gpu-operator
 
-serviceAccountName: mcp-habana-config-sa
+serviceAccountName: mcp-amd-config-sa
 rbac:
   roles:
-    - name: habana-config-role
+    - name: amd-config-role
       createRole: true
       apiGroups:
         - '""'
@@ -50,16 +43,16 @@ rbac:
         - "create"
         - "watch"
   roleBindings:
-    - name: habana-config-rolebinding
+    - name: amd-config-rolebinding
       createBinding: true
       scope:
         cluster: true
         namespace: ""
       subjects:
         kind: ServiceAccount
-        name: mcp-habana-config-sa
-        namespace: habana-ai-operator
+        name: mcp-amd-config-sa
+        namespace: amd-gpu-operator
         apiGroup: ""
       roleRef:
         kind: ClusterRole
-        name: habana-config-role
+        name: amd-config-role
