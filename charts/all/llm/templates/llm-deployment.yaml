@@ -43,6 +43,7 @@ spec:
               value: {{ .value }}
             {{- end }}
             {{- end }}
+{{/* used if you want to redirect to a local-cluster model serve using internal uri instead */}}
 {{/*            - name: LLM_ENDPOINT*/}}
 {{/*              value: https://{{ .Values.global.amdllm.servingRuntime.name }}-{{ .Values.global.amdllm.servingRuntime.namespace }}.apps.{{ .Values.global.clusterDomain }}*/}}
 
@@ -53,7 +54,7 @@ spec:
             {{- end }}
             {{- end }}
           image:
-            {{- if .Values.global.build.enabled }}
+            {{- if (.Values.global.build).enabled | default "true" }}
             {{ .Values.global.amdllm.image.from_source }}
             {{- else}}
             {{ .Values.global.amdllm.image.pre_built }}

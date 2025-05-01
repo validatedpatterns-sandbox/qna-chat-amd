@@ -9,11 +9,11 @@ metadata:
   labels:
     io.kompose.service: reranking
   name: reranking
-  namespace: gaudi-llm
+  namespace: amd-llm
 spec:
   ports:
-    - name: "8000"
-      port: 8000
+    - name: "5003"
+      port: 5003
       targetPort: 8000
   selector:
     io.kompose.service: reranking
@@ -26,11 +26,11 @@ metadata:
     kompose.cmd: kompose convert -f docker_compose.yaml
     kompose.version: 1.33.0 (3ce457399)
     argocd.argoproj.io/sync-wave: "5"
-    image.openshift.io/triggers: '[{"from":{"kind":"ImageStreamTag","name":"reranking-tei:latest"},"fieldPath":"spec.template.spec.containers[?(@.name==\"reranking-tei-gaudi-server\")].image"}]'
+    image.openshift.io/triggers: '[{"from":{"kind":"ImageStreamTag","name":"reranking:latest"},"fieldPath":"spec.template.spec.containers[?(@.name==\"reranking-server\")].image"}]'
   labels:
     io.kompose.service: reranking
   name: reranking
-  namespace: gaudi-llm
+  namespace: amd-llm
 spec:
   replicas: 1
   selector:
@@ -57,9 +57,10 @@ spec:
                   key: huggingface
                   name: hf-token-secret
             - name: TEI_RERANKING_ENDPOINT
-              value: http://tei-embedding-service.gaudi-llm.svc.cluster.local:8090
-          image: image-registry.openshift-image-registry.svc:5000/gaudi-llm/reranking-tei:latest
-          name: reranking-tei-server
+              value: "http://tei-reranker-service.amd-llm.svc.cluster.local:5006"
+          image:
+            image-registry.openshift-image-registry.svc:5000/opea/reranking:latest
+          name: reranking-server
           ports:
             - containerPort: 8000
               protocol: TCP
@@ -76,12 +77,12 @@ kind: BuildConfig
 apiVersion: build.openshift.io/v1
 metadata:
   name: reranking
-  namespace: gaudi-llm
+  namespace: amd-llm
 spec:
   output:
     to:
       kind: "ImageStreamTag"
-      name: "reranking-tei:latest"
+      name: "reranking:latest"
   failedBuildsHistoryLimit: 5
   successfulBuildsHistoryLimit: 5
   nodeSelector: null
@@ -90,22 +91,23 @@ spec:
   runPolicy: SerialLatestOnly
   source:
     git:
-      ref: 7c2e7f6
+      ref: 3e559df
       uri: https://github.com/opea-project/GenAIComps.git
     type: Git
   strategy:
     type: Docker
     dockerStrategy:
-      dockerfilePath: comps/reranks/langchain/docker/Dockerfile
+      dockerfilePath: comps/rerankings/src/Dockerfile
+
   triggers:
-  - type: ConfigChange
+    - type: ConfigChange
 ---
 # Source: reranking/templates/reranking-imagestream.yaml
 apiVersion: image.openshift.io/v1
 kind: ImageStream
 metadata:
-  name: reranking-tei
-  namespace: gaudi-llm
+  name: reranking
+  namespace: amd-llm
 spec:
   lookupPolicy:
     local: true
@@ -114,15 +116,14 @@ spec:
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
-  name: rerank-megaservice-route
-  namespace: gaudi-llm
+  name: reranking
+  namespace: amd-llm
 spec:
-  host: megaservice-gaudi-llm.apps.
+  host: megaservice-amd-llm.apps.
   path: /v1/reranking
   port:
-    targetPort: 8000
+    targetPort: 5003
+  tls:
+    termination: edge
   to:
-    kind: Service
     name: reranking
-    weight: 100
-  wildcardPolicy: None

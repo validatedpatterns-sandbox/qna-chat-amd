@@ -114,6 +114,27 @@ spec:
       serviceAccountName: mcp-kmm-config-sa
       terminationGracePeriodSeconds: 60
 ---
+# Source: kmm/templates/mc-amdgpu-module-blacklist.yaml
+apiVersion: machineconfiguration.openshift.io/v1
+kind: MachineConfig
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "-101"
+  labels:
+    machineconfiguration.openshift.io/role: worker
+  name: amdgpu-module-blacklist
+spec:
+  config:
+    ignition:
+      version: 3.2.0
+    storage:
+      files:
+        - path: "/etc/modprobe.d/amdgpu-blacklist.conf"
+          mode: 420
+          overwrite: true
+          contents:
+            source: "data:text/plain;base64,YmxhY2tsaXN0IGFtZGdwdQo="
+---
 # Source: kmm/templates/mc-set-fw-path.yaml
 apiVersion: machineconfiguration.openshift.io/v1
 kind: MachineConfig

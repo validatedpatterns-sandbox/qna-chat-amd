@@ -1,0 +1,179 @@
+---
+# Source: tei-embedding-service/templates/tei-persistentVolumeClaims.yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    io.kompose.service: tei-reranker-claim0
+  name: tei-reranker-claim0
+  namespace: amd-llm
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 3Gi
+---
+# Source: tei-embedding-service/templates/tei-persistentVolumeClaims.yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    io.kompose.service: tei-embedding-claim0
+  name: tei-embedding-claim0
+  namespace: amd-llm
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 3Gi
+---
+# Source: tei-embedding-service/templates/tei-services.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker_compose.yaml
+    kompose.version: 1.33.0 (3ce457399)
+  labels:
+    io.kompose.service: tei-reranker-service
+  name: tei-reranker-service
+  namespace: amd-llm
+spec:
+  ports:
+    - name: "5006"
+      port: 5006
+      targetPort: 8080
+  selector:
+    io.kompose.service: tei-reranker
+---
+# Source: tei-embedding-service/templates/tei-services.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker_compose.yaml
+    kompose.version: 1.33.0 (3ce457399)
+  labels:
+    io.kompose.service: tei-embedding-service
+  name: tei-embedding-service
+  namespace: amd-llm
+spec:
+  ports:
+    - name: "5007"
+      port: 5007
+      targetPort: 8080
+  selector:
+    io.kompose.service: tei-embedding
+---
+# Source: tei-embedding-service/templates/tei-deployments.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker_compose.yaml
+    kompose.version: 1.33.0 (3ce457399)
+  labels:
+    io.kompose.service: tei-reranker
+  name: tei-reranker
+  namespace: amd-llm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: tei-reranker
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f docker_compose.yaml
+        kompose.version: 1.33.0 (3ce457399)
+      labels:
+        io.kompose.network/chatqna-default: "true"
+        io.kompose.service: tei-reranker
+    spec:
+      containers:
+        - args:
+            - --model-id
+            - BAAI/bge-reranker-base
+            - --port
+            - "8080"
+            - --auto-truncate
+          env:
+            - name: HF_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  key: huggingface
+                  name: hf-token-secret
+            - name: HOME
+              value: /data
+          image: ghcr.io/huggingface/text-embeddings-inference:cpu-1.6
+          name: tei-reranker-server
+          ports:
+            - containerPort: 80
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /data
+              name: tei-reranker-claim0
+      restartPolicy: Always
+      volumes:
+        - name: tei-reranker-claim0
+          persistentVolumeClaim:
+            claimName: tei-reranker-claim0
+---
+# Source: tei-embedding-service/templates/tei-deployments.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker_compose.yaml
+    kompose.version: 1.33.0 (3ce457399)
+  labels:
+    io.kompose.service: tei-embedding
+  name: tei-embedding
+  namespace: amd-llm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: tei-embedding
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f docker_compose.yaml
+        kompose.version: 1.33.0 (3ce457399)
+      labels:
+        io.kompose.network/chatqna-default: "true"
+        io.kompose.service: tei-embedding
+    spec:
+      containers:
+        - args:
+            - --model-id
+            - BAAI/bge-base-en-v1.5
+            - --port
+            - "8080"
+          env:
+            - name: HF_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  key: huggingface
+                  name: hf-token-secret
+            - name: HOME
+              value: /data
+          image: ghcr.io/huggingface/text-embeddings-inference:cpu-1.6
+          name: tei-embedding-server
+          ports:
+            - containerPort: 80
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /data
+              name: tei-embedding-claim0
+      restartPolicy: Always
+      volumes:
+        - name: tei-embedding-claim0
+          persistentVolumeClaim:
+            claimName: tei-embedding-claim0

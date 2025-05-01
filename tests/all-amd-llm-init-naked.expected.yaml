@@ -1,0 +1,320 @@
+---
+# Source: amdllm-init/templates/rbac/serviceAccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: amd-pattern-sa
+  namespace: 
+  annotations:
+    argocd.argoproj.io/hook: "PreSync"
+    argocd.argoproj.io/sync-wave: "-10"
+---
+# Source: amdllm-init/templates/ensure-builds-cm.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ensure-builds
+  namespace: amd-llm
+  annotations:
+    argocd.argoproj.io/sync-wave: "-1"
+data:
+  ensure-builds.sh: |
+    #!/bin/bash
+
+    set -o pipefail
+
+    NS="amd-llm"
+
+    echo "Ensuring no buildconfigs are in failed status after all MCs have been applied"
+
+    for buildconfig in $(oc -n ${NS} get buildconfigs -oname)
+    do
+      echo "Getting last build data for BuildConfig ${buildconfig}"
+      LATEST="$(oc -n ${NS} get ${buildconfig} -ojsonpath='{.status.lastVersion}')"
+      BUILD_NAME="$(oc -n ${NS} get ${buildconfig} -ojsonpath='{.metadata.name}')"
+      echo "Checking last build status..."
+      LAST_FAILED="$(oc -n ${NS} get build ${BUILD_NAME}-${LATEST} -ojsonpath='{.status.phase}')"
+      echo "Is last build ${LATEST} failed? ${LAST_FAILED}"
+      if [[ "Failed" = "${LAST_FAILED}" ]]
+      then
+        echo "Restarting build for last failed BuildConfig ${BUILD_NAME}"
+        oc -n ${NS} start-build "${buildconfig}"
+      fi
+    done
+---
+# Source: amdllm-init/templates/init-istio-ca-secret-cm.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: create-rhoai-istio-rootca-cert-secret
+  namespace: amd-llm
+  annotations:
+    argocd.argoproj.io/sync-wave: "-1"
+data:
+  create-rhoai-istio-rootca-cert-secret.sh: |
+    #!/bin/bash
+
+    TMP_KEY='tls.crt'
+    SRC_SECRET=$(oc extract secret/knative-serving-cert -n istio-system --to=- --keys=${TMP_KEY})
+
+    if [ -z "$SRC_SECRET" ]; then
+      echo "Secret 'secret/knative-serving-cert' in namespace 'istio-system' is EMPTY. Will try again..."
+      exit 1
+    else
+      TARGET_SECRET_NAME='unused-rhoai-ca-bundle'
+      SECRET_EXISTS=$(oc get secret --ignore-not-found $TARGET_SECRET_NAME -n amd-llm)
+
+      if [[ -z "${SECRET_EXISTS}" ]]; then
+        echo "Creating '$TARGET_SECRET_NAME' secret (using knative-serving-cert)..."
+        oc create secret generic -n amd-llm $TARGET_SECRET_NAME --from-literal=${TMP_KEY}="$SRC_SECRET"
+      else
+        echo "Secret '$TARGET_SECRET_NAME' already exists!!!"
+      fi
+    fi
+---
+# Source: amdllm-init/templates/zz-patch-kserve-config-cm.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: patch-kserve-progress-deadline
+  namespace: amd-llm
+data:
+  patch-kserve-progress-deadline.sh: |
+    #!/bin/bash
+    echo "Current knative-serving"
+    oc get -oyaml -n knative-serving knativeserving knative-serving | tee -a /tmp/knative-old.yaml
+
+    echo "Patching knative-serving config to include 30m progressDeadline for model servings..."
+    oc patch --type=merge -n knative-serving knativeserving knative-serving --patch '{"spec":{"config":{"deployment":{"progress-deadline":"30m"}}}}'
+    
+    echo "Post-patch knative-serving manifest"
+    oc get -oyaml -n knative-serving knativeserving knative-serving | tee -a /tmp/knative-new.yaml
+
+    echo "Changes:"
+    diff -y /tmp/knative-old.yaml /tmp/knative-new.yaml --suppress-common-lines
+---
+# Source: amdllm-init/templates/rbac/role.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: amd-pattern-rhoai-role
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+    argocd.argoproj.io/sync-wave: "-15"
+rules:
+  - apiGroups:
+      - ""
+      - "apps"
+      - "batch"
+      - "machineconfiguration.openshift.io"
+      - "rbac.authorization.k8s.io"
+      - "security.openshift.io"
+      - "datasciencecluster.opendatahub.io"
+      - "operator.knative.dev"
+      - "build.openshift.io"
+    resources:
+      - namespaces
+      - secrets
+      - datascienceclusters
+      - clusterrolebindings
+      - knativeservings
+      - jobs
+      - buildconfigs
+      - builds
+      - buildconfigs/instantiate
+    verbs:
+      - create
+      - get
+      - list
+      - patch
+      - update
+      - use
+      - watch
+---
+# Source: amdllm-init/templates/rbac/role.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: amd-pattern-rhoai-role-mcp-label
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+    argocd.argoproj.io/sync-wave: "-15"
+rules:
+  - apiGroups:
+      - "machineconfiguration.openshift.io"
+    resources:
+      - machineconfigpools
+      - machineconfigs
+    verbs:
+      - get
+      - list
+      - patch
+      - watch
+---
+# Source: amdllm-init/templates/rbac/crb-rhoai.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "-100"
+  name: kubeadmin-rhoai-cluster-admin-rolebinding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+- kind: User
+  apiGroup: rbac.authorization.k8s.io
+  name: 'kube:admin'
+---
+# Source: amdllm-init/templates/rbac/rolebinding.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: amd-pattern-rhoai-rolebind
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+    argocd.argoproj.io/sync-wave: "-15"
+subjects:
+- kind: ServiceAccount
+  name: amd-pattern-sa
+  namespace: amd-llm
+  apiGroup: ""
+roleRef:
+  kind: ClusterRole
+  name: amd-pattern-rhoai-role
+  apiGroup: rbac.authorization.k8s.io
+---
+# Source: amdllm-init/templates/rbac/rolebinding.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: amd-pattern-rhoai-role-mcp-label
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+    argocd.argoproj.io/sync-wave: "-15"
+subjects:
+- kind: ServiceAccount
+  name: amd-pattern-sa
+  namespace: amd-llm
+  apiGroup: ""
+roleRef:
+  kind: ClusterRole
+  name: amd-pattern-rhoai-role-mcp-label
+  apiGroup: rbac.authorization.k8s.io
+---
+# Source: amdllm-init/templates/ensure-builds-job.yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  annotations:
+    argocd.argoproj.io/hook: Sync
+    argocd.argoproj.io/sync-wave: "11"
+  name: ensure-builds-job
+  namespace: amd-llm
+spec:
+  template:
+    spec:
+      containers:
+      - image: image-registry.openshift-image-registry.svc:5000/openshift/cli:latest
+        command:
+        - /bin/bash
+        - -c
+        - |
+          oc wait --for condition=Complete -n amd-gpu-operator job job-wait-for-mcp-update --timeout=-1s'
+          oc wait --for condition=Complete -n amd-gpu-operator job job-confirm-amd-gpu-present --timeout=-1s'
+
+          oc wait --for condition=Complete -n amd-llm job init-kubeletconfig-apply-job --timeout=-1s
+          '/tmp/ensure-builds.sh'
+        name: ensure-builds
+        volumeMounts:
+          - mountPath: /tmp/ensure-builds.sh
+            name: ensure-builds
+            subPath: ensure-builds.sh
+      volumes:
+        - name: ensure-builds
+          configMap:
+            name: ensure-builds
+            defaultMode: 0755
+      dnsPolicy: ClusterFirst
+      restartPolicy: Never
+      serviceAccount: amd-pattern-sa
+      serviceAccountName: amd-pattern-sa
+      terminationGracePeriodSeconds: 400
+---
+# Source: amdllm-init/templates/init-istio-ca-secret-job.yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  annotations:
+    argocd.argoproj.io/hook: Sync
+    argocd.argoproj.io/sync-wave: "10"
+  name: create-rhoai-istio-rootca-cert-secret
+  namespace: amd-llm
+spec:
+  template:
+    spec:
+      containers:
+      - image: image-registry.openshift-image-registry.svc:5000/openshift/cli:latest
+        command:
+        - /bin/bash
+        - -c
+        - |
+          oc wait --for=condition=ReconcileComplete=True dsc/rhods-datasciencecluster --timeout=-1s
+          oc wait --for condition=Ready=True knativeserving -n knative-serving knative-serving --timeout=-1s
+          '/tmp/create-rhoai-istio-rootca-cert-secret.sh'
+        name: create-rhoai-istio-rootca-cert-secret
+        volumeMounts:
+          - mountPath: /tmp/create-rhoai-istio-rootca-cert-secret.sh
+            name: create-rhoai-istio-rootca-cert-secret
+            subPath: create-rhoai-istio-rootca-cert-secret.sh
+      volumes:
+        - name: create-rhoai-istio-rootca-cert-secret
+          configMap:
+            name: create-rhoai-istio-rootca-cert-secret
+            defaultMode: 0755
+      dnsPolicy: ClusterFirst
+      restartPolicy: Never
+      serviceAccount: amd-pattern-sa
+      serviceAccountName: amd-pattern-sa
+      terminationGracePeriodSeconds: 400
+---
+# Source: amdllm-init/templates/zz-patch-kserve-config-job.yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  annotations:
+    argocd.argoproj.io/hook: Sync
+    argocd.argoproj.io/sync-wave: "102"
+  name: zz-patch-kserve-progress-deadline
+  namespace: amd-llm
+spec:
+  template:
+    spec:
+      containers:
+      - image: image-registry.openshift-image-registry.svc:5000/openshift/cli:latest
+        command:
+        - /bin/bash
+        - -c
+        - |
+          # wait for DSC to progress
+          oc wait --for=condition=ReconcileComplete=True dsc/rhods-datasciencecluster --timeout=-1s
+          # now we wait for Kserve to become Ready installing... 
+          oc wait --for=condition=Ready=True -n knative-serving knativeserving knative-serving --timeout=-1s
+          # Then we patch progressDeadline in Kserve Config since 70b might download longer > 600secs onto kserve
+          '/tmp/patch-kserve-progress-deadline.sh'
+        name: patch-kserve-progress-deadline
+        volumeMounts:
+          - mountPath: /tmp/patch-kserve-progress-deadline.sh
+            name: patch-kserve-progress-deadline
+            subPath: patch-kserve-progress-deadline.sh
+      volumes:
+        - name: patch-kserve-progress-deadline
+          configMap:
+            name: patch-kserve-progress-deadline
+            defaultMode: 0755
+      dnsPolicy: ClusterFirst
+      restartPolicy: Never
+      serviceAccount: amd-pattern-sa
+      serviceAccountName: amd-pattern-sa
+      terminationGracePeriodSeconds: 400

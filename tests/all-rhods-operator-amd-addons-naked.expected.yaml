@@ -1,0 +1,15 @@
+---
+# Source: rhods-operator-amd-addons/templates/amdacceleratorprofile.yaml
+apiVersion: dashboard.opendatahub.io/v1
+kind: AcceleratorProfile
+metadata:
+  name: amd
+  namespace: redhat-ods-applications
+spec:
+  displayName: AMD
+  enabled: true
+  identifier: amd.com/gpu
+  tolerations:
+    - effect: NoSchedule
+      key: amd.com/gpu
+      operator: Exists

@@ -7,13 +7,13 @@ metadata:
     argocd.argoproj.io/sync-wave: "1"
 spec:
   operand:
-    {{ if eq $.Values.global.clusterVersion "4.15" }}
+    {{ if eq ($.Values.global).clusterVersion "4.15" }}
     image: {{ .Values.nfd.images.v415 }}
-    {{ else if eq $.Values.global.clusterVersion "4.16" }}
+    {{ else if eq ($.Values.global).clusterVersion "4.16" }}
     image: {{ .Values.nfd.images.v416 }}
-    {{ else if eq $.Values.global.clusterVersion "4.17" }}
+    {{ else if eq ($.Values.global).clusterVersion "4.17" }}
     image: {{ .Values.nfd.images.v417 }}
-    {{ else if eq $.Values.global.clusterVersion "4.18" }}
+    {{ else if eq ($.Values.global).clusterVersion "4.18" }}
     image: {{ .Values.nfd.images.v418 }}
     {{ else }}
     image: undefined-ocp-version-match

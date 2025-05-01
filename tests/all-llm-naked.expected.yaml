@@ -1,0 +1,151 @@
+---
+# Source: llm-server/templates/llm-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker_compose.yaml
+    kompose.version: 1.33.0 (3ce457399)
+    argocd.argoproj.io/compare-options: IgnoreExtraneous
+    argocd.argoproj.io/sync-wave: "5"
+  labels:
+    io.kompose.service: llm-tgi
+  name: llm-tgi
+  namespace: amd-llm
+spec:
+  ports:
+    - name: "5005"
+      port: 5005
+      targetPort: 9000
+  selector:
+    io.kompose.service: llm-tgi
+---
+# Source: llm-server/templates/llm-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker_compose.yaml
+    kompose.version: 1.33.0 (3ce457399)
+    argocd.argoproj.io/compare-options: IgnoreExtraneous
+    argocd.argoproj.io/sync-wave: "5"
+    image.openshift.io/triggers: '[{"from":{"kind":"ImageStreamTag","name":"llm-tgi:latest"},"fieldPath":"spec.template.spec.containers[?(@.name==\"llm-tgi-server\")].image"}]'
+  labels:
+    io.kompose.service: llm-tgi
+  name: llm
+  namespace: amd-llm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: llm-tgi
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f docker_compose.yaml
+        kompose.version: 1.33.0 (3ce457399)
+      labels:
+        io.kompose.network/chatqna-default: "true"
+        io.kompose.service: llm-tgi
+    spec:
+      containers:
+        - env:
+            - name: HOME
+              value: /tmp/temp-data
+            - name: PYTHONPATH
+              value: /home/user/.local/lib/python3.11/site-packages:/home/user
+            - name: SSL_CERT_FILE
+              value: /tmp/bundle.crt
+            - name: REQUESTS_CA_BUNDLE
+              value: /tmp/bundle.crt
+            - name: LLM_MODEL_ID
+              value: jary-serve
+            - name: HF_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  key: huggingface
+                  name: hf-token-secret
+              value: 
+            - name: LLM_ENDPOINT
+              valueFrom:
+                secretKeyRef:
+                  key: inference_endpoint
+                  name: rhoai-model-secret
+              value: 
+
+
+
+          image:
+            image-registry.openshift-image-registry.svc:5000/opea/llm-tgi:latest
+          name: llm-tgi-server
+          ports:
+            - containerPort: 9000
+              protocol: TCP
+          volumeMounts:
+            - name: temp-data
+              mountPath: /tmp/temp-data
+            - name: endpoint-cert
+              mountPath: /tmp
+      restartPolicy: Always
+      volumes:
+        - name: temp-data
+          emptyDir: {}
+        - name: endpoint-cert
+          secret:
+            secretName: endpoint-cert
+---
+# Source: llm-server/templates/llm-buildconfig.yaml
+kind: BuildConfig
+apiVersion: build.openshift.io/v1
+metadata:
+  name: llm-tgi
+  namespace: amd-llm
+spec:
+  output:
+    to:
+      kind: "ImageStreamTag"
+      name: "llm-tgi:latest"
+  failedBuildsHistoryLimit: 5
+  successfulBuildsHistoryLimit: 5
+  nodeSelector: null
+  postCommit: {}
+  resources: {}
+  runPolicy: SerialLatestOnly
+  source:
+    git:
+      ref: 3e559df
+      uri: https://github.com/opea-project/GenAIComps.git
+    type: Git
+  strategy:
+    type: Docker
+    dockerStrategy:
+      dockerfilePath: comps/llms/src/text-generation/Dockerfile
+
+  triggers:
+    - type: ConfigChange
+---
+# Source: llm-server/templates/llm-imagestream.yaml
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  name: llm-tgi
+  namespace: amd-llm
+spec:
+  lookupPolicy:
+    local: true
+---
+# Source: llm-server/templates/llm-route.yaml
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: llm-tgi
+  namespace: amd-llm
+spec:
+  host: megaservice-amd-llm.apps.lab.com
+  path: /v1/chat/completions
+  port:
+    targetPort: 5005
+  tls:
+    termination: edge
+  to:
+    name: llm-tgi

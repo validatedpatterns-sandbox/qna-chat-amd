@@ -6,7 +6,7 @@ metadata:
   labels:
     io.kompose.service: redis-vector-db-claim0
   name: redis-vector-db-claim0
-  namespace: gaudi-llm
+  namespace: amd-llm
 spec:
   accessModes:
     - ReadWriteOnce
@@ -24,7 +24,7 @@ metadata:
   labels:
     io.kompose.service: redis-vector-db
   name: redis-vector-db
-  namespace: gaudi-llm
+  namespace: amd-llm
 spec:
   ports:
     - name: "6379"
@@ -46,7 +46,7 @@ metadata:
   labels:
     io.kompose.service: redis-vector-db
   name: redis-vector-db
-  namespace: gaudi-llm
+  namespace: amd-llm
 spec:
   replicas: 1
   selector:

@@ -3,8 +3,8 @@
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: gaudi-pattern-sa
-  namespace: gaudi-pattern
+  name: amd-pattern-sa
+  namespace: amd-pattern
   annotations:
     argocd.argoproj.io/hook: "PreSync"
     argocd.argoproj.io/sync-wave: "-10"
@@ -14,7 +14,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: create-s3-secret
-  namespace: gaudi-pattern
+  namespace: amd-pattern
   annotations:
     argocd.argoproj.io/sync-wave: "-1"
 data:
@@ -24,7 +24,7 @@ data:
       echo "SECRET EXISTS"
     else
       echo "CREATING SECRET..."
-      oc create secret generic s3-secret-bck -n gaudi-pattern \
+      oc create secret generic s3-secret-bck -n amd-pattern \
       --from-literal=AWS_ACCESS_KEY_ID=$(oc extract -n openshift-storage secret/rook-ceph-object-user-ocs-storagecluster-cephobjectstore-ocs-storagecluster-cephobjectstoreuser --keys=AccessKey --to=-) \
       --from-literal=AWS_SECRET_ACCESS_KEY=$(oc extract -n openshift-storage secret/rook-ceph-object-user-ocs-storagecluster-cephobjectstore-ocs-storagecluster-cephobjectstoreuser --keys=SecretKey --to=-) \
       --from-literal=S3_RGW_ROUTE=$(oc -n openshift-storage get route s3-rgw -ojsonpath='{.spec.host}')
@@ -34,7 +34,7 @@ data:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: gaudi-pattern-role
+  name: amd-pattern-role
   annotations:
     argocd.argoproj.io/hook: PreSync
     argocd.argoproj.io/sync-wave: "-15"
@@ -64,18 +64,18 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: gaudi-pattern-rolebind
+  name: amd-pattern-rolebind
   annotations:
     argocd.argoproj.io/hook: PreSync
     argocd.argoproj.io/sync-wave: "-15"
 subjects:
 - kind: ServiceAccount
-  name: gaudi-pattern-sa
+  name: amd-pattern-sa
   namespace: openshift-storage
   apiGroup: ""
 roleRef:
   kind: ClusterRole
-  name: gaudi-pattern-role
+  name: amd-pattern-role
   apiGroup: rbac.authorization.k8s.io
 ---
 # Source: odf/templates/job-create-s3-bucket.yaml
@@ -86,7 +86,7 @@ metadata:
     argocd.argoproj.io/hook: Sync
     argocd.argoproj.io/sync-wave: "10"
   name: create-s3-bucket
-  namespace: gaudi-pattern
+  namespace: amd-pattern
 spec:
   template:
     spec:
@@ -116,8 +116,8 @@ spec:
         name: create-s3-bucket
       dnsPolicy: ClusterFirst
       restartPolicy: Never
-      serviceAccount: gaudi-pattern-sa
-      serviceAccountName: gaudi-pattern-sa
+      serviceAccount: amd-pattern-sa
+      serviceAccountName: amd-pattern-sa
       terminationGracePeriodSeconds: 400
 ---
 # Source: odf/templates/job-create-s3-secret.yaml
@@ -128,7 +128,7 @@ metadata:
     argocd.argoproj.io/hook: Sync
     argocd.argoproj.io/sync-wave: "10"
   name: create-s3-secret
-  namespace: gaudi-pattern
+  namespace: amd-pattern
 spec:
   template:
     spec:
@@ -151,8 +151,8 @@ spec:
             defaultMode: 0755
       dnsPolicy: ClusterFirst
       restartPolicy: Never
-      serviceAccount: gaudi-pattern-sa
-      serviceAccountName: gaudi-pattern-sa
+      serviceAccount: amd-pattern-sa
+      serviceAccountName: amd-pattern-sa
       terminationGracePeriodSeconds: 400
 ---
 # Source: odf/templates/job-increase-rgw-mem-limit.yaml
@@ -163,7 +163,7 @@ metadata:
     argocd.argoproj.io/hook: Sync
     argocd.argoproj.io/sync-wave: "10"
   name: increase-rgw-mem-limit
-  namespace: gaudi-pattern
+  namespace: amd-pattern
 spec:
   template:
     spec:
@@ -177,8 +177,8 @@ spec:
         name: increase-rgw-mem-limit
       dnsPolicy: ClusterFirst
       restartPolicy: Never
-      serviceAccount: gaudi-pattern-sa
-      serviceAccountName: gaudi-pattern-sa
+      serviceAccount: amd-pattern-sa
+      serviceAccountName: amd-pattern-sa
       terminationGracePeriodSeconds: 400
 ---
 # Source: odf/templates/rgw-route.yaml

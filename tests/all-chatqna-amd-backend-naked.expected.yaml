@@ -9,16 +9,16 @@ metadata:
     argocd.argoproj.io/compare-options: IgnoreExtraneous
     argocd.argoproj.io/sync-wave: "5"
   labels:
-    io.kompose.service: chatqna-gaudi-backend-server
-  name: chatqna-gaudi-backend-server
-  namespace: gaudi-llm
+    io.kompose.service: chatqna-backend
+  name: chatqna-backend
+  namespace: amd-llm
 spec:
   ports:
-    - name: "8888"
-      port: 8888
+    - name: "5008"
+      port: 5008
       targetPort: 8888
   selector:
-    io.kompose.service: chatqna-gaudi-backend-server
+    io.kompose.service: chatqna-backend
 ---
 # Source: chatqna-amd-backend/templates/backend-deployment.yaml
 apiVersion: apps/v1
@@ -29,74 +29,70 @@ metadata:
     kompose.version: 1.33.0 (3ce457399)
     argocd.argoproj.io/compare-options: IgnoreExtraneous
     argocd.argoproj.io/sync-wave: "5"
-    image.openshift.io/triggers: '[{"from":{"kind":"ImageStreamTag","name":"chatqna:latest"},"fieldPath":"spec.template.spec.containers[?(@.name==\"chatqna-amd-backend-server\")].image"}]'
+    image.openshift.io/triggers: '[{"from":{"kind":"ImageStreamTag","name":"chatqna-backend:latest"},"fieldPath":"spec.template.spec.containers[?(@.name==\"chatqna-backend-server\")].image"}]'
   labels:
-    io.kompose.service: chatqna-gaudi-backend-server
-  name: chatqna-gaudi-backend-server
-  namespace: gaudi-llm
+    io.kompose.service: chatqna-backend
+  name: chatqna-backend
+  namespace: amd-llm
 spec:
   replicas: 1
   selector:
     matchLabels:
-      io.kompose.service: chatqna-gaudi-backend-server
+      io.kompose.service: chatqna-backend
   template:
     metadata:
       annotations:
         kompose.cmd: kompose convert -f docker_compose.yaml
         kompose.version: 1.33.0 (3ce457399)
       labels:
-        io.kompose.network/gaudi-default: "true"
-        io.kompose.service: chatqna-gaudi-backend-server
+        io.kompose.network/amd-default: "true"
+        io.kompose.service: chatqna-backend
     spec:
       containers:
         - env:
             - name: MEGA_SERVICE_HOST_IP
-              value: megaservice-gaudi-llm.apps.igk.internal
-            - name: EMBEDDING_SERVICE_HOST_IP
-              value: embedding.gaudi-llm.svc.cluster.local
-            - name: EMBEDDING_SERVICE_PORT
-              value: "6000"
+              value: megaservice-amd-llm.apps.igk.internal
+            - name: EMBEDDING_SERVER_HOST_IP
+              value: tei-embedding-service.amd-llm.svc.cluster.local
+            - name: EMBEDDING_SERVER_PORT
+              value: "5007"
             - name: RETRIEVER_SERVICE_HOST_IP
-              value: retriever.gaudi-llm.svc.cluster.local
+              value: retriever.amd-llm.svc.cluster.local
             - name: RETRIEVER_SERVICE_PORT
-              value: "7000"
-            - name: RERANK_SERVICE_HOST_IP
-              value: reranking.gaudi-llm.svc.cluster.local
-            - name: RERANK_SERVICE_PORT
-              value: "8000"
-            - name: LLM_SERVICE_HOST_IP
-              value: llm.gaudi-llm.svc.cluster.local
-            - name: LLM_SERVICE_PORT
-              value: "9000"           
-          image: image-registry.openshift-image-registry.svc:5000/gaudi-llm/chatqna:latest
-          name: chatqna-amd-backend-server
+              value: "5004"
+            - name: RERANK_SERVER_HOST_IP
+              value: tei-reranker-service.amd-llm.svc.cluster.local
+            - name: RERANK_SERVER_PORT
+              value: "5006"
+            - name: LLM_SERVER_HOST_IP
+              value: llm-tgi.amd-llm.svc.cluster.local
+            - name: LLM_SERVER_PORT
+              value: "5005"
+            - name: PYTHONPATH
+              value: ${PYTHONPATH}:/home/user/GenAIComps
+            - name: LOGFLAG
+              value: "True"
+          image:
+            image-registry.openshift-image-registry.svc:5000/opea/chatqna:latest
+          name: chatqna-backend-server
           ports:
             - containerPort: 8888
               protocol: TCP
-          volumeMounts:
-            - mountPath: /home/user/megaservice-config.yaml
-              name: megaservice-config
-              subPath: megaservice-config.yaml
       restartPolicy: Always
-      volumes:
-        - name: megaservice-config 
-          configMap:
-            name: megaservice-config
-            defaultMode: 0755
 ---
 # Source: chatqna-amd-backend/templates/backend-buildconfig.yaml
 kind: BuildConfig
 apiVersion: build.openshift.io/v1
 metadata:
-  name: chatqna-megaservice-server
-  namespace: gaudi-llm
+  name: chatqna-backend
+  namespace: amd-llm
   annotations:
     argocd.argoproj.io/compare-options: IgnoreExtraneous
 spec:
   output:
     to:
       kind: "ImageStreamTag"
-      name: "chatqna:latest"
+      name: "chatqna-backend:latest"
   failedBuildsHistoryLimit: 5
   successfulBuildsHistoryLimit: 5
   nodeSelector: null
@@ -104,24 +100,25 @@ spec:
   resources: {}
   runPolicy: SerialLatestOnly
   source:
-    contextDir: ChatQnA/docker
+    contextDir: ChatQnA
     git:
-      ref: 9f36e84c
+      ref: 61a8bef
       uri: https://github.com/opea-project/GenAIExamples.git
     type: Git
   strategy:
     type: Docker
     dockerStrategy:
       dockerfilePath: Dockerfile
+
   triggers:
-  - type: ConfigChange
+    - type: ConfigChange
 ---
 # Source: chatqna-amd-backend/templates/backend-imagestream.yaml
 apiVersion: image.openshift.io/v1
 kind: ImageStream
 metadata:
-  name: chatqna
-  namespace: gaudi-llm
+  name: chatqna-backend
+  namespace: amd-llm
 spec:
   lookupPolicy:
     local: true
@@ -130,14 +127,13 @@ spec:
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
-  name: megaservice-main-route
-  namespace: gaudi-llm
+  name: chatqna-backend
+  namespace: amd-llm
 spec:
-  host: megaservice-gaudi-llm.apps.igk.internal
+  host: megaservice-amd-llm.apps.igk.internal
   port:
-    targetPort: 8888
+    targetPort: 5008
+  tls:
+    termination: edge
   to:
-    kind: Service
-    name: chatqna-amd-backend-server
-    weight: 100
-  wildcardPolicy: None
+    name: chatqna-backend

@@ -11,11 +11,11 @@ metadata:
   labels:
     io.kompose.service: embedding
   name: embedding
-  namespace: gaudi-llm
+  namespace: amd-llm
 spec:
   ports:
-    - name: "6000"
-      port: 6000
+    - name: "5002"
+      port: 5002
       targetPort: 6000
   selector:
     io.kompose.service: embedding
@@ -29,11 +29,11 @@ metadata:
     kompose.version: 1.33.0 (3ce457399)
     argocd.argoproj.io/compare-options: IgnoreExtraneous
     argocd.argoproj.io/sync-wave: "5"
-    image.openshift.io/triggers: '[{"from":{"kind":"ImageStreamTag","name":"embedding-tei:latest"},"fieldPath":"spec.template.spec.containers[?(@.name==\"embedding-tei-server\")].image"}]'
+    image.openshift.io/triggers: '[{"from":{"kind":"ImageStreamTag","name":"embedding:latest"},"fieldPath":"spec.template.spec.containers[?(@.name==\"embedding-server\")].image"}]'
   labels:
     io.kompose.service: embedding
   name: embedding
-  namespace: gaudi-llm
+  namespace: amd-llm
 spec:
   replicas: 1
   selector:
@@ -53,11 +53,12 @@ spec:
             - name: HOME
               value: /tmp/temp-data
             - name: PYTHONPATH
-              value: /home/user/.local/lib/python3.11/site-packages:/home/user
+              value: /home/user/.local/lib/python3.11/site-packages:/home/user:/home
             - name: TEI_EMBEDDING_ENDPOINT
-              value: http://tei-embedding-service.gaudi-llm.svc.cluster.local:8090
-          image: image-registry.openshift-image-registry.svc:5000/gaudi-llm/embedding-tei:latest
-          name: embedding-tei-server
+              value: "http://tei-embedding-service.amd-llm.svc.cluster.local:5007"
+          image:
+            image-registry.openshift-image-registry.svc:5000/opea/embedding:latest
+          name: embedding-server
           ports:
             - containerPort: 6000
               protocol: TCP
@@ -74,12 +75,12 @@ kind: BuildConfig
 apiVersion: build.openshift.io/v1
 metadata:
   name: embedding
-  namespace: gaudi-llm
+  namespace: amd-llm
 spec:
   output:
     to:
       kind: "ImageStreamTag"
-      name: "embedding-tei:latest"
+      name: "embedding:latest"
   failedBuildsHistoryLimit: 5
   successfulBuildsHistoryLimit: 5
   nodeSelector: null
@@ -88,22 +89,23 @@ spec:
   runPolicy: SerialLatestOnly
   source:
     git:
-      ref: 7c2e7f6
+      ref: 3e559df
       uri: https://github.com/opea-project/GenAIComps.git
     type: Git
   strategy:
     type: Docker
     dockerStrategy:
-      dockerfilePath: comps/embeddings/langchain/docker/Dockerfile
+      dockerfilePath: comps/embeddings/src/Dockerfile
+
   triggers:
-  - type: ConfigChange
+    - type: ConfigChange
 ---
 # Source: embedding/templates/embedding-imagestream.yaml
 apiVersion: image.openshift.io/v1
 kind: ImageStream
 metadata:
-  name: embedding-tei
-  namespace: gaudi-llm
+  name: embedding
+  namespace: amd-llm
 spec:
   lookupPolicy:
     local: true
@@ -112,15 +114,14 @@ spec:
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
-  name: embedding-megaservice-route
-  namespace: gaudi-llm
+  name: embedding
+  namespace: amd-llm
 spec:
-  host: megaservice-gaudi-llm.apps.
+  host: megaservice-amd-llm.apps.
   path: /v1/embeddings
   port:
-    targetPort: 6000
+    targetPort: 5002
+  tls:
+    termination: edge
   to:
-    kind: Service
     name: embedding
-    weight: 100
-  wildcardPolicy: None

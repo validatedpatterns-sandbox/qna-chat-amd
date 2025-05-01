@@ -3,7 +3,7 @@
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: gaudi-pattern-sa
+  name: amd-pattern-sa
   namespace: pattern-namespace
   annotations:
     argocd.argoproj.io/hook: "PreSync"
@@ -34,7 +34,7 @@ data:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: gaudi-pattern-role
+  name: amd-pattern-role
   annotations:
     argocd.argoproj.io/hook: PreSync
     argocd.argoproj.io/sync-wave: "-15"
@@ -64,18 +64,18 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: gaudi-pattern-rolebind
+  name: amd-pattern-rolebind
   annotations:
     argocd.argoproj.io/hook: PreSync
     argocd.argoproj.io/sync-wave: "-15"
 subjects:
 - kind: ServiceAccount
-  name: gaudi-pattern-sa
+  name: amd-pattern-sa
   namespace: openshift-storage
   apiGroup: ""
 roleRef:
   kind: ClusterRole
-  name: gaudi-pattern-role
+  name: amd-pattern-role
   apiGroup: rbac.authorization.k8s.io
 ---
 # Source: odf/templates/job-create-s3-bucket.yaml
@@ -116,8 +116,8 @@ spec:
         name: create-s3-bucket
       dnsPolicy: ClusterFirst
       restartPolicy: Never
-      serviceAccount: gaudi-pattern-sa
-      serviceAccountName: gaudi-pattern-sa
+      serviceAccount: amd-pattern-sa
+      serviceAccountName: amd-pattern-sa
       terminationGracePeriodSeconds: 400
 ---
 # Source: odf/templates/job-create-s3-secret.yaml
@@ -151,8 +151,8 @@ spec:
             defaultMode: 0755
       dnsPolicy: ClusterFirst
       restartPolicy: Never
-      serviceAccount: gaudi-pattern-sa
-      serviceAccountName: gaudi-pattern-sa
+      serviceAccount: amd-pattern-sa
+      serviceAccountName: amd-pattern-sa
       terminationGracePeriodSeconds: 400
 ---
 # Source: odf/templates/job-increase-rgw-mem-limit.yaml
@@ -177,8 +177,8 @@ spec:
         name: increase-rgw-mem-limit
       dnsPolicy: ClusterFirst
       restartPolicy: Never
-      serviceAccount: gaudi-pattern-sa
-      serviceAccountName: gaudi-pattern-sa
+      serviceAccount: amd-pattern-sa
+      serviceAccountName: amd-pattern-sa
       terminationGracePeriodSeconds: 400
 ---
 # Source: odf/templates/rgw-route.yaml

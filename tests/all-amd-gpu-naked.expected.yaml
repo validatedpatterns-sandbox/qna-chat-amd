@@ -1,0 +1,156 @@
+---
+# Source: amd-gpu-operator/templates/rbac/serviceAccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: mcp-amd-config-sa
+  namespace: 
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+---
+# Source: amd-gpu-operator/templates/cm-wait-for-mcp-update.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: wait-for-mcp-update
+  annotations:
+    argocd.argoproj.io/sync-wave: "-10"
+data:
+  wait-for-mcp.sh: |
+    #!/bin/bash
+    MC_FW_PATH='99-worker-kernel-args-firmware-path'
+    waiting_time=10
+
+    until [[ $(oc get mcp worker -o jsonpath='{.status.configuration.source[*].name}') == *"${MC_IOMMU}"* || $(oc get mcp worker -o jsonpath='{.status.configuration.source[*].name}') == *"${MC_FW_PATH}"* ]]
+    do
+      sleep ${waiting_time}
+    done
+    sleep ${waiting_time}
+---
+# Source: amd-gpu-operator/templates/rbac/role.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: amd-config-role
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+    argocd.argoproj.io/sync-wave: "-15"
+rules:
+  - apiGroups:
+      - ""
+      - "apps"
+      - "apiextensions.k8s.io"
+      - "machineconfiguration.openshift.io"
+      - "imageregistry.operator.openshift.io"
+    resources:
+      - machineconfigs
+      - machineconfigpools
+      - pods
+      - namespaces
+      - services
+      - configs
+    verbs:
+      - get
+      - list
+      - patch
+      - update
+      - create
+      - watch
+---
+# Source: amd-gpu-operator/templates/rbac/rolebinding.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: amd-config-rolebinding
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+    argocd.argoproj.io/sync-wave: "-15"
+subjects:
+- kind: ServiceAccount
+  name: mcp-amd-config-sa
+  namespace: amd-gpu-operator
+  apiGroup: ""
+roleRef:
+  kind: ClusterRole
+  name: amd-config-role
+  apiGroup: rbac.authorization.k8s.io
+---
+# Source: amd-gpu-operator/templates/job-confirm-amd-gpu-present.yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "10"
+  name: job-confirm-amd-gpu-present
+spec:
+  template:
+    spec:
+      containers:
+        - image: redhat/ubi9-minimal:latest
+          command:
+            - /bin/bash
+            - -c
+            - |
+               cat
+          imagePullPolicy: IfNotPresent
+          name: confirm-amd-gpu-present
+          resources:
+            limits:
+              amd.com/gpu: "1"
+            requests:
+              amd.com/gpu: "1"
+      restartPolicy: Never
+      serviceAccount: mcp-amd-config-sa
+      serviceAccountName: mcp-amd-config-sa
+---
+# Source: amd-gpu-operator/templates/job-wait-for-mcp-update.yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  annotations:
+    argocd.argoproj.io/hook: Sync
+    argocd.argoproj.io/sync-wave: "-1"
+  name: job-wait-for-mcp-update
+spec:
+  template:
+    spec:
+      containers:
+      - image: image-registry.openshift-image-registry.svc:5000/openshift/cli:latest
+        command:
+        - /bin/bash
+        - -c
+        - |
+           '/tmp/wait-for-mcp.sh' && \
+           oc wait mcp/worker --for condition=updated --timeout=2000s
+        name: wait-for-mcp-update
+        volumeMounts:
+          - mountPath: /tmp/wait-for-mcp.sh
+            name: wait-for-mcp-update
+            subPath: wait-for-mcp.sh
+      volumes:
+        - name: wait-for-mcp-update
+          configMap:
+            name: wait-for-mcp-update
+            defaultMode: 0755
+      dnsPolicy: ClusterFirst
+      restartPolicy: Never
+      serviceAccount: mcp-amd-config-sa
+      serviceAccountName: mcp-amd-config-sa
+      terminationGracePeriodSeconds: 60
+---
+# Source: amd-gpu-operator/templates/deviceconfig.yaml
+apiVersion: amd.com/v1alpha1
+kind: DeviceConfig
+metadata:
+  name: amd-gpu
+  namespace: amd-gpu-operator
+spec:
+  devicePlugin:
+    enableNodeLabeller: true
+    devicePluginImage: rocm/k8s-device-plugin:latest
+    nodeLabellerImage: rocm/k8s-device-plugin:labeller-latest
+  driver:
+    enable: true
+    version: 6.2.2
+  selector:
+    feature.node.kubernetes.io/amd-gpu: 'true'
