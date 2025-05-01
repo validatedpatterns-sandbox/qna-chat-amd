@@ -9,6 +9,7 @@ vault.init
 super-linter.log
 common/pattern-vault.init
 .idea
+.iml
 TMP/*
 venv
 .DS_Store
