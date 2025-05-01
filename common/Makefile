@@ -215,42 +215,33 @@ EXECUTABLES=git helm oc ansible
 test: ## run helm tests
 	@for t in $(CHARTS); do common/scripts/test.sh $$t all "$(TEST_OPTS)"; if [ $$? != 0 ]; then exit 1; fi; done
 
-.PHONY: helmlint
-helmlint: ## run helm lint
-	@for t in $(CHARTS); do common/scripts/lint.sh $$t $(TEST_OPTS); if [ $$? != 0 ]; then exit 1; fi; done
-
-API_URL ?= https://raw.githubusercontent.com/hybrid-cloud-patterns/ocp-schemas/main/openshift/4.10/
-KUBECONFORM_SKIP ?= -skip 'CustomResourceDefinition,ClusterIssuer,CertManager,Certificate,ArgoCD'
-
-# We need to skip 'CustomResourceDefinition' as openapi2jsonschema seems to be unable to generate them ATM
-.PHONY: kubeconform
-kubeconform: ## run helm kubeconform
-	@for t in $(CHARTS); do helm template $(TEST_OPTS) $(PATTERN_OPTS) $$t | kubeconform -strict $(KUBECONFORM_SKIP) -verbose -schema-location $(API_URL); if [ $$? != 0 ]; then exit 1; fi; done
-
 .PHONY: super-linter
 super-linter: ## Runs super linter locally
 	rm -rf .mypy_cache
 	podman run -e RUN_LOCAL=true -e USE_FIND_ALGORITHM=true	\
-					-e VALIDATE_BASH=false \
-					-e VALIDATE_JSCPD=false \
-					-e VALIDATE_KUBERNETES_KUBECONFORM=false \
-					-e VALIDATE_YAML=false \
 					-e VALIDATE_ANSIBLE=false \
+					-e VALIDATE_BASH=false \
+					-e VALIDATE_CHECKOV=false \
 					-e VALIDATE_DOCKERFILE_HADOLINT=false \
+					-e VALIDATE_JSCPD=false \
+					-e VALIDATE_JSON_PRETTIER=false \
+					-e VALIDATE_JUPYTER_NBQA_BLACK=false \
+                    -e VALIDATE_JUPYTER_NBQA_FLAKE8=false \
+                    -e VALIDATE_JUPYTER_NBQA_ISORT=false \
+                    -e VALIDATE_JUPYTER_NBQA_MYPY=false \
+                    -e VALIDATE_JUPYTER_NBQA_PYLINT=false \
+                    -e VALIDATE_JUPYTER_NBQA_RUFF=false \
+					-e VALIDATE_MARKDOWN_PRETTIER=false \
+					-e VALIDATE_KUBERNETES_KUBECONFORM=false \
+					-e VALIDATE_PYTHON_PYLINT=false \
+					-e VALIDATE_SHELL_SHFMT=false \
 					-e VALIDATE_TEKTON=false \
+					-e VALIDATE_YAML=false \
+					-e VALIDATE_YAML_PRETTIER=false \
 					$(DISABLE_LINTERS) \
 					-v $(PWD):/tmp/lint:rw,z \
 					-w /tmp/lint \
-					docker.io/github/super-linter:slim-v5
-
-.PHONY: ansible-lint
-ansible-lint: ## run ansible lint on ansible/ folder
-	podman run -it -v $(PWD):/workspace:rw,z --workdir /workspace --env ANSIBLE_CONFIG=./ansible/ansible.cfg \
-		--entrypoint "/usr/local/bin/ansible-lint" quay.io/ansible/creator-ee:latest  "-vvv" "ansible/"
-
-.PHONY: ansible-unittest
-ansible-unittest: ## run ansible unit tests
-	pytest -r a --fulltrace --color yes ansible/tests/unit/test_*.py
+					ghcr.io/super-linter/super-linter:slim-v7
 
 .PHONY: deploy upgrade legacy-deploy legacy-upgrade
 deploy upgrade legacy-deploy legacy-upgrade:

@@ -23,3 +23,7 @@ post-install: ## Post-install tasks
 .PHONY: test
 test:
 	@make -f common/Makefile PATTERN_OPTS="-f values-global.yaml -f values-hub.yaml" test
+
+.PHONY: lint
+lint:
+	@make -f common/Makefile PATTERN_OPTS="-f values-global.yaml -f values-hub.yaml" super-linter
