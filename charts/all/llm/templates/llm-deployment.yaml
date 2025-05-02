@@ -33,6 +33,12 @@ spec:
               value: {{ .value }}
             {{- end }}
             {{- end }}
+            {{- if .Values.external_cert_enabled }}
+            - name: SSL_CERT_FILE
+              value: /tmp/bundle.crtzs
+            - name: REQUESTS_CA_BUNDLE
+              value: /tmp/bundle.crt
+            {{- end }}
             {{- if .Values.global.amdllm.secret_env }}
             {{- range .Values.global.amdllm.secret_env }}
             - name: {{ .name }}

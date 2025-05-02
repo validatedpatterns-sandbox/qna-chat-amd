@@ -2,6 +2,8 @@ global:
   amdllm:
     namespace: amd-llm
 
+# external_cert_enabled: true # if true, values-secret should instantiate a matching vault secret source!
+
 secret:
   hugging_face:
     ocp:

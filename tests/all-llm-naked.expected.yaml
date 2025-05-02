@@ -54,10 +54,6 @@ spec:
               value: /tmp/temp-data
             - name: PYTHONPATH
               value: /home/user/.local/lib/python3.11/site-packages:/home/user
-            - name: SSL_CERT_FILE
-              value: /tmp/bundle.crt
-            - name: REQUESTS_CA_BUNDLE
-              value: /tmp/bundle.crt
             - name: LLM_MODEL_ID
               value: jary-serve
             - name: HF_TOKEN
