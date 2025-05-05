@@ -333,11 +333,17 @@ data:
         namespace: amd-llm
         runtime_envs: []
       build:
-        enabled: false
+        enabled: true
       clusterDomain: region.example.com
       clusterPlatform: aws
       clusterVersion: "4.12"
       extraValueFiles: []
+      genAIExamples:
+        gitRef: 61a8bef
+        gitUri: https://github.com/opea-project/GenAIExamples.git
+      genAiComps:
+        gitRef: 3e559df
+        gitUri: https://github.com/opea-project/GenAIComps.git
       hubClusterDomain: apps.hub.example.com
       localClusterDomain: apps.region.example.com
       namespace: pattern-namespace

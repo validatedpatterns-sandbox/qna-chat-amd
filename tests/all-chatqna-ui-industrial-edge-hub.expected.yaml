@@ -106,8 +106,8 @@ spec:
   source:
     contextDir: ChatQnA/ui
     git:
-      ref: 04304c45
-      uri: https://github.com/sgahlot/GenAIExamples.git
+      ref: 61a8bef
+      uri: https://github.com/opea-project/GenAIExamples.git
     type: Git
   strategy:
     type: Docker
