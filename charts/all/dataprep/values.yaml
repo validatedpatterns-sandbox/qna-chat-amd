@@ -13,7 +13,7 @@ global:
     docker_file_Path: comps/dataprep/src/Dockerfile
 
     image:
-      pre_built: quay.io/sgahlot/opea/dataprep:latest
+      pre_built: quay.io/ecosystem-appeng/dataprep:latest
       from_source: image-registry.openshift-image-registry.svc:5000/opea/dataprep:latest
 
     git_repo_uri: https://github.com/opea-project/GenAIComps.git

@@ -17,7 +17,7 @@ global:
 
 
     image:
-      pre_built: quay.io/sgahlot/opea/chatqna-ui:latest
+      pre_built: quay.io/ecosystem-appeng/chatqna-ui:latest
       from_source: image-registry.openshift-image-registry.svc:5000/opea/chatqna-ui:latest
 
     git_ref: 04304c45
