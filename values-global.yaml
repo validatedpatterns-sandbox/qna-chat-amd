@@ -10,7 +10,7 @@ global:
     build_envs: []
     runtime_envs: []
   build:
-    enabled: false
+    enabled: true
 
   genAiComps:
     gitUri: https://github.com/opea-project/GenAIComps.git
