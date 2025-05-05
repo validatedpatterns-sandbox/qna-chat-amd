@@ -80,15 +80,10 @@ spec:
           volumeMounts:
             - name: temp-data
               mountPath: /tmp/temp-data
-            - name: endpoint-cert
-              mountPath: /tmp
       restartPolicy: Always
       volumes:
         - name: temp-data
           emptyDir: {}
-        - name: endpoint-cert
-          secret:
-            secretName: endpoint-cert
 ---
 # Source: llm-server/templates/llm-buildconfig.yaml
 kind: BuildConfig

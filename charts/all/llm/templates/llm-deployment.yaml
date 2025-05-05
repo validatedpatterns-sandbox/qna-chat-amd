@@ -72,12 +72,16 @@ spec:
           volumeMounts:
             - name: {{ .Values.global.amdllm.volume.tmp.name }}
               mountPath: {{ .Values.global.amdllm.volume.tmp.path }}
+            {{- if .Values.external_cert_enabled }}
             - name: {{ .Values.global.amdllm.volume.cert.name }}
               mountPath: {{ .Values.global.amdllm.volume.cert.path }}
+            {{- end }}
       restartPolicy: Always
       volumes:
         - name: {{ .Values.global.amdllm.volume.tmp.name }}
           emptyDir: {}
+        {{- if .Values.external_cert_enabled }}
         - name: {{ .Values.global.amdllm.volume.cert.name }}
           secret:
             secretName: {{ .Values.global.amdllm.volume.cert.name }}
+        {{- end }}
