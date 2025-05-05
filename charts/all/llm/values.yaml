@@ -21,7 +21,7 @@ global:
       namespace: amdserve
 
     image:
-      pre_built: quay.io/sgahlot/opea/llm-tgi:latest
+      pre_built: quay.io/ecosystem-appeng/llm-tgi:latest
       from_source: image-registry.openshift-image-registry.svc:5000/opea/llm-tgi:latest
 
     git_repo_uri: https://github.com/opea-project/GenAIComps.git
