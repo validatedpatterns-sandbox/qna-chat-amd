@@ -15,13 +15,9 @@ global:
     docker_file_Path: docker/Dockerfile
     working_dir: /tmp/temp-data/svelte
 
-
     image:
       pre_built: quay.io/ecosystem-appeng/chatqna-ui:latest
       from_source: image-registry.openshift-image-registry.svc:5000/opea/chatqna-ui:latest
-
-    git_ref: 04304c45
-    git_repo_uri: https://github.com/sgahlot/GenAIExamples.git
 
     volume:
       temp:

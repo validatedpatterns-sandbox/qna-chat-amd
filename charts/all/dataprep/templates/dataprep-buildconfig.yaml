@@ -1,4 +1,4 @@
-{{- if (.Values.global.build).enabled | default "true" }}
+{{- if .Values.global.build.enabled }}
 kind: BuildConfig
 apiVersion: build.openshift.io/v1
 metadata:
@@ -17,8 +17,8 @@ spec:
   runPolicy: SerialLatestOnly
   source:
     git:
-      ref: {{ .Values.global.amdllm.git_ref }}
-      uri: {{ .Values.global.amdllm.git_repo_uri }}
+      ref: {{ .Values.global.genAiComps.gitRef }}
+      uri: {{ .Values.global.genAiComps.gitUri }}
     type: Git
   strategy:
     type: Docker

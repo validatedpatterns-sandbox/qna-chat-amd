@@ -55,7 +55,7 @@ spec:
             - name: PYTHONPATH
               value: /home/user/.local/lib/python3.11/site-packages:/home/user
             - name: LLM_MODEL_ID
-              value: jary-serve
+              value: llama-31b
             - name: HF_TOKEN
               valueFrom:
                 secretKeyRef:

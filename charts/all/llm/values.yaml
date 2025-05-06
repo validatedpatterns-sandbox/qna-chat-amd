@@ -24,9 +24,6 @@ global:
       pre_built: quay.io/ecosystem-appeng/llm-tgi:latest
       from_source: image-registry.openshift-image-registry.svc:5000/opea/llm-tgi:latest
 
-    git_repo_uri: https://github.com/opea-project/GenAIComps.git
-    git_ref: 3e559df   # make sure to validate buildconfig & other change scope before updating
-
     secret_env:
       - name: HF_TOKEN
         secret:
@@ -43,7 +40,7 @@ global:
       - name: PYTHONPATH
         value: /home/user/.local/lib/python3.11/site-packages:/home/user
       - name: LLM_MODEL_ID
-        value: jary-serve
+        value: llama-31b
     volume:
       tmp:
         name: temp-data
@@ -51,6 +48,3 @@ global:
       cert:
         name: endpoint-cert
         path: /tmp
-#      rhoai_ca:
-#        name: rhoai-ca-bundle
-#        path: /rhoai-ca
