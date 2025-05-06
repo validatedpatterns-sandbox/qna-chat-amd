@@ -168,35 +168,35 @@ clusterGroup:
           kind: BuildConfig
           jqPathExpressions:
             - '.spec.paused'
-#    retriever:
-#      name: retriever
-#      namespace: amd-llm
-#      project: amd-llm
-#      path: charts/all/retriever
-#      ignoreDifferences:
-#        - group: apps
-#          kind: Deployment
-#          jqPathExpressions:
-#            - '.spec.template.spec.containers[].image'
-#        - group: build.openshift.io
-#          kind: BuildConfig
-#          jqPathExpressions:
-#            - '.spec.paused'
-#    # SG: Commenting out reranking microservice as the backend makes use of "tei-reranker" service instead
-#    # reranking:
-#    #   name: reranking
-#    #   namespace: amd-llm
-#    #   project: amd-llm
-#    #   path: charts/all/reranking
-#    #   ignoreDifferences:
-#    #     - group: apps
-#    #       kind: Deployment
-#    #       jqPathExpressions:
-#    #         - '.spec.template.spec.containers[].image'
-#    #     - group: build.openshift.io
-#    #       kind: BuildConfig
-#    #       jqPathExpressions:
-#    #         - '.spec.paused'
+    retriever:
+      name: retriever
+      namespace: amd-llm
+      project: amd-llm
+      path: charts/all/retriever
+      ignoreDifferences:
+        - group: apps
+          kind: Deployment
+          jqPathExpressions:
+            - '.spec.template.spec.containers[].image'
+        - group: build.openshift.io
+          kind: BuildConfig
+          jqPathExpressions:
+            - '.spec.paused'
+    # SG: Commenting out reranking microservice as the backend makes use of "tei-reranker" service instead
+    # reranking:
+    #   name: reranking
+    #   namespace: amd-llm
+    #   project: amd-llm
+    #   path: charts/all/reranking
+    #   ignoreDifferences:
+    #     - group: apps
+    #       kind: Deployment
+    #       jqPathExpressions:
+    #         - '.spec.template.spec.containers[].image'
+    #     - group: build.openshift.io
+    #       kind: BuildConfig
+    #       jqPathExpressions:
+    #         - '.spec.paused'
 #    llm:
 #      name: llm
 #      namespace: amd-llm
