@@ -197,49 +197,49 @@ clusterGroup:
     #       kind: BuildConfig
     #       jqPathExpressions:
     #         - '.spec.paused'
-#    llm:
-#      name: llm
-#      namespace: amd-llm
-#      project: amd-llm
-#      path: charts/all/llm
-#      ignoreDifferences:
-#        - group: apps
-#          kind: Deployment
-#          jqPathExpressions:
-#            - '.spec.template.spec.containers[].image'
-#        - group: build.openshift.io
-#          kind: BuildConfig
-#          jqPathExpressions:
-#            - '.spec.paused'
-#    # SG: Commenting out embedding microservice as the backend makes use of "tei-embedding" service instead
-#    # embedding:
-#    #   name: embedding
-#    #   namespace: amd-llm
-#    #   project: amd-llm
-#    #   path: charts/all/embedding
-#    #   ignoreDifferences:
-#    #     - group: apps
-#    #       kind: Deployment
-#    #       jqPathExpressions:
-#    #         - '.spec.template.spec.containers[].image'
-#    #     - group: build.openshift.io
-#    #       kind: BuildConfig
-#    #       jqPathExpressions:
-#    #         - '.spec.paused'
-#    dataprep:
-#      name: dataprep
-#      namespace: amd-llm
-#      project: amd-llm
-#      path: charts/all/dataprep
-#      ignoreDifferences:
-#        - group: apps
-#          kind: Deployment
-#          jqPathExpressions:
-#            - '.spec.template.spec.containers[].image'
-#        - group: build.openshift.io
-#          kind: BuildConfig
-#          jqPathExpressions:
-#            - '.spec.paused'
+    llm:
+      name: llm
+      namespace: amd-llm
+      project: amd-llm
+      path: charts/all/llm
+      ignoreDifferences:
+        - group: apps
+          kind: Deployment
+          jqPathExpressions:
+            - '.spec.template.spec.containers[].image'
+        - group: build.openshift.io
+          kind: BuildConfig
+          jqPathExpressions:
+            - '.spec.paused'
+    # SG: Commenting out embedding microservice as the backend makes use of "tei-embedding" service instead
+    # embedding:
+    #   name: embedding
+    #   namespace: amd-llm
+    #   project: amd-llm
+    #   path: charts/all/embedding
+    #   ignoreDifferences:
+    #     - group: apps
+    #       kind: Deployment
+    #       jqPathExpressions:
+    #         - '.spec.template.spec.containers[].image'
+    #     - group: build.openshift.io
+    #       kind: BuildConfig
+    #       jqPathExpressions:
+    #         - '.spec.paused'
+    dataprep:
+      name: dataprep
+      namespace: amd-llm
+      project: amd-llm
+      path: charts/all/dataprep
+      ignoreDifferences:
+        - group: apps
+          kind: Deployment
+          jqPathExpressions:
+            - '.spec.template.spec.containers[].image'
+        - group: build.openshift.io
+          kind: BuildConfig
+          jqPathExpressions:
+            - '.spec.paused'
     chatqna-ui:
       name: chatqna-ui
       namespace: amd-llm
