@@ -11,8 +11,6 @@ function display_menu_and_get_choice() {
     "Dataprep - URL link"
     "Dataprep - Delete ALL"
     "Dataprep - Get ingested data"
-    "Embedding"
-    "Rerank"
     "Retriever"
     "LLM"
     "ChatQnA - main"
@@ -73,24 +71,6 @@ function display_menu_and_get_choice() {
 
       printf '\n Invoking this endpoint should return the current knowledge base\n'
 
-      invoke_endpoint $op $endpoint "$content_type" "$body_option" "$body"
-      break
-      ;;
-    "Embedding")
-      local op='embeddings'
-      local endpoint="embeddings"
-      local body_option="--data"
-      local body='{ "input": "what is deep learning?",  "parameters": { "max_new_tokens":64, "do_sample": true } }'
-      local content_type='application/json'
-      invoke_endpoint $op $endpoint "$content_type" "$body_option" "$body"
-      break
-      ;;
-    "Rerank")
-      local op='reranking'
-      local endpoint="reranking"
-      local body_option="--data"
-      local body='{"initial_query": "what is deep learning?", "retrieved_docs": [ { "text": "Deep Learning is not..." }, { "text":"Deep learning is..." } ]}'
-      local content_type='application/json'
       invoke_endpoint $op $endpoint "$content_type" "$body_option" "$body"
       break
       ;;
