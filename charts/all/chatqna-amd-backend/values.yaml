@@ -14,7 +14,7 @@ global:
     docker_file_Path: Dockerfile
 
     image:
-      pre_built: quay.io/sgahlot/opea/chatqna:APR.26
+      pre_built: quay.io/sgahlot/opea/chatqna:APR.09
       from_source: image-registry.openshift-image-registry.svc:5000/opea/chatqna:latest
 
     megaservice_envs:

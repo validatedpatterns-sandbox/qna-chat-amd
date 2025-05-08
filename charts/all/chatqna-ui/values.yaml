@@ -16,7 +16,7 @@ global:
     working_dir: /tmp/temp-data/svelte
 
     image:
-      pre_built: quay.io/sgahlot/opea/chatqna-ui:APR.25
+      pre_built: quay.io/sgahlot/opea/chatqna-ui:APR.09
       from_source: image-registry.openshift-image-registry.svc:5000/opea/chatqna-ui:latest
 
     volume:
