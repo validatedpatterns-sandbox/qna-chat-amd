@@ -168,34 +168,34 @@ clusterGroup:
           kind: BuildConfig
           jqPathExpressions:
             - '.spec.paused'
-    retriever:
-      name: retriever
-      namespace: amd-llm
-      project: amd-llm
-      path: charts/all/retriever
-      ignoreDifferences:
-        - group: apps
-          kind: Deployment
-          jqPathExpressions:
-            - '.spec.template.spec.containers[].image'
-        - group: build.openshift.io
-          kind: BuildConfig
-          jqPathExpressions:
-            - '.spec.paused'
-    llm:
-      name: llm
-      namespace: amd-llm
-      project: amd-llm
-      path: charts/all/llm
-      ignoreDifferences:
-        - group: apps
-          kind: Deployment
-          jqPathExpressions:
-            - '.spec.template.spec.containers[].image'
-        - group: build.openshift.io
-          kind: BuildConfig
-          jqPathExpressions:
-            - '.spec.paused'
+#    retriever:
+#      name: retriever
+#      namespace: amd-llm
+#      project: amd-llm
+#      path: charts/all/retriever
+#      ignoreDifferences:
+#        - group: apps
+#          kind: Deployment
+#          jqPathExpressions:
+#            - '.spec.template.spec.containers[].image'
+#        - group: build.openshift.io
+#          kind: BuildConfig
+#          jqPathExpressions:
+#            - '.spec.paused'
+#    llm:
+#      name: llm
+#      namespace: amd-llm
+#      project: amd-llm
+#      path: charts/all/llm
+#      ignoreDifferences:
+#        - group: apps
+#          kind: Deployment
+#          jqPathExpressions:
+#            - '.spec.template.spec.containers[].image'
+#        - group: build.openshift.io
+#          kind: BuildConfig
+#          jqPathExpressions:
+#            - '.spec.paused'
     dataprep:
       name: dataprep
       namespace: amd-llm
@@ -225,20 +225,20 @@ clusterGroup:
           kind: BuildConfig
           jqPathExpressions:
             - '.spec.paused'
-    chatqna-backend:
-      name: chatqna-backend
-      namespace: amd-llm
-      project: amd-llm
-      path: charts/all/chatqna-amd-backend
-      ignoreDifferences:
-        - group: apps
-          kind: Deployment
-          jqPathExpressions:
-            - '.spec.template.spec.containers[].image'
-        - group: build.openshift.io
-          kind: BuildConfig
-          jqPathExpressions:
-            - '.spec.paused'
+#    chatqna-backend:
+#      name: chatqna-backend
+#      namespace: amd-llm
+#      project: amd-llm
+#      path: charts/all/chatqna-amd-backend
+#      ignoreDifferences:
+#        - group: apps
+#          kind: Deployment
+#          jqPathExpressions:
+#            - '.spec.template.spec.containers[].image'
+#        - group: build.openshift.io
+#          kind: BuildConfig
+#          jqPathExpressions:
+#            - '.spec.paused'
 
   imperative:
     # NOTE: We *must* use lists and not hashes. As hashes lose ordering once parsed by helm
