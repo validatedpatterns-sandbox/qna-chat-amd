@@ -52,6 +52,8 @@ spec:
               value: https://megaservice-{{ .Values.global.amdllm.namespace }}.apps.{{ .Values.global.clusterDomain }}/v1/chatqna
             - name: UPLOAD_FILE_BASE_URL
               value: https://megaservice-{{ .Values.global.amdllm.namespace }}.apps.{{ .Values.global.clusterDomain }}/v1/dataprep/ingest
+            - name: DELETE_FILE
+              value: https://megaservice-{{ .Values.global.amdllm.namespace }}.apps.{{ .Values.global.clusterDomain }}/v1/dataprep/delete
             - name: GET_FILE
               value: https://megaservice-{{ .Values.global.amdllm.namespace }}.apps.{{ .Values.global.clusterDomain }}/v1/dataprep/get
             {{- if .Values.global.amdllm.runtime_envs }}
