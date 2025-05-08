@@ -21,7 +21,7 @@ global:
       namespace: amdserve
 
     image:
-      pre_built: quay.io/ecosystem-appeng/llm-tgi:latest
+      pre_built: quay.io/sgahlot/opea/llm-tgi:APR.28
       from_source: image-registry.openshift-image-registry.svc:5000/opea/llm-tgi:latest
 
     secret_env:
