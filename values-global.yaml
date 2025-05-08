@@ -10,7 +10,7 @@ global:
     build_envs: []
     runtime_envs: []
   build:
-    enabled: true
+    enabled: false
 
   genAiComps:
     gitUri: https://github.com/opea-project/GenAIComps.git
@@ -18,9 +18,9 @@ global:
   genAIExamples:
     gitUri: https://github.com/opea-project/GenAIExamples.git
     # OLD git ref
-    # gitRef: 61a8bef
+    gitRef: 61a8bef
     # new git ref
-    gitRef: ff66600
+    # gitRef: ff66600
 
 main:
   clusterGroupName: hub
