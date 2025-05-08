@@ -9,6 +9,7 @@ global:
     runtime_envs: []
 
     service_name: chatqna-ui
+    ui_service_name: chatqna-ui-secure
     service_port: 5009
     container_port: 5173
     source_context_dir: ChatQnA/ui
