@@ -17,9 +17,10 @@ global:
     gitRef: af3ff62
   genAIExamples:
     gitUri: https://github.com/opea-project/GenAIExamples.git
-    gitRef: 61a8bef
-    # Testing out old id
-#    gitRef: ff66600
+    # OLD git ref
+    # gitRef: 61a8bef
+    # new git ref
+    gitRef: ff66600
 
 main:
   clusterGroupName: hub
