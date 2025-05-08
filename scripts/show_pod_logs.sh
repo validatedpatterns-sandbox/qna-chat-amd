@@ -45,20 +45,18 @@ function show_logs() {
 #
 # Command line arguments expected:
 #   -d|D    dataprep
-#   -e|E    embedding
-#   -r|R    reranking
-#   -i|I    retriever
+#   -r|R    retriever
 #   -l|L    llm
 #   -te|TE  tei-embedding
 #   -tr|TR  tei-reranker
 #   -c|C    chatqna
+#   -u|U    chatqna-ui
 #------------------------------------------------------------------------------------------------------------------
 function process_cmd_args() {
   if [ $# -eq 0 ]; then
       USAGE
   fi
 
-  # dataprep(dD), embedding(eE), reranking(rR), retriever(iI), llm(lL), backend(bB)
   local pod_name
   local mega_or_micro_service="micro"
 
@@ -70,13 +68,7 @@ function process_cmd_args() {
           d|D)
             pod_name='dataprep'
             ;;
-          e|E)
-            pod_name='embedding'
-            ;;
           r|R)
-            pod_name='reranking'
-            ;;
-          i|I)
             pod_name='retriever'
             ;;
           l|L)
@@ -126,9 +118,7 @@ function USAGE() {
     Usage: $0 -[p|P] <option>
     where option is:
         -d|D    dataprep        (micro-service)
-        -e|E    embedding       (micro-service)
-        -r|R    reranking       (micro-service)
-        -i|I    retriever       (micro-service)
+        -r|R    retriever       (micro-service)
         -l|L    llm             (micro-service)
         -te|TE  tei-embedding   (embedding micro-service uses this)
         -tr|TR  tei-reranker    (reranking micro-service uses this)
