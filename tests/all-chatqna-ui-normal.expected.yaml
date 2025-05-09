@@ -125,7 +125,7 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-wave: "6"
 spec:
-  href: 'https://chatqna-ui-amd-llm.apps.region.example.com'
+  href: 'https://chatqna-ui-secure-amd-llm.apps.region.example.com'
   location: ApplicationMenu
   # This text will appear in a box called "Launcher" under "namespace" or "project" in the web console
   text: OPEA ChatQnA on AMD Instinct
