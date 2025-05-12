@@ -69,6 +69,8 @@ spec:
               value: https://megaservice-amd-llm.apps.region.example.com/v1/chatqna
             - name: UPLOAD_FILE_BASE_URL
               value: https://megaservice-amd-llm.apps.region.example.com/v1/dataprep/ingest
+            - name: DELETE_FILE
+              value: https://megaservice-amd-llm.apps.region.example.com/v1/dataprep/delete
             - name: GET_FILE
               value: https://megaservice-amd-llm.apps.region.example.com/v1/dataprep/get
           image:
@@ -106,7 +108,7 @@ spec:
   source:
     contextDir: ChatQnA/ui
     git:
-      ref: 61a8bef
+      ref: ff66600
       uri: https://github.com/opea-project/GenAIExamples.git
     type: Git
   strategy:
