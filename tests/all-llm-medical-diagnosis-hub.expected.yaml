@@ -104,7 +104,7 @@ spec:
   runPolicy: SerialLatestOnly
   source:
     git:
-      ref: 3e559df
+      ref: af3ff62
       uri: https://github.com/opea-project/GenAIComps.git
     type: Git
   strategy:

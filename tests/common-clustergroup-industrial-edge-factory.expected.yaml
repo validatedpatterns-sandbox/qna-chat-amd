@@ -178,10 +178,10 @@ data:
       clusterVersion: "4.12"
       extraValueFiles: []
       genAIExamples:
-        gitRef: 61a8bef
+        gitRef: ff66600
         gitUri: https://github.com/opea-project/GenAIExamples.git
       genAiComps:
-        gitRef: 3e559df
+        gitRef: af3ff62
         gitUri: https://github.com/opea-project/GenAIComps.git
       hubClusterDomain: apps.hub.example.com
       localClusterDomain: apps.region.example.com
