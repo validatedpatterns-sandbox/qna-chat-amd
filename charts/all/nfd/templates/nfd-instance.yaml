@@ -49,6 +49,5 @@ spec:
                       "7408", # MI250X
                       "740c", # MI250/MI250X
                       "738c", # MI100
-                      "738e",  # MI100
-                      "7362"  # TODO - [JARY] test to see if it'll pick up on ec2 radeon / g4ad instances
+                      "738e"  # MI100
                     ]}
