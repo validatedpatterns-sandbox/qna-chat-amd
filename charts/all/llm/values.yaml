@@ -3,8 +3,6 @@ global:
 
   clusterDomain: lab.com
 
-  # external_cert_enabled: true # if true, values-secret should instantiate a matching vault secret source!
-
   amdllm:
     namespace: amd-llm
     build_envs: [] # http_proxy/https_prxy can be set here
@@ -48,3 +46,5 @@ global:
       cert:
         name: endpoint-cert
         path: /tmp
+
+external_cert_enabled: true # if true, values-secret should instantiate a matching vault secret source!
