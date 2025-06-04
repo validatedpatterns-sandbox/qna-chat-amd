@@ -73,55 +73,12 @@ spec:
             - name: LOGFLAG
               value: "True"
           image:
-            image-registry.openshift-image-registry.svc:5000/opea/chatqna:latest
+            quay.io/ecosystem-appeng/chatqna:latest
           name: chatqna-backend-server
           ports:
             - containerPort: 8888
               protocol: TCP
       restartPolicy: Always
----
-# Source: chatqna-amd-backend/templates/backend-buildconfig.yaml
-kind: BuildConfig
-apiVersion: build.openshift.io/v1
-metadata:
-  name: chatqna-backend
-  namespace: amd-llm
-  annotations:
-    argocd.argoproj.io/compare-options: IgnoreExtraneous
-spec:
-  output:
-    to:
-      kind: "ImageStreamTag"
-      name: "chatqna-backend:latest"
-  failedBuildsHistoryLimit: 5
-  successfulBuildsHistoryLimit: 5
-  nodeSelector: null
-  postCommit: {}
-  resources: {}
-  runPolicy: SerialLatestOnly
-  source:
-    contextDir: ChatQnA
-    git:
-      ref: ff66600
-      uri: https://github.com/opea-project/GenAIExamples.git
-    type: Git
-  strategy:
-    type: Docker
-    dockerStrategy:
-      dockerfilePath: Dockerfile
-
-  triggers:
-    - type: ConfigChange
----
-# Source: chatqna-amd-backend/templates/backend-imagestream.yaml
-apiVersion: image.openshift.io/v1
-kind: ImageStream
-metadata:
-  name: chatqna-backend
-  namespace: amd-llm
-spec:
-  lookupPolicy:
-    local: true
 ---
 # Source: chatqna-amd-backend/templates/backend-route.yaml
 apiVersion: route.openshift.io/v1

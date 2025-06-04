@@ -57,7 +57,7 @@ spec:
             - name: TEI_EMBEDDING_ENDPOINT
               value: "http://tei-embedding-service.amd-llm.svc.cluster.local:5007"
           image:
-            image-registry.openshift-image-registry.svc:5000/opea/embedding:latest
+            quay.io/ecosystem-appeng/embedding:latest
           name: embedding-server
           ports:
             - containerPort: 6000
@@ -69,46 +69,6 @@ spec:
       volumes:
         - name: temp-data
           emptyDir: {}
----
-# Source: embedding/templates/embedding-buildconfig.yaml
-kind: BuildConfig
-apiVersion: build.openshift.io/v1
-metadata:
-  name: embedding
-  namespace: amd-llm
-spec:
-  output:
-    to:
-      kind: "ImageStreamTag"
-      name: "embedding:latest"
-  failedBuildsHistoryLimit: 5
-  successfulBuildsHistoryLimit: 5
-  nodeSelector: null
-  postCommit: {}
-  resources: {}
-  runPolicy: SerialLatestOnly
-  source:
-    git:
-      ref: af3ff62
-      uri: https://github.com/opea-project/GenAIComps.git
-    type: Git
-  strategy:
-    type: Docker
-    dockerStrategy:
-      dockerfilePath: comps/embeddings/src/Dockerfile
-
-  triggers:
-    - type: ConfigChange
----
-# Source: embedding/templates/embedding-imagestream.yaml
-apiVersion: image.openshift.io/v1
-kind: ImageStream
-metadata:
-  name: embedding
-  namespace: amd-llm
-spec:
-  lookupPolicy:
-    local: true
 ---
 # Source: embedding/templates/embedding-route.yaml
 apiVersion: route.openshift.io/v1
