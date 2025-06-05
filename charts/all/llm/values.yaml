@@ -4,6 +4,7 @@ global:
   clusterDomain: lab.com
 
   external_cert_enabled: true # if true, values-secret should instantiate a matching vault secret source!
+  cert_file: /tmp/bundle.crt
 
   amdllm:
     namespace: amd-llm
