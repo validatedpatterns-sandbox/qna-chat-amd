@@ -16,7 +16,7 @@ spec:
         - -c
         - |
           # wait for DSC to progress
-          oc wait --for=condition=ReconcileComplete=True dsc/rhods-datasciencecluster --timeout=-1s
+          oc wait --for=condition=Ready=True dsc/rhods-datasciencecluster --timeout=-1s
           # now we wait for Kserve to become Ready installing... 
           oc wait --for=condition=Ready=True -n knative-serving knativeserving knative-serving --timeout=-1s
           # Then we patch progressDeadline in Kserve Config since 70b might download longer > 600secs onto kserve

@@ -2,8 +2,6 @@ global:
   amdllm:
     namespace: amd-llm
 
-# external_cert_enabled: true # if true, values-secret should instantiate a matching vault secret source!
-
 secret:
   hugging_face:
     ocp:
@@ -21,14 +19,6 @@ secret:
       secret_name: rhoai_model
       path: secret/hub/rhoai_model
       key: inference_endpoint
-  endpoint_cert:
-    ocp:
-      secret_name: endpoint-cert
-      key: bundle.crt
-    vault:
-      secret_name: endpoint_cert
-      path: secret/hub/endpoint_cert
-      key: bundle.crt
 
 secret_store:
   name: vault-backend

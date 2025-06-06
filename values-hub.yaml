@@ -56,6 +56,12 @@ clusterGroup:
       source: redhat-operators
       channel: stable
 
+    authorino:
+      name: authorino-operator
+      namespace: openshift-operators
+      source: redhat-operators
+      channel: stable
+
   projects:
     - hub
     - openshift-nfd

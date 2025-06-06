@@ -33,12 +33,10 @@ spec:
               value: {{ .value }}
             {{- end }}
             {{- end }}
-            {{- if .Values.external_cert_enabled }}
             - name: SSL_CERT_FILE
-              value: /tmp/bundle.crtzs
+              value: /tmp/tls.crt
             - name: REQUESTS_CA_BUNDLE
-              value: /tmp/bundle.crt
-            {{- end }}
+              value: /tmp/tls.crt
             {{- if .Values.global.amdllm.secret_env }}
             {{- range .Values.global.amdllm.secret_env }}
             - name: {{ .name }}
@@ -72,16 +70,12 @@ spec:
           volumeMounts:
             - name: {{ .Values.global.amdllm.volume.tmp.name }}
               mountPath: {{ .Values.global.amdllm.volume.tmp.path }}
-            {{- if .Values.external_cert_enabled }}
             - name: {{ .Values.global.amdllm.volume.cert.name }}
               mountPath: {{ .Values.global.amdllm.volume.cert.path }}
-            {{- end }}
       restartPolicy: Always
       volumes:
         - name: {{ .Values.global.amdllm.volume.tmp.name }}
           emptyDir: {}
-        {{- if .Values.external_cert_enabled }}
         - name: {{ .Values.global.amdllm.volume.cert.name }}
           secret:
             secretName: {{ .Values.global.amdllm.volume.cert.name }}
-        {{- end }}
