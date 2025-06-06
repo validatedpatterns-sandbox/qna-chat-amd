@@ -61,7 +61,7 @@ spec:
             - name: NLTK_DATA
               value: /tmp/temp-data/nltk_data
           image:
-            image-registry.openshift-image-registry.svc:5000/opea/dataprep:latest
+            quay.io/ecosystem-appeng/dataprep:latest
           name: dataprep-server
           ports:
             - containerPort: 5000
@@ -77,46 +77,6 @@ spec:
           emptyDir: {}
         - name: uploaded-files
           emptyDir: {}
----
-# Source: dataprep/templates/dataprep-buildconfig.yaml
-kind: BuildConfig
-apiVersion: build.openshift.io/v1
-metadata:
-  name: dataprep
-  namespace: amd-llm
-spec:
-  output:
-    to:
-      kind: "ImageStreamTag"
-      name: "dataprep:latest"
-  failedBuildsHistoryLimit: 5
-  successfulBuildsHistoryLimit: 5
-  nodeSelector: null
-  postCommit: {}
-  resources: {}
-  runPolicy: SerialLatestOnly
-  source:
-    git:
-      ref: af3ff62
-      uri: https://github.com/opea-project/GenAIComps.git
-    type: Git
-  strategy:
-    type: Docker
-    dockerStrategy:
-      dockerfilePath: comps/dataprep/src/Dockerfile
-
-  triggers:
-    - type: ConfigChange
----
-# Source: dataprep/templates/dataprep-imagestream.yaml
-apiVersion: image.openshift.io/v1
-kind: ImageStream
-metadata:
-  name: dataprep
-  namespace: amd-llm
-spec:
-  lookupPolicy:
-    local: true
 ---
 # Source: dataprep/templates/dataprep-route.yaml
 apiVersion: route.openshift.io/v1

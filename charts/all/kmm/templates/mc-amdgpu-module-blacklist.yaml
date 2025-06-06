@@ -4,8 +4,8 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-wave: "-101"
   labels:
-    machineconfiguration.openshift.io/role: worker
-  name: amdgpu-module-blacklist
+    machineconfiguration.openshift.io/role: master
+  name: 60-amdgpu-module-blacklist
 spec:
   config:
     ignition:

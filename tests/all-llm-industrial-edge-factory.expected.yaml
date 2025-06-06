@@ -56,6 +56,10 @@ spec:
               value: /home/user/.local/lib/python3.11/site-packages:/home/user
             - name: LLM_MODEL_ID
               value: llama-31b
+            - name: SSL_CERT_FILE
+              value: /tmp/tls.crt
+            - name: REQUESTS_CA_BUNDLE
+              value: /tmp/tls.crt
             - name: HF_TOKEN
               valueFrom:
                 secretKeyRef:
@@ -72,7 +76,7 @@ spec:
 
 
           image:
-            image-registry.openshift-image-registry.svc:5000/opea/llm-tgi:latest
+            quay.io/ecosystem-appeng/llm-tgi:latest
           name: llm-tgi-server
           ports:
             - containerPort: 9000
@@ -80,50 +84,15 @@ spec:
           volumeMounts:
             - name: temp-data
               mountPath: /tmp/temp-data
+            - name: rhoai-ca-bundle
+              mountPath: /tmp
       restartPolicy: Always
       volumes:
         - name: temp-data
           emptyDir: {}
----
-# Source: llm-server/templates/llm-buildconfig.yaml
-kind: BuildConfig
-apiVersion: build.openshift.io/v1
-metadata:
-  name: llm-tgi
-  namespace: amd-llm
-spec:
-  output:
-    to:
-      kind: "ImageStreamTag"
-      name: "llm-tgi:latest"
-  failedBuildsHistoryLimit: 5
-  successfulBuildsHistoryLimit: 5
-  nodeSelector: null
-  postCommit: {}
-  resources: {}
-  runPolicy: SerialLatestOnly
-  source:
-    git:
-      ref: af3ff62
-      uri: https://github.com/opea-project/GenAIComps.git
-    type: Git
-  strategy:
-    type: Docker
-    dockerStrategy:
-      dockerfilePath: comps/llms/src/text-generation/Dockerfile
-
-  triggers:
-    - type: ConfigChange
----
-# Source: llm-server/templates/llm-imagestream.yaml
-apiVersion: image.openshift.io/v1
-kind: ImageStream
-metadata:
-  name: llm-tgi
-  namespace: amd-llm
-spec:
-  lookupPolicy:
-    local: true
+        - name: rhoai-ca-bundle
+          secret:
+            secretName: rhoai-ca-bundle
 ---
 # Source: llm-server/templates/llm-route.yaml
 apiVersion: route.openshift.io/v1

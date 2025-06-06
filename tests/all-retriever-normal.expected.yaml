@@ -58,7 +58,7 @@ spec:
             - name: NLTK_DATA
               value: /tmp/temp-data/nltk_data
           image:
-            image-registry.openshift-image-registry.svc:5000/opea/retriever:latest
+            quay.io/ecosystem-appeng/retriever:latest
           name: retriever-server
           ports:
             - containerPort: 7000
@@ -71,46 +71,6 @@ spec:
       volumes:
         - name: temp-data
           emptyDir: {}
----
-# Source: retriever/templates/retriever-buildconfig.yaml
-kind: BuildConfig
-apiVersion: build.openshift.io/v1
-metadata:
-  name: retriever
-  namespace: amd-llm
-spec:
-  output:
-    to:
-      kind: "ImageStreamTag"
-      name: "retriever:latest"
-  failedBuildsHistoryLimit: 5
-  successfulBuildsHistoryLimit: 5
-  nodeSelector: null
-  postCommit: {}
-  resources: {}
-  runPolicy: SerialLatestOnly
-  source:
-    git:
-      ref: af3ff62
-      uri: https://github.com/opea-project/GenAIComps.git
-    type: Git
-  strategy:
-    type: Docker
-    dockerStrategy:
-      dockerfilePath: comps/retrievers/src/Dockerfile
-
-  triggers:
-    - type: ConfigChange
----
-# Source: retriever/templates/retriever-imagestream.yaml
-apiVersion: image.openshift.io/v1
-kind: ImageStream
-metadata:
-  name: retriever
-  namespace: amd-llm
-spec:
-  lookupPolicy:
-    local: true
 ---
 # Source: retriever/templates/retriever-route.yaml
 apiVersion: route.openshift.io/v1

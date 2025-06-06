@@ -42,6 +42,39 @@ data:
       fi
     done
 ---
+# Source: amdllm-init/templates/init-istio-ca-secret-cm.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: create-rhoai-istio-rootca-cert-secret
+  namespace: amd-llm
+  annotations:
+    argocd.argoproj.io/sync-wave: "-1"
+data:
+  create-rhoai-istio-rootca-cert-secret.sh: |
+    #!/bin/bash
+    echo "Starting secret sync script"
+
+    UPSTREAM_EXISTS=$(oc get secret --ignore-not-found -n istio-system knative-serving-cert)
+    EXISTS=$(oc get secret --ignore-not-found rhoai-ca-bundle)
+
+    if [[ -z "${UPSTREAM_EXISTS}" ]]; then
+      echo "upstream found"
+    else
+      echo "upstream not found"
+    fi
+
+    if [[ -z "${EXISTS}" ]]; then
+      echo "creating secret..."
+      oc create secret generic -n amd-llm rhoai-ca-bundle --from-literal=tls.crt="$(oc extract secret/knative-serving-cert -n istio-system --to=- --keys=tls.crt)"
+      echo "done creating secret."
+      exit
+    else
+      echo "oc get secret --ignore-not-found rhoai-ca-bundle returned non-empty string, not creating a secret"
+    fi
+
+    echo "script bottom"
+---
 # Source: amdllm-init/templates/zz-patch-kserve-config-cm.yaml
 apiVersion: v1
 kind: ConfigMap
@@ -212,6 +245,43 @@ spec:
       serviceAccountName: amd-pattern-sa
       terminationGracePeriodSeconds: 400
 ---
+# Source: amdllm-init/templates/init-istio-ca-secret-job.yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  annotations:
+    argocd.argoproj.io/hook: Sync
+    argocd.argoproj.io/sync-wave: "10"
+  name: create-rhoai-istio-rootca-cert-secret
+  namespace: amd-llm
+spec:
+  template:
+    spec:
+      containers:
+        - image: image-registry.openshift-image-registry.svc:5000/openshift/cli:latest
+          command:
+            - /bin/bash
+            - -c
+            - |
+              oc wait --for condition=Ready=True dsc/rhods-datasciencecluster --timeout=-1s
+              oc wait --for condition=Ready=True knativeserving -n knative-serving knative-serving --timeout=-1s
+              '/tmp/create-rhoai-istio-rootca-cert-secret.sh'
+          name: create-rhoai-istio-rootca-cert-secret
+          volumeMounts:
+            - mountPath: /tmp/create-rhoai-istio-rootca-cert-secret.sh
+              name: create-rhoai-istio-rootca-cert-secret
+              subPath: create-rhoai-istio-rootca-cert-secret.sh
+      volumes:
+        - name: create-rhoai-istio-rootca-cert-secret
+          configMap:
+            name: create-rhoai-istio-rootca-cert-secret
+            defaultMode: 0755
+      dnsPolicy: ClusterFirst
+      restartPolicy: Never
+      serviceAccount: amd-pattern-sa
+      serviceAccountName: amd-pattern-sa
+      terminationGracePeriodSeconds: 400
+---
 # Source: amdllm-init/templates/zz-patch-kserve-config-job.yaml
 apiVersion: batch/v1
 kind: Job
@@ -231,7 +301,7 @@ spec:
         - -c
         - |
           # wait for DSC to progress
-          oc wait --for=condition=ReconcileComplete=True dsc/rhods-datasciencecluster --timeout=-1s
+          oc wait --for=condition=Ready=True dsc/rhods-datasciencecluster --timeout=-1s
           # now we wait for Kserve to become Ready installing... 
           oc wait --for=condition=Ready=True -n knative-serving knativeserving knative-serving --timeout=-1s
           # Then we patch progressDeadline in Kserve Config since 70b might download longer > 600secs onto kserve

@@ -292,7 +292,7 @@ data:
         namespace: amd-llm
         runtime_envs: []
       build:
-        enabled: true
+        enabled: false
       clusterDomain: region.example.com
       clusterPlatform: aws
       clusterVersion: "4.12"
