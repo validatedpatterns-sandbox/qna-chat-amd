@@ -1,3 +1,5 @@
+# execute the script found in zz-patch-kserve-config-cm.yaml
+# zz as an order of operations adjustment
 apiVersion: batch/v1
 kind: Job
 metadata:

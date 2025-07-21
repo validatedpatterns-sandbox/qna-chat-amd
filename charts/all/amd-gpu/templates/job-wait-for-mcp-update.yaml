@@ -1,3 +1,4 @@
+# job to run the script found in cm-wait-for-mcp-update.yaml
 apiVersion: batch/v1
 kind: Job
 metadata:

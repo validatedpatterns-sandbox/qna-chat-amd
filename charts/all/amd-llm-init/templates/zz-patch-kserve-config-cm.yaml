@@ -1,3 +1,5 @@
+# create a CM to hold the script we'll execute from zz-patch-kserve-config-job
+# script pads the amount of time system will allow for model container to resolve due to large model footprints
 apiVersion: v1
 kind: ConfigMap
 metadata:

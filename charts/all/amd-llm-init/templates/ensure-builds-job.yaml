@@ -1,3 +1,4 @@
+# job to run the script in ensure-builds-cm.yaml
 apiVersion: batch/v1
 kind: Job
 metadata:

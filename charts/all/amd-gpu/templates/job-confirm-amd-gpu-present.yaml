@@ -1,3 +1,4 @@
+# simple job to check if/when we have an AMD GPU available for resources
 apiVersion: batch/v1
 kind: Job
 metadata:

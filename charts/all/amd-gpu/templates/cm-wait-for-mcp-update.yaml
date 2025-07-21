@@ -1,3 +1,4 @@
+# script to wait for config'd MachineConfigPool,relevance - 99-worker-kernel-args-firmware-path
 apiVersion: v1
 kind: ConfigMap
 metadata:

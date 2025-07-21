@@ -1,3 +1,5 @@
+# script to await Vault... vault is essential to the GitOps underlying pattern, but unclear to me why the wait is here
+# with KMM changes and if it's relevant, I didn't think so from quick glance, but could be wrong
 apiVersion: v1
 kind: ConfigMap
 metadata:

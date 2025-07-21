@@ -1,3 +1,4 @@
+# blacklist necessary for AMD driver support, at least with the versions we were implementing
 apiVersion: machineconfiguration.openshift.io/v1
 kind: MachineConfig
 metadata:

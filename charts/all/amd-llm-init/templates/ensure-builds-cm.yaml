@@ -1,3 +1,5 @@
+# set up the script to verify build jobs, if needed
+# not necessarily needed without OPEA, but left in case AMD needs to do any image builds in-cluster
 apiVersion: v1
 kind: ConfigMap
 metadata:

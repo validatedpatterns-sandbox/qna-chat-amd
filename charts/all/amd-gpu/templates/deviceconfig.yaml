@@ -1,3 +1,4 @@
+# device config for AMD GPU support
 apiVersion: amd.com/v1alpha1
 kind: DeviceConfig
 metadata:
